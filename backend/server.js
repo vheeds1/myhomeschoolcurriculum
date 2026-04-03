@@ -220,7 +220,7 @@ app.post('/api/reviews', submitLimiter, (req, res) => {
   writeDB(db);
   sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
     `New Review Pending — ${c.name}`,
-    `<h2>New Review for ${c.name}</h2><p>${review.name}: ★${review.rating} — ${review.title}</p><p>${review.body}</p><p><a href="${process.env.myhomeschoolcurriculum.com||'http://localhost:3001'}/admin">Approve in Admin →</a></p>`);
+    `<h2>New Review for ${c.name}</h2><p>${review.name}: ★${review.rating} — ${review.title}</p><p>${review.body}</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}/admin">Approve in Admin →</a></p>`);
   res.status(201).json({ success: true, message: 'Review submitted! It will appear after approval.' });
 });
 
@@ -314,7 +314,7 @@ app.post('/api/auth/register', authLimiter, (req, res) => {
   };
   db.users.push(user);
   writeDB(db);
-  const verifyUrl = `${process.env.myhomeschoolcurriculum.com||'http://localhost:3001'}/account?verify=${verifyToken}`;
+  const verifyUrl = `${process.env.SITE_URL||'http://localhost:3001'}/account?verify=${verifyToken}`;
   sendEmail(user.email, 'Verify your MyHomeschoolCurriculum account',
     `<h2>Welcome, ${user.name}!</h2><p>Please verify your email:</p><p><a href="${verifyUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Verify Email →</a></p>`);
   res.status(201).json({ success: true, message: 'Account created! Check your email to verify.' });
@@ -361,7 +361,7 @@ app.post('/api/auth/request-reset', authLimiter, (req, res) => {
     user.resetToken = resetToken;
     user.resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
     writeDB(db);
-    const resetUrl = `${process.env.myhomeschoolcurriculum.com||'http://localhost:3001'}/account?reset=${resetToken}`;
+    const resetUrl = `${process.env.SITE_URL||'http://localhost:3001'}/account?reset=${resetToken}`;
     sendEmail(user.email, 'Reset your MyHomeschoolCurriculum password',
       `<p>Hi ${user.name},</p><p>Click to reset your password (expires in 1 hour):</p><p><a href="${resetUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Reset Password →</a></p>`);
   }
@@ -445,8 +445,8 @@ app.post('/api/billing/create-checkout', async (req, res) => {
       customer_email: email,
       line_items: [{ price: STRIPE_PRICES[tier], quantity: 1 }],
       metadata: { tier, companyName: companyName||'' },
-      success_url: `${process.env.myhomeschoolcurriculum.com||'http://localhost:3001'}/publisher?success=1&tier=${tier}`,
-      cancel_url:  `${process.env.myhomeschoolcurriculum.com||'http://localhost:3001'}/publisher?canceled=1`,
+      success_url: `${process.env.SITE_URL||'http://localhost:3001'}/publisher?success=1&tier=${tier}`,
+      cancel_url:  `${process.env.SITE_URL||'http://localhost:3001'}/publisher?canceled=1`,
     });
     res.json({ url: session.url });
   } catch(e) { res.status(500).json({ error: e.message }); }
@@ -460,7 +460,7 @@ app.post('/api/billing/create-portal', requireUser, async (req, res) => {
   try {
     const session = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.myhomeschoolcurriculum.com||'http://localhost:3001'}/account`
+      return_url: `${process.env.SITE_URL||'http://localhost:3001'}/account`
     });
     res.json({ url: session.url });
   } catch(e) { res.status(500).json({ error: e.message }); }
@@ -526,7 +526,7 @@ app.post('/api/newsletter/subscribe', submitLimiter, async (req, res) => {
     } catch(e) { console.log('Mailchimp error:', e.message); }
   }
   sendEmail(subscriber.email, 'Welcome to MyHomeschoolCurriculum! 🧭',
-    `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${process.env.myhomeschoolcurriculum.com||'http://localhost:3001'}">Browse curricula →</a></p>`);
+    `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}">Browse curricula →</a></p>`);
   res.status(201).json({ success: true, message: "You're subscribed! Check your inbox for a welcome email." });
 });
 
@@ -775,7 +775,7 @@ app.get('/api/admin/blog', requireAdmin, (req, res) => {
 
 // ─── SEO — SITEMAP + ROBOTS ──────────────────────────────────────────────────
 app.get('/robots.txt', (req, res) => {
-  const siteUrl = process.env.myhomeschoolcurriculum.com || `http://localhost:${PORT}`;
+  const siteUrl = process.env.SITE_URL || `http://localhost:${PORT}`;
   res.type('text/plain').send(
     `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: ${siteUrl}/sitemap.xml\n`
   );
@@ -783,7 +783,7 @@ app.get('/robots.txt', (req, res) => {
 
 app.get('/sitemap.xml', (req, res) => {
   const db = readDB();
-  const siteUrl = (process.env.myhomeschoolcurriculum.com || `http://localhost:${PORT}`).replace(/\/$/, '');
+  const siteUrl = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
   const posts = (db.blogPosts || []).filter(p => p.published);
   const curricula = (db.curricula || []).filter(c => c.active !== false);
   const states = Object.keys(STATE_LAWS || {});
