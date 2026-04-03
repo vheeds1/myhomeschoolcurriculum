@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homeschool Laws by State — MyHomeschoolCurriculum</title>
+<meta name="description" content="Complete guide to homeschool laws, requirements, and regulations in all 50 US states. Find out what you need to do in your state.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FDF6EC;--warm-white:#FFFBF5;--sage:#7A9E7E;--deep-sage:#4A7550;--terracotta:#C8614A;--gold:#D4A84B;--navy:#1E3A4C;--charcoal:#2C3E3F;--light-sage:#EAF2EB;--border:#E8DDD0;--text-muted:#7A7A6E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal)}
+header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;text-decoration:none}
+.logo-text span{color:var(--gold)}
+nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;margin-left:4px;transition:all .2s}
+nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
+.hero{background:linear-gradient(135deg,var(--navy),#2A4F5A);padding:50px 24px;text-align:center}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;margin-bottom:10px}
+.hero h1 span{color:var(--gold)}
+.hero p{color:rgba(255,255,255,.7);max-width:580px;margin:0 auto;font-size:.95rem}
+.hero-disclaimer{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px 16px;max-width:580px;margin:16px auto 0;font-size:.78rem;color:rgba(255,255,255,.7);text-align:left}
+.wrap{max-width:1200px;margin:0 auto;padding:40px 24px}
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
+.search-bar{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:9px 14px;flex:1;min-width:200px;max-width:320px}
+.search-bar input{border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:.85rem;background:transparent;width:100%}
+.difficulty-filter{display:flex;gap:6px;flex-wrap:wrap}
+.diff-btn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;color:var(--charcoal)}
+.diff-btn:hover{border-color:var(--sage)}
+.diff-btn.active-easy{background:#E6F4EA;border-color:#4A7550;color:#1E7E34}
+.diff-btn.active-moderate{background:#FFF3CD;border-color:#D4A84B;color:#856404}
+.diff-btn.active-strict{background:#FFE9E6;border-color:#C8614A;color:var(--terracotta)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;align-items:center;color:var(--text-muted);margin-bottom:24px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
+.dot-easy{background:#4A7550}
+.dot-moderate{background:#D4A84B}
+.dot-strict{background:#C8614A}
+.states-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.state-card{background:var(--warm-white);border:2px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s}
+.state-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(30,58,76,.08)}
+.state-card.easy{border-left:4px solid #4A7550}
+.state-card.moderate{border-left:4px solid #D4A84B}
+.state-card.strict{border-left:4px solid #C8614A}
+.state-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy);font-weight:700;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.diff-badge{padding:2px 9px;border-radius:10px;font-size:.68rem;font-weight:700;text-transform:uppercase}
+.badge-easy{background:#E6F4EA;color:#1E7E34}
+.badge-moderate{background:#FFF3CD;color:#856404}
+.badge-strict{background:#FFE9E6;color:var(--terracotta)}
+.state-desc{font-size:.8rem;color:var(--text-muted);line-height:1.5}
+.state-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.tag{padding:2px 7px;border-radius:6px;font-size:.68rem;background:var(--light-sage);color:var(--deep-sage);font-weight:500}
+
+/* DETAIL OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--warm-white);border-radius:20px;max-width:640px;width:100%;padding:32px;position:relative;margin:auto}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted)}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:6px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.info-item{background:var(--cream);border-radius:10px;padding:12px}
+.info-key{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:3px}
+.info-val{font-size:.85rem;font-weight:500}
+.info-val.green{color:var(--deep-sage)}
+.info-val.orange{color:#856404}
+.info-val.red{color:var(--terracotta)}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn-primary{background:var(--deep-sage);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.btn-secondary{background:transparent;color:var(--deep-sage);border:1.5px solid var(--deep-sage);padding:9px 18px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+
+.results-bar{font-size:.85rem;color:var(--text-muted);margin-bottom:16px}
+.results-bar strong{color:var(--charcoal)}
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:28px 24px;text-align:center;font-size:.8rem;margin-top:60px}
+footer a{color:var(--gold);text-decoration:none}
+@media(max-width:600px){.info-grid{grid-template-columns:1fr}.states-grid{grid-template-columns:1fr}}
+</style>
+  <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    // gtag("config", "G-XXXXXXXXXX"); // Uncomment and replace with your GA4 ID
+  </script>
+</head>
+<body>
+<header>
+  <a href="/" class="logo-text">Curriculum<span>Compass</span></a>
+  <nav>
+    <a href="/">Browse</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/legal.html">State Laws</a>
+    <a href="/account.html">My Account</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>Homeschool Laws<br><span>By State</span></h1>
+  <p>Know exactly what your state requires before you start homeschooling. Laws vary dramatically — from complete freedom to strict annual oversight.</p>
+  <div class="hero-disclaimer">⚠️ <strong>Legal Disclaimer:</strong> This information is for general guidance only and may not reflect recent law changes. Always verify with your state's Department of Education or an attorney before making decisions.</div>
+</div>
+
+<div class="wrap">
+  <div class="controls">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" id="stateSearch" placeholder="Search states…" oninput="filterStates()">
+    </div>
+    <div class="difficulty-filter">
+      <button class="diff-btn" id="btn-all" onclick="setDiff('all',this)">All States</button>
+      <button class="diff-btn" id="btn-easy" onclick="setDiff('Easy',this)">🟢 Easy</button>
+      <button class="diff-btn" id="btn-moderate" onclick="setDiff('Moderate',this)">🟡 Moderate</button>
+      <button class="diff-btn" id="btn-strict" onclick="setDiff('Strict',this)">🔴 Strict</button>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="dot dot-easy"></span> Easy — Low oversight, minimal requirements</span>
+    <span><span class="dot dot-moderate"></span> Moderate — Annual notice and/or assessment</span>
+    <span><span class="dot dot-strict"></span> Strict — Approval, detailed documentation, testing</span>
+  </div>
+  <div class="results-bar" id="resultsBar">Loading…</div>
+  <div class="states-grid" id="statesGrid"><div style="text-align:center;padding:40px;color:var(--text-muted)">Loading state data…</div></div>
+</div>
+
+<!-- State Detail Modal -->
+<div class="overlay" id="stateOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="stateDetail"></div>
+  </div>
+</div>
+
+<footer>
+  <a href="/">MyHomeschoolCurriculum</a> — Helping homeschool families navigate the world of curriculum<br>
+  <span style="font-size:.7rem;opacity:.5">© 2025 MyHomeschoolCurriculum. Not legal advice — verify with your state DOE.</span>
+</footer>
+
+<script>
+const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+let allStates = [];
+let currentDiff = 'all';
+
+async function loadStates() {
+  try {
+    const res = await fetch(`${API}/legal/states`);
+    const data = await res.json();
+    allStates = data.states || [];
+    renderStates(allStates);
+  } catch(e) {
+    document.getElementById('statesGrid').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Could not load state data. Is the server running?</div>';
+  }
+}
+
+function renderStates(states) {
+  document.getElementById('resultsBar').innerHTML = `<strong>${states.length}</strong> states`;
+  const grid = document.getElementById('statesGrid');
+  if (!states.length) { grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">No states match your filter.</div>'; return; }
+  grid.innerHTML = states.map(s => {
+    const cls = s.difficulty === 'Strict' ? 'strict' : s.difficulty === 'Moderate' ? 'moderate' : 'easy';
+    const badgeCls = s.difficulty === 'Strict' ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
+    return `
+      <div class="state-card ${cls}" onclick="openState('${encodeURIComponent(s.state)}')">
+        <div class="state-name">
+          ${s.state}
+          <span class="diff-badge ${badgeCls}">${s.difficulty}</span>
+        </div>
+        <div class="state-desc">${s.description}</div>
+      </div>`;
+  }).join('');
+}
+
+function filterStates() {
+  const q = document.getElementById('stateSearch').value.toLowerCase();
+  let filtered = allStates;
+  if (currentDiff !== 'all') filtered = filtered.filter(s => s.difficulty === currentDiff);
+  if (q) filtered = filtered.filter(s => s.state.toLowerCase().includes(q) || s.description.toLowerCase().includes(q));
+  renderStates(filtered);
+}
+
+function setDiff(diff, btn) {
+  currentDiff = diff;
+  document.querySelectorAll('.diff-btn').forEach(b => b.className = 'diff-btn');
+  if (diff === 'Easy') btn.className = 'diff-btn active-easy';
+  else if (diff === 'Moderate') btn.className = 'diff-btn active-moderate';
+  else if (diff === 'Strict') btn.className = 'diff-btn active-strict';
+  filterStates();
+}
+
+async function openState(stateEncoded) {
+  try {
+    const res = await fetch(`${API}/legal/states/${stateEncoded}`);
+    const s = await res.json();
+    const diffColor = s.difficulty === 'Strict' ? 'red' : s.difficulty === 'Moderate' ? 'orange' : 'green';
+    const badgeCls = s.difficulty === 'Strict' ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
+    document.getElementById('stateDetail').innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+        <h2>🗺️ ${s.state}</h2>
+        <span class="diff-badge ${badgeCls}" style="padding:5px 14px;font-size:.78rem">${s.difficulty} Oversight</span>
+      </div>
+      <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:4px">${s.description}</p>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-key">Withdrawal Notice</div><div class="info-val ${diffColor}">${s.withdrawalNotice}</div></div>
+        <div class="info-item"><div class="info-key">Subject Requirements</div><div class="info-val">${s.subjectRequirements}</div></div>
+        <div class="info-item"><div class="info-key">Testing Requirements</div><div class="info-val">${s.testingRequirements}</div></div>
+        <div class="info-item"><div class="info-key">Portfolio Requirements</div><div class="info-val">${s.portfolioRequirements}</div></div>
+      </div>
+      <div style="background:#FFF3CD;border-radius:10px;padding:12px 14px;font-size:.8rem;color:#856404;margin-bottom:16px">
+        ⚠️ This information may not reflect the most recent legislative changes. Always verify current requirements with your state's Department of Education.
+      </div>
+      <div class="modal-actions">
+        <a href="${s.moreInfo}" target="_blank" rel="noopener" class="btn-primary">Official HSLDA Guide →</a>
+        <a href="/" class="btn-secondary">Find Curricula</a>
+      </div>`;
+    document.getElementById('stateOverlay').classList.add('open');
+  } catch(e) { console.error(e); }
+}
+
+function closeModal() { document.getElementById('stateOverlay').classList.remove('open'); }
+
+// Pre-select state from URL
+const stateParam = new URLSearchParams(location.search).get('state');
+loadStates().then(() => { if (stateParam) openState(stateParam); });
+</script>
+</body>
+</html>

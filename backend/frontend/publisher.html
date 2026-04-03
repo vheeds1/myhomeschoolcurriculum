@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>List Your Curriculum — MyHomeschoolCurriculum for Publishers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FDF6EC;--warm-white:#FFFBF5;--sage:#7A9E7E;--deep-sage:#4A7550;--terracotta:#C8614A;--gold:#D4A84B;--navy:#1E3A4C;--charcoal:#2C3E3F;--light-sage:#EAF2EB;--border:#E8DDD0;--text-muted:#7A7A6E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal)}
+header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;text-decoration:none}
+.logo-text span{color:var(--gold)}
+.back-link{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;transition:all .2s}
+.back-link:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* HERO */
+.pub-hero{background:linear-gradient(135deg,var(--navy),#2A4F5A);padding:70px 24px;text-align:center}
+.pub-hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);color:#fff;margin-bottom:14px}
+.pub-hero h1 span{color:var(--gold)}
+.pub-hero p{color:rgba(255,255,255,.75);font-size:1rem;max-width:560px;margin:0 auto 36px}
+.stat-row{display:flex;gap:40px;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);font-weight:700;display:block}
+.stat-label{color:rgba(255,255,255,.6);font-size:.78rem}
+
+/* PRICING SECTION */
+.section{max-width:1100px;margin:0 auto;padding:60px 24px}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);margin-bottom:10px}
+.section-header p{color:var(--text-muted);font-size:.95rem;max-width:500px;margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.pricing-card{background:var(--warm-white);border:2px solid var(--border);border-radius:18px;padding:28px;position:relative;transition:all .2s}
+.pricing-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(30,58,76,.1)}
+.pricing-card.popular{border-color:var(--gold);background:linear-gradient(135deg,#FFFBF5,#FEF6E4)}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);padding:3px 16px;border-radius:20px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.tier-icon{font-size:2rem;margin-bottom:10px}
+.tier-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);font-weight:700;margin-bottom:4px}
+.tier-price{font-size:1.8rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.tier-price span{font-size:.85rem;font-weight:400;color:var(--text-muted)}
+.tier-desc{font-size:.82rem;color:var(--text-muted);margin-bottom:16px;line-height:1.5}
+.tier-features{list-style:none;margin-bottom:20px}
+.tier-features li{font-size:.82rem;padding:4px 0;display:flex;align-items:flex-start;gap:7px;line-height:1.4}
+.tier-features li::before{content:'✓';color:var(--deep-sage);font-weight:700;flex-shrink:0}
+.btn-tier{width:100%;padding:10px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;border:2px solid var(--deep-sage);background:transparent;color:var(--deep-sage);transition:all .2s}
+.btn-tier:hover{background:var(--deep-sage);color:#fff}
+.btn-tier.primary-tier{background:var(--deep-sage);color:#fff}
+.btn-tier.primary-tier:hover{background:#3A6040}
+
+/* HOW IT WORKS */
+.how-section{background:var(--warm-white);padding:60px 24px}
+.how-inner{max-width:900px;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;margin-top:40px}
+.step{text-align:center;padding:24px}
+.step-num{width:48px;height:48px;background:var(--deep-sage);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin:0 auto 14px}
+.step h4{font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:8px}
+.step p{font-size:.83rem;color:var(--text-muted);line-height:1.6}
+
+/* INQUIRY FORM */
+.form-section{background:var(--cream);padding:60px 24px}
+.form-wrap{max-width:700px;margin:0 auto}
+.form-card{background:var(--warm-white);border-radius:20px;border:1px solid var(--border);padding:40px}
+.form-card h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:6px}
+.form-card>p{color:var(--text-muted);font-size:.88rem;margin-bottom:28px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--charcoal);margin-bottom:5px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;background:#fff;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--sage)}
+.form-group textarea{resize:vertical;min-height:100px}
+.form-group select{cursor:pointer}
+.tier-select-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:6px}
+.tier-radio{border:2px solid var(--border);border-radius:10px;padding:10px 8px;cursor:pointer;text-align:center;transition:all .18s;font-size:.78rem;font-weight:500}
+.tier-radio:hover{border-color:var(--sage)}
+.tier-radio.selected{border-color:var(--deep-sage);background:var(--light-sage);color:var(--deep-sage);font-weight:600}
+.tier-radio input{display:none}
+.submit-btn{width:100%;padding:13px;background:var(--deep-sage);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:4px}
+.submit-btn:hover{background:#3A6040;transform:translateY(-1px);box-shadow:0 4px 14px rgba(74,117,80,.3)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* CONTACT SECTION */
+.contact-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:700px;margin:24px auto 0}
+.contact-card{background:var(--warm-white);border-radius:14px;border:1px solid var(--border);padding:22px}
+.contact-card h4{font-weight:600;color:var(--navy);margin-bottom:6px}
+.contact-card p{font-size:.83rem;color:var(--text-muted);line-height:1.6}
+.contact-card a{color:var(--deep-sage);text-decoration:none;font-weight:600}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:14px 22px;border-radius:12px;font-size:.88rem;font-weight:500;z-index:999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:340px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:var(--deep-sage)}
+.toast.error{background:var(--terracotta)}
+
+footer{background:var(--navy);color:rgba(255,255,255,.65);padding:30px 24px;text-align:center;font-size:.8rem}
+footer a{color:var(--gold);text-decoration:none}
+@media(max-width:640px){.form-row,.contact-row{grid-template-columns:1fr}.tier-select-grid{grid-template-columns:1fr 1fr}}
+</style>
+  <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    // gtag("config", "G-XXXXXXXXXX"); // Uncomment and replace with your GA4 ID
+  </script>
+</head>
+<body>
+<header>
+  <a href="/" class="logo-text">Curriculum<span>Compass</span></a>
+  <a href="/" class="back-link">← Back to Browse</a>
+</header>
+
+<div class="pub-hero">
+  <h1>Reach <span>50,000+</span> Homeschool<br>Families Ready to Buy</h1>
+  <p>List your curriculum on MyHomeschoolCurriculum and connect with parents actively searching for the perfect fit — every single day.</p>
+  <div class="stat-row">
+    <div class="stat"><span class="stat-num">50k+</span><span class="stat-label">Monthly Visitors</span></div>
+    <div class="stat"><span class="stat-num">80+</span><span class="stat-label">Curricula Listed</span></div>
+    <div class="stat"><span class="stat-num">4.8★</span><span class="stat-label">Publisher Satisfaction</span></div>
+    <div class="stat"><span class="stat-num">12k+</span><span class="stat-label">Parent Reviews</span></div>
+  </div>
+</div>
+
+<div class="section" id="pricing">
+  <div class="section-header">
+    <h2>Choose Your Listing Type</h2>
+    <p>From free affiliate listings to premium platinum placements — we have an option for every budget.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="tier-icon">🆓</div>
+      <div class="tier-name">Standard</div>
+      <div class="tier-price">Free <span>forever</span></div>
+      <div class="tier-desc">Get discovered by families searching for your curriculum type.</div>
+      <ul class="tier-features">
+        <li>Basic listing in our directory</li>
+        <li>Filter and search visibility</li>
+        <li>Parent reviews enabled</li>
+        <li>Link to your website</li>
+      </ul>
+      <button class="btn-tier" onclick="selectTier('standard')">Get Listed Free</button>
+    </div>
+    <div class="pricing-card" id="affiliate">
+      <div class="tier-icon">🔗</div>
+      <div class="tier-name">Affiliate</div>
+      <div class="tier-price">Free <span>+ commission</span></div>
+      <div class="tier-desc">We promote your curriculum and earn a percentage of referred sales.</div>
+      <ul class="tier-features">
+        <li>Everything in Standard</li>
+        <li>Affiliate link tracking</li>
+        <li>Performance reporting</li>
+        <li>Promoted in search results</li>
+        <li>Newsletter features</li>
+      </ul>
+      <button class="btn-tier" onclick="selectTier('affiliate')">Apply for Affiliate</button>
+    </div>
+    <div class="pricing-card popular" id="sponsored">
+      <span class="popular-badge">⭐ Most Popular</span>
+      <div class="tier-icon">🥈</div>
+      <div class="tier-name">Silver</div>
+      <div class="tier-price">$49 <span>/month</span></div>
+      <div class="tier-desc">Featured placement with a silver highlight to stand out from standard listings.</div>
+      <ul class="tier-features">
+        <li>Everything in Affiliate</li>
+        <li>Silver featured badge</li>
+        <li>Mid-page featured placement</li>
+        <li>Included in quiz recommendations</li>
+        <li>Monthly analytics report</li>
+      </ul>
+      <button class="btn-tier primary-tier" onclick="selectTier('silver')">Get Silver Placement</button>
+    </div>
+    <div class="pricing-card">
+      <div class="tier-icon">🥇</div>
+      <div class="tier-name">Gold</div>
+      <div class="tier-price">$149 <span>/month</span></div>
+      <div class="tier-desc">Top-of-results sponsored placement with a gold badge and featured callout.</div>
+      <ul class="tier-features">
+        <li>Everything in Silver</li>
+        <li>Gold sponsor badge + top placement</li>
+        <li>Featured in quiz results</li>
+        <li>Homepage banner inclusion</li>
+        <li>Social media spotlight</li>
+        <li>Priority email support</li>
+      </ul>
+      <button class="btn-tier" onclick="selectTier('gold')">Get Gold Placement</button>
+    </div>
+    <div class="pricing-card">
+      <div class="tier-icon">💎</div>
+      <div class="tier-name">Platinum</div>
+      <div class="tier-price">$299 <span>/month</span></div>
+      <div class="tier-desc">The ultimate top-of-site placement. Your curriculum, first and prominently every time.</div>
+      <ul class="tier-features">
+        <li>Everything in Gold</li>
+        <li>Platinum badge + #1 placement</li>
+        <li>Dedicated landing page</li>
+        <li>Newsletter exclusive feature</li>
+        <li>Custom curriculum guide content</li>
+        <li>Quarterly strategy calls</li>
+        <li>Co-branded promotions</li>
+      </ul>
+      <button class="btn-tier" onclick="selectTier('platinum')">Get Platinum</button>
+    </div>
+  </div>
+</div>
+
+<div class="how-section">
+  <div class="how-inner">
+    <div class="section-header">
+      <h2>How It Works</h2>
+      <p>Getting listed on MyHomeschoolCurriculum is simple. Here's what to expect.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h4>Submit Your Inquiry</h4><p>Fill out the form below with your curriculum details and preferred listing type.</p></div>
+      <div class="step"><div class="step-num">2</div><h4>We Review & Respond</h4><p>Our team reviews your curriculum within 2–3 business days and sends you an agreement.</p></div>
+      <div class="step"><div class="step-num">3</div><h4>Go Live</h4><p>Once approved and any billing is set up, your listing goes live within 5–7 business days.</p></div>
+      <div class="step"><div class="step-num">4</div><h4>Track Performance</h4><p>Access your dashboard to see clicks, referrals, and affiliate earnings in real time.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="form-section" id="contact">
+  <div class="form-wrap">
+    <div class="form-card">
+      <h2>Apply for a Listing</h2>
+      <p>Fill out the form below and our team will be in touch within 2–3 business days.</p>
+
+      <div class="form-row">
+        <div class="form-group"><label>Company / Organization Name *</label><input type="text" id="companyName" placeholder="Jenny's Curriculum Co."></div>
+        <div class="form-group"><label>Your Name *</label><input type="text" id="contactName" placeholder="Jenny Phillips"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="jenny@company.com"></div>
+        <div class="form-group"><label>Phone (optional)</label><input type="tel" id="phone" placeholder="+1 (555) 000-0000"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Curriculum Name *</label><input type="text" id="curriculumName" placeholder="The Amazing Curriculum"></div>
+        <div class="form-group"><label>Your Website</label><input type="url" id="website" placeholder="https://yoursite.com"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Listing Type *</label>
+        <div class="tier-select-grid" id="tierGrid">
+          <label class="tier-radio" onclick="highlightTier(this,'standard')"><input type="radio" name="tier" value="standard">🆓 Standard<br><span style="font-size:.7rem;color:var(--text-muted)">Free</span></label>
+          <label class="tier-radio" onclick="highlightTier(this,'affiliate')"><input type="radio" name="tier" value="affiliate">🔗 Affiliate<br><span style="font-size:.7rem;color:var(--text-muted)">Free + %</span></label>
+          <label class="tier-radio" onclick="highlightTier(this,'silver')"><input type="radio" name="tier" value="silver">🥈 Silver<br><span style="font-size:.7rem;color:var(--text-muted)">$49/mo</span></label>
+          <label class="tier-radio" onclick="highlightTier(this,'gold')"><input type="radio" name="tier" value="gold">🥇 Gold<br><span style="font-size:.7rem;color:var(--text-muted)">$149/mo</span></label>
+          <label class="tier-radio" onclick="highlightTier(this,'platinum')"><input type="radio" name="tier" value="platinum">💎 Platinum<br><span style="font-size:.7rem;color:var(--text-muted)">$299/mo</span></label>
+        </div>
+        <input type="hidden" id="selectedTier" value="">
+      </div>
+
+      <div class="form-group">
+        <label>Grade Levels Covered</label>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:5px" id="gradesSelect">
+          <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer"><input type="checkbox" value="Pre-K"> Pre-K</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer"><input type="checkbox" value="K-2"> K–2</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer"><input type="checkbox" value="3-5"> 3–5</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer"><input type="checkbox" value="6-8"> 6–8</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer"><input type="checkbox" value="9-12"> 9–12</label>
+        </div>
+      </div>
+
+      <div class="form-group"><label>Brief Curriculum Description</label><textarea id="description" placeholder="Describe your curriculum — teaching approach, subjects covered, what makes it unique…" rows="4"></textarea></div>
+      <div class="form-group"><label>Any questions or additional notes?</label><textarea id="message" placeholder="Questions about affiliate rates, listing details, etc." rows="3"></textarea></div>
+
+      <button class="submit-btn" id="submitBtn" onclick="submitInquiry()">Send Listing Inquiry →</button>
+      <p style="font-size:.72rem;color:var(--text-muted);text-align:center;margin-top:10px">We respond to all inquiries within 2–3 business days. No spam, ever.</p>
+    </div>
+
+    <div class="contact-row">
+      <div class="contact-card">
+        <h4>📧 Email Us Directly</h4>
+        <p>Prefer email? Reach our publisher team directly at <a href="/cdn-cgi/l/email-protection#98e8edfaf4f1ebf0fdeaebd8fbedeaeaf1fbedf4edf5fbf7f5e8f9ebebb6fbf7f5"><span class="__cf_email__" data-cfemail="5c2c293e30352f34392e2f1c3f292e2e353f293029313f33312c3d2f2f723f3331">[email&#160;protected]</span></a></p>
+      </div>
+      <div class="contact-card">
+        <h4>❓ General Questions</h4>
+        <p>For non-publisher inquiries, visit our <a href="/">homepage</a> or email <a href="/cdn-cgi/l/email-protection#b0d8d5dcdcdff0d3c5c2c2d9d3c5dcc5ddd3dfddc0d1c3c39ed3dfdd"><span class="__cf_email__" data-cfemail="a7cfc2cbcbc8e7c4d2d5d5cec4d2cbd2cac4c8cad7c6d4d489c4c8ca">[email&#160;protected]</span></a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="/">MyHomeschoolCurriculum</a> — Helping homeschool families find their perfect fit.<br>
+  <span style="font-size:.7rem;opacity:.6">© 2025 MyHomeschoolCurriculum. All rights reserved.</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const API = window.location.hostname==='localhost' ? 'http://localhost:3001/api' : '/api';
+let selectedTierVal = '';
+
+function selectTier(tier) {
+  selectedTierVal = tier;
+  document.getElementById('selectedTier').value = tier;
+  document.querySelectorAll('.tier-radio').forEach(r => {
+    r.classList.toggle('selected', r.querySelector('input').value === tier);
+  });
+  document.getElementById('contact').scrollIntoView({ behavior:'smooth' });
+}
+
+function highlightTier(el, val) {
+  selectedTierVal = val;
+  document.getElementById('selectedTier').value = val;
+  document.querySelectorAll('.tier-radio').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+async function submitInquiry() {
+  const companyName = document.getElementById('companyName').value.trim();
+  const contactName = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const curriculumName = document.getElementById('curriculumName').value.trim();
+  const tier = document.getElementById('selectedTier').value;
+
+  if (!companyName||!contactName||!email||!curriculumName) {
+    showToast('Please fill in all required fields.','error'); return;
+  }
+  if (!tier) { showToast('Please select a listing type.','error'); return; }
+  if (!/\S+@\S+\.\S+/.test(email)) { showToast('Please enter a valid email address.','error'); return; }
+
+  const grades = Array.from(document.querySelectorAll('#gradesSelect input:checked')).map(i=>i.value);
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+
+  try {
+    const res = await fetch(`${API}/listing-inquiry`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        companyName, contactName, email, curriculumName,
+        phone: document.getElementById('phone').value,
+        website: document.getElementById('website').value,
+        description: document.getElementById('description').value,
+        message: document.getElementById('message').value,
+        listingType: tier, grades
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast("🎉 Inquiry sent! We'll be in touch within 2–3 business days.",'success');
+      btn.textContent='Inquiry Sent ✓';
+      setTimeout(()=>{ btn.disabled=false; btn.textContent='Send Listing Inquiry →'; },5000);
+    } else {
+      showToast(data.error||'Submission failed.','error');
+      btn.disabled=false; btn.textContent='Send Listing Inquiry →';
+    }
+  } catch(e) {
+    showToast('Could not reach the server.','error');
+    btn.disabled=false; btn.textContent='Send Listing Inquiry →';
+  }
+}
+
+function 

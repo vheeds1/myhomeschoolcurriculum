@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — MyHomeschoolCurriculum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0F1923;--surface:#162230;--surface2:#1C2D3D;--border:#253545;--accent:#4A9A54;--gold:#D4A84B;--red:#E05A47;--yellow:#E8B84B;--navy:#1E3A4C;--text:#E8EDF2;--muted:#7A8EA0;--cream:#FDF6EC}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:380px;text-align:center}
+.login-logo{font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff;margin-bottom:4px}
+.login-logo span{color:var(--gold)}
+.login-sub{color:var(--muted);font-size:.85rem;margin-bottom:28px}
+.login-input{width:100%;padding:11px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;margin-bottom:12px;transition:border-color .2s}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.login-btn:hover{background:#3a8a44;transform:translateY(-1px)}
+.login-err{color:var(--red);font-size:.82rem;margin-top:8px}
+/* LAYOUT */
+#app{display:none;flex:1;flex-direction:column}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff}
+.topbar-logo span{color:var(--gold)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-right span{font-size:.8rem;color:var(--muted)}
+.logout-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;transition:all .18s}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+.layout{display:flex;flex:1}
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;flex-shrink:0;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;transition:all .18s;border-left:3px solid transparent;font-size:.85rem;color:var(--muted)}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.nav-item.active{color:var(--text);background:rgba(74,154,84,.1);border-left-color:var(--accent)}
+.nav-item .icon{font-size:1rem;width:20px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:.65rem;font-weight:700}
+.nav-section{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:14px 18px 4px}
+.content{flex:1;padding:28px;overflow-x:auto;min-width:0}
+/* OVERVIEW */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px}
+.stat-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
+.stat-value{font-family:'Playfair Display',serif;font-size:1.8rem;color:#fff}
+.stat-sub{font-size:.75rem;color:var(--muted);margin-top:3px}
+.stat-card.green .stat-value{color:var(--accent)}
+.stat-card.gold .stat-value{color:var(--gold)}
+.stat-card.red .stat-value{color:var(--red)}
+/* TABLES */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.section-title{font-size:1rem;font-weight:600;color:var(--text)}
+.btn{padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .18s}
+.btn-green{background:var(--accent);color:#fff}
+.btn-green:hover{background:#3a8a44}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#c04030}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:500px}
+th{background:var(--surface2);color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;padding:11px 14px;text-align:left;font-weight:600;white-space:nowrap}
+td{padding:11px 14px;border-top:1px solid var(--border);vertical-align:top;max-width:280px;word-break:break-word}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.68rem;font-weight:700}
+.badge-new{background:rgba(74,154,84,.2);color:var(--accent)}
+.badge-pending{background:rgba(232,184,75,.2);color:var(--yellow)}
+.badge-active{background:rgba(74,154,84,.2);color:var(--accent)}
+.badge-canceled{background:rgba(224,90,71,.2);color:var(--red)}
+.badge-handled{background:rgba(122,142,160,.2);color:var(--muted)}
+.badge-platinum{background:rgba(212,168,75,.25);color:var(--gold)}
+.badge-gold{background:rgba(212,168,75,.15);color:#c4963f}
+.badge-silver{background:rgba(180,180,180,.2);color:#aaa}
+.action-btns{display:flex;gap:5px;flex-wrap:wrap}
+.act-btn{padding:4px 10px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
+.act-approve{background:rgba(74,154,84,.2);color:var(--accent)}
+.act-approve:hover{background:var(--accent);color:#fff}
+.act-delete{background:rgba(224,90,71,.15);color:var(--red)}
+.act-delete:hover{background:var(--red);color:#fff}
+.act-view{background:rgba(255,255,255,.08);color:var(--muted)}
+.act-view:hover{background:rgba(255,255,255,.15);color:var(--text)}
+.empty-row td{text-align:center;color:var(--muted);padding:28px}
+/* TABS */
+.tab-content{display:none}
+.tab-content.active{display:block}
+/* MRR HIGHLIGHT */
+.mrr-box{background:linear-gradient(135deg,#1A3A24,#1E4A2C);border:1px solid rgba(74,154,84,.3);border-radius:14px;padding:20px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.mrr-box .big{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--accent)}
+.mrr-box .label{font-size:.78rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px}
+/* SEARCH BAR */
+.search-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;width:200px}
+.search-input:focus{border-color:var(--accent)}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;padding:13px 20px;border-radius:10px;font-size:.85rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{background:var(--red)}
+/* CURRICULUM FORM */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:640px;padding:28px;position:relative;margin:auto}
+.modal h3{font-size:1.1rem;font-weight:600;margin-bottom:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:4px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none}
+.form-group textarea{min-height:80px;resize:vertical}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+@media(max-width:768px){.sidebar{display:none}.stats-grid{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">Curriculum<span>Compass</span></div>
+    <div class="login-sub">Admin Dashboard</div>
+    <input class="login-input" type="password" id="tokenInput" placeholder="Admin token" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Enter Dashboard →</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;flex:1;flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-logo">Curriculum<span>Compass</span> <span style="font-size:.7rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400">Admin</span></div>
+    <div class="topbar-right">
+      <span id="lastRefreshed"></span>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active" onclick="showTab('overview',this)"><span class="icon">📊</span> Dashboard</div>
+      <div class="nav-section">Content</div>
+      <div class="nav-item" onclick="showTab('curricula',this)"><span class="icon">📚</span> Curricula</div>
+      <div class="nav-item" onclick="showTab('reviews',this)"><span class="icon">⭐</span> Reviews <span class="nav-badge" id="reviewsBadge" style="display:none"></span></div>
+      <div class="nav-item" onclick="showTab('blog',this)"><span class="icon">✍️</span> Blog Posts</div>
+      <div class="nav-section">Business</div>
+      <div class="nav-item" onclick="showTab('inquiries',this)"><span class="icon">📋</span> Inquiries <span class="nav-badge" id="inquiriesBadge" style="display:none"></span></div>
+      <div class="nav-item" onclick="showTab('messages',this)"><span class="icon">💬</span> Messages</div>
+      <div class="nav-item" onclick="showTab('subscriptions',this)"><span class="icon">💳</span> Subscriptions</div>
+      <div class="nav-section">People</div>
+      <div class="nav-item" onclick="showTab('users',this)"><span class="icon">👥</span> Users</div>
+      <div class="nav-item" onclick="showTab('newsletter',this)"><span class="icon">📬</span> Newsletter</div>
+    </div>
+
+    <div class="content">
+
+      <!-- OVERVIEW TAB -->
+      <div class="tab-content active" id="tab-overview">
+        <div class="section-header">
+          <div class="section-title">Dashboard Overview</div>
+          <button class="btn btn-ghost" onclick="loadAll()">↺ Refresh</button>
+        </div>
+        <div class="mrr-box">
+          <div><div class="label">Est. Monthly Revenue</div><div class="big" id="mrrValue">$0</div></div>
+          <div style="width:1px;height:50px;background:rgba(255,255,255,.1)"></div>
+          <div><div class="label">Active Subscriptions</div><div class="big" id="activeSubs" style="color:var(--gold)">0</div></div>
+          <div style="width:1px;height:50px;background:rgba(255,255,255,.1)"></div>
+          <div><div class="label">Newsletter Subscribers</div><div class="big" id="nlCount" style="color:#7AB4FF">0</div></div>
+        </div>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card"><div class="stat-label">Total Curricula</div><div class="stat-value">—</div></div>
+        </div>
+        <div class="section-header" style="margin-top:28px"><div class="section-title">⏳ Pending Reviews</div></div>
+        <div class="table-wrap"><table><thead><tr><th>Curriculum</th><th>Reviewer</th><th>Rating</th><th>Title</th><th>Actions</th></tr></thead><tbody id="pendingReviewsTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table></div>
+        <div class="section-header" style="margin-top:28px"><div class="section-title">📋 Recent Inquiries</div></div>
+        <div class="table-wrap"><table><thead><tr><th>Curriculum</th><th>Company</th><th>Type</th><th>Status</th><th>Date</th></tr></thead><tbody id="recentInquiriesTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- CURRICULA TAB -->
+      <div class="tab-content" id="tab-curricula">
+        <div class="section-header">
+          <div class="section-title">📚 Curricula</div>
+          <div style="display:flex;gap:8px">
+            <input class="search-input" placeholder="Search…" oninput="filterTable('curriculaTable',this.value)">
+            <button class="btn btn-green" onclick="openCurriculumModal()">+ Add New</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Grades</th><th>Style</th><th>Price</th><th>Rating</th><th>Tier</th><th>Active</th><th>Actions</th></tr></thead><tbody id="curriculaTable"><tr class="empty-row"><td colspan="8">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- REVIEWS TAB -->
+      <div class="tab-content" id="tab-reviews">
+        <div class="section-header">
+          <div class="section-title">⭐ Reviews</div>
+          <input class="search-input" placeholder="Search…" oninput="filterTable('reviewsTable',this.value)">
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Curriculum</th><th>Reviewer</th><th>Rating</th><th>Title</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="reviewsTable"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- INQUIRIES TAB -->
+      <div class="tab-content" id="tab-inquiries">
+        <div class="section-header">
+          <div class="section-title">📋 Listing Inquiries</div>
+          <input class="search-input" placeholder="Search…" oninput="filterTable('inquiriesTable',this.value)">
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Curriculum</th><th>Company</th><th>Contact</th><th>Email</th><th>Type</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="inquiriesTable"><tr class="empty-row"><td colspan="8">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- MESSAGES TAB -->
+      <div class="tab-content" id="tab-messages">
+        <div class="section-header">
+          <div class="section-title">💬 Contact Messages</div>
+          <input class="search-input" placeholder="Search…" oninput="filterTable('messagesTable',this.value)">
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="messagesTable"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- SUBSCRIPTIONS TAB -->
+      <div class="tab-content" id="tab-subscriptions">
+        <div class="section-header"><div class="section-title">💳 Stripe Subscriptions</div></div>
+        <div class="table-wrap"><table><thead><tr><th>Company</th><th>Email</th><th>Tier</th><th>Status</th><th>Started</th></tr></thead><tbody id="subscriptionsTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- USERS TAB -->
+      <div class="tab-content" id="tab-users">
+        <div class="section-header">
+          <div class="section-title">👥 Users</div>
+          <input class="search-input" placeholder="Search…" oninput="filterTable('usersTable',this.value)">
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Verified</th><th>Joined</th><th>Last Login</th></tr></thead><tbody id="usersTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- NEWSLETTER TAB -->
+      <div class="tab-content" id="tab-newsletter">
+        <div class="section-header">
+          <div class="section-title">📬 Newsletter Subscribers</div>
+          <input class="search-input" placeholder="Search…" oninput="filterTable('newsletterTable',this.value)">
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Email</th><th>Name</th><th>Source</th><th>Subscribed</th></tr></thead><tbody id="newsletterTable"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- BLOG TAB -->
+      <div class="tab-content" id="tab-blog">
+        <div class="section-header">
+          <div class="section-title">✍️ Blog Posts</div>
+          <button class="btn btn-green" onclick="openBlogModal()">+ New Post</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Published</th><th>Actions</th></tr></thead><tbody id="blogTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody></table></div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- Curriculum Modal -->
+<div class="modal-overlay" id="curriculumModal" onclick="if(event.target===this)closeCurriculumModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCurriculumModal()">✕</button>
+    <h3 id="currModalTitle">Add Curriculum</h3>
+    <input type="hidden" id="currModalId">
+    <div class="form-row">
+      <div class="form-group"><label>Name*</label><input id="cName" placeholder="The Good and the Beautiful"></div>
+      <div class="form-group"><label>Slug*</label><input id="cSlug" placeholder="good-and-the-beautiful"></div>
+    </div>
+    <div class="form-group"><label>Tagline</label><input id="cTagline" placeholder="Short tagline"></div>
+    <div class="form-group"><label>Description</label><textarea id="cDescription"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Price Min ($)</label><input id="cPriceMin" type="number"></div>
+      <div class="form-group"><label>Price Max ($)</label><input id="cPriceMax" type="number"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Grades (comma-sep)</label><input id="cGrades" placeholder="K,1,2,3,4,5"></div>
+      <div class="form-group"><label>Style (comma-sep)</label><input id="cStyle" placeholder="Classical,Charlotte Mason"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Worldview</label><input id="cWorldview" placeholder="Christian,Secular"></div>
+      <div class="form-group"><label>Format</label><input id="cFormat" placeholder="Print,Digital,DVD"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Sponsor Tier</label>
+        <select id="cTier"><option value="">Standard (free)</option><option value="silver">Silver ($49/mo)</option><option value="gold">Gold ($149/mo)</option><option value="platinum">Platinum ($299/mo)</option></select>
+      </div>
+      <div class="form-group"><label>Affiliate Link</label><input id="cAffiliate" placeholder="https://…"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Featured</label><select id="cFeatured"><option value="false">No</option><option value="true">Yes</option></select></div>
+      <div class="form-group"><label>Active</label><select id="cActive"><option value="true">Yes</option><option value="false">No</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeCurriculumModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveCurriculum()">Save Curriculum</button>
+    </div>
+  </div>
+</div>
+
+<!-- Blog Modal -->
+<div class="modal-overlay" id="blogModal" onclick="if(event.target===this)closeBlogModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBlogModal()">✕</button>
+    <h3 id="blogModalTitle">New Blog Post</h3>
+    <input type="hidden" id="blogModalId">
+    <div class="form-row">
+      <div class="form-group"><label>Title*</label><input id="bTitle"></div>
+      <div class="form-group"><label>Slug</label><input id="bSlug" placeholder="auto-generated from title"></div>
+    </div>
+    <div class="form-group"><label>Excerpt</label><textarea id="bExcerpt" style="min-height:60px"></textarea></div>
+    <div class="form-group"><label>Content (Markdown supported)</label><textarea id="bContent" style="min-height:180px"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Category</label>
+        <select id="bCategory"><option>Getting Started</option><option>Teaching Styles</option><option>Budget</option><option>Special Needs</option><option>High School</option><option>General</option></select>
+      </div>
+      <div class="form-group"><label>Tags (comma-sep)</label><input id="bTags"></div>
+    </div>
+    <div class="form-group"><label>Published</label><select id="bPublished"><option value="true">Yes — Live</option><option value="false">No — Draft</option></select></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeBlogModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveBlogPost()">Save Post</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+let adminToken = localStorage.getItem('cc_admin_token') || '';
+let analyticsData = null;
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token) return;
+  // Test the token
+  const res = await fetch(`${API}/analytics`, { headers: { Authorization: `Bearer ${token}` } });
+  if (res.ok) {
+    adminToken = token;
+    localStorage.setItem('cc_admin_token', token);
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    loadAll();
+  } else {
+    document.getElementById('loginErr').textContent = 'Invalid admin token.';
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('cc_admin_token');
+  adminToken = '';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+function authHeaders() { return { Authorization: `Bearer ${adminToken}`, 'Content-Type': 'application/json' }; }
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+// Auto-login if token cached
+if (adminToken) {
+  fetch(`${API}/analytics`, { headers: { Authorization: `Bearer ${adminToken}` } })
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if (d) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+        loadAll();
+      }
+    }).catch(() => {});
+}
+
+async function loadAll() {
+  document.getElementById('lastRefreshed').textContent = 'Refreshing…';
+  await Promise.all([loadAnalytics(), loadCurricula(), loadReviews(), loadInquiries(), loadMessages(), loadUsers(), loadNewsletter(), loadSubscriptions(), loadBlog()]);
+  document.getElementById('lastRefreshed').textContent = 'Updated ' + new Date().toLocaleTimeString();
+}
+
+// ── ANALYTICS / OVERVIEW ─────────────────────────────────────────────────────
+async function loadAnalytics() {
+  try {
+    const res = await fetch(`${API}/analytics`, { headers: authHeaders() });
+    const data = await res.json();
+    analyticsData = data;
+    const o = data.overview;
+    document.getElementById('mrrValue').textContent = '$' + (o.estimatedMRR || 0).toLocaleString();
+    document.getElementById('activeSubs').textContent = o.activeSubscriptions || 0;
+    document.getElementById('nlCount').textContent = (o.newsletterSubscribers || 0).toLocaleString();
+    // Stats grid
+    document.getElementById('statsGrid').innerHTML = [
+      { label:'Curricula', value: o.totalCurricula, cls: '' },
+      { label:'Total Reviews', value: o.totalReviews, cls: '' },
+      { label:'Pending Reviews', value: o.pendingReviews, cls: o.pendingReviews > 0 ? 'red' : '' },
+      { label:'Affiliate Clicks', value: o.totalClicks, cls: '' },
+      { label:'Clicks (30d)', value: o.recentClicks, cls: 'green' },
+      { label:'Total Inquiries', value: o.totalInquiries, cls: '' },
+      { label:'New Inquiries', value: o.pendingInquiries, cls: o.pendingInquiries > 0 ? 'gold' : '' },
+      { label:'Contact Messages', value: o.totalMessages, cls: '' },
+      { label:'Registered Users', value: o.totalUsers, cls: '' },
+      { label:'Blog Posts', value: o.totalBlogPosts, cls: '' },
+    ].map(s => `<div class="stat-card ${s.cls}"><div class="stat-label">${s.label}</div><div class="stat-value">${s.value ?? '—'}</div></div>`).join('');
+    // Badges
+    if (o.pendingReviews > 0) { document.getElementById('reviewsBadge').textContent = o.pendingReviews; document.getElementById('reviewsBadge').style.display = ''; }
+    if (o.pendingInquiries > 0) { document.getElementById('inquiriesBadge').textContent = o.pendingInquiries; document.getElementById('inquiriesBadge').style.display = ''; }
+    // Pending reviews table
+    const pr = data.pendingReviews || [];
+    document.getElementById('pendingReviewsTable').innerHTML = pr.length
+      ? pr.map(r => `<tr><td>${r.curriculumSlug||r.curriculumId}</td><td>${r.name}</td><td>${'★'.repeat(r.rating)}</td><td>${r.title}</td><td><div class="action-btns"><button class="act-btn act-approve" onclick="approveReview(${r.id})">Approve</button><button class="act-btn act-delete" onclick="deleteReview(${r.id})">Delete</button></div></td></tr>`).join('')
+      : '<tr class="empty-row"><td colspan="5">No pending reviews 🎉</td></tr>';
+    // Recent inquiries
+    const ri = data.recentInquiries || [];
+    document.getElementById('recentInquiriesTable').innerHTML = ri.length
+      ? ri.map(i => `<tr><td>${i.curriculumName}</td><td>${i.companyName}</td><td><span class="badge badge-${i.listingType||'new'}">${i.listingType}</span></td><td><span class="badge badge-${i.status}">${i.status}</span></td><td>${fmt(i.createdAt)}</td></tr>`).join('')
+      : '<tr class="empty-row"><td colspan="5">No recent inquiries</td></tr>';
+  } catch(e) { console.error(e); }
+}
+
+// ── CURRICULA ─────────────────────────────────────────────────────────────────
+async function loadCurricula() {
+  try {
+    const res = await fetch(`${API}/admin/curricula`, { headers: authHeaders() });
+    const data = await res.json();
+    const curricula = Array.isArray(data) ? data : (data.curricula || []);
+    document.getElementById('curriculaTable').innerHTML = curricula.length
+      ? curricula.map(c => `<tr>
+          <td><strong>${c.name}</strong><br><span style="color:var(--muted);font-size:.75rem">${c.slug}</span></td>
+          <td>${(c.grades||[]).join(', ')||'—'}</td>
+          <td>${(c.style||[]).join(', ')||'—'}</td>
+          <td>${c.priceMin ? '$'+c.priceMin+(c.priceMax?'–$'+c.priceMax:'') : 'Free'}</td>
+          <td>${c.rating||'—'} (${c.reviewCount||0})</td>
+          <td><span class="badge badge-${c.sponsorTier||'none'}">${c.sponsorTier||'free'}</span></td>
+          <td>${c.active ? '✅' : '❌'}</td>
+          <td><div class="action-btns"><button class="act-btn act-view" onclick="editCurriculum(${JSON.stringify(c).replace(/"/g,'&quot;')})">Edit</button><button class="act-btn act-delete" onclick="toggleActive(${c.id},${!c.active})">${c.active?'Deactivate':'Activate'}</button></div></td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="8">No curricula yet</td></tr>';
+  } catch(e) {}
+}
+
+// ── REVIEWS ──────────────────────────────────────────────────────────────────
+async function loadReviews() {
+  try {
+    // Get from analytics (has pending) + public API
+    const [ar, pr] = await Promise.all([
+      fetch(`${API}/curricula`, { headers: authHeaders() }).then(r => r.json()),
+      fetch(`${API}/analytics`, { headers: authHeaders() }).then(r => r.json())
+    ]);
+    // Build from pending + the analytics data we already have
+    const pending = pr.pendingReviews || [];
+    document.getElementById('reviewsTable').innerHTML = pending.length
+      ? pending.map(r => `<tr>
+          <td>${r.curriculumSlug||r.curriculumId}</td>
+          <td>${r.name}<br><span style="color:var(--muted);font-size:.73rem">${r.location||''}</span></td>
+          <td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td>
+          <td>${r.title}<br><span style="color:var(--muted);font-size:.73rem">${(r.body||'').substring(0,80)}…</span></td>
+          <td><span class="badge badge-pending">Pending</span></td>
+          <td>${fmt(r.createdAt)}</td>
+          <td><div class="action-btns"><button class="act-btn act-approve" onclick="approveReview(${r.id})">Approve</button><button class="act-btn act-delete" onclick="deleteReview(${r.id})">Delete</button></div></td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="7">No pending reviews 🎉</td></tr>';
+  } catch(e) {}
+}
+
+async function approveReview(id) {
+  await fetch(`${API}/admin/reviews/${id}/approve`, { method: 'PUT', headers: authHeaders() });
+  showToast('Review approved!');
+  loadAnalytics(); loadReviews();
+}
+async function deleteReview(id) {
+  if (!confirm('Delete this review?')) return;
+  await fetch(`${API}/admin/reviews/${id}`, { method: 'DELETE', headers: authHeaders() });
+  showToast('Review deleted');
+  loadAnalytics(); loadReviews();
+}
+
+// ── INQUIRIES ─────────────────────────────────────────────────────────────────
+async function loadInquiries() {
+  try {
+    const res = await fetch(`${API}/admin/inquiries`, { headers: authHeaders() });
+    const data = await res.json();
+    const inqs = data.inquiries || [];
+    document.getElementById('inquiriesTable').innerHTML = inqs.length
+      ? inqs.map(i => `<tr>
+          <td><strong>${i.curriculumName}</strong></td>
+          <td>${i.companyName}</td>
+          <td>${i.contactName}</td>
+          <td><a href="mailto:${i.email}" style="color:var(--accent)">${i.email}</a></td>
+          <td><span class="badge badge-${i.listingType}">${i.listingType}</span></td>
+          <td><span class="badge badge-${i.status}">${i.status}</span></td>
+          <td>${fmt(i.createdAt)}</td>
+          <td><button class="act-btn act-approve" onclick="markInquiry('${i.id}','contacted')">Mark Contacted</button></td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="8">No inquiries yet</td></tr>';
+  } catch(e) {}
+}
+async function markInquiry(id, status) {
+  await fetch(`${API}/admin/inquiries/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status }) });
+  showToast('Status updated'); loadInquiries();
+}
+
+// ── MESSAGES ─────────────────────────────────────────────────────────────────
+async function loadMessages() {
+  try {
+    const res = await fetch(`${API}/admin/messages`, { headers: authHeaders() });
+    const data = await res.json();
+    const msgs = data.messages || [];
+    document.getElementById('messagesTable').innerHTML = msgs.length
+      ? msgs.map(m => `<tr>
+          <td>${m.name}</td>
+          <td><a href="mailto:${m.email}" style="color:var(--accent)">${m.email}</a></td>
+          <td>${m.subject||'—'}</td>
+          <td style="max-width:240px;color:var(--muted)">${(m.message||'').substring(0,100)}${m.message?.length>100?'…':''}</td>
+          <td><span class="badge ${m.handled?'badge-handled':'badge-new'}">${m.handled?'Done':'New'}</span></td>
+          <td>${fmt(m.createdAt)}</td>
+          <td><button class="act-btn act-approve" onclick="markMessage('${m.id}',${!m.handled})">${m.handled?'Reopen':'Mark Done'}</button></td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="7">No messages yet</td></tr>';
+  } catch(e) {}
+}
+async function markMessage(id, handled) {
+  await fetch(`${API}/admin/messages/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ handled }) });
+  showToast('Updated'); loadMessages();
+}
+
+// ── SUBSCRIPTIONS ─────────────────────────────────────────────────────────────
+async function loadSubscriptions() {
+  try {
+    const res = await fetch(`${API}/billing/subscriptions`, { headers: authHeaders() });
+    const data = await res.json();
+    const subs = data.subscriptions || [];
+    document.getElementById('subscriptionsTable').innerHTML = subs.length
+      ? subs.map(s => `<tr>
+          <td>${s.companyName||'—'}</td>
+          <td>${s.email}</td>
+          <td><span class="badge badge-${s.tier}">${s.tier}</span></td>
+          <td><span class="badge badge-${s.status}">${s.status}</span></td>
+          <td>${fmt(s.createdAt)}</td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="5">No subscriptions yet — configure Stripe to enable billing</td></tr>';
+  } catch(e) {}
+}
+
+// ── USERS ─────────────────────────────────────────────────────────────────────
+async function loadUsers() {
+  try {
+    const res = await fetch(`${API}/admin/users`, { headers: authHeaders() });
+    const data = await res.json();
+    const users = data.users || [];
+    document.getElementById('usersTable').innerHTML = users.length
+      ? users.map(u => `<tr>
+          <td>${u.name}</td>
+          <td>${u.email}</td>
+          <td>${u.emailVerified ? '<span class="badge badge-active">✓ Verified</span>' : '<span class="badge badge-pending">Pending</span>'}</td>
+          <td>${fmt(u.createdAt)}</td>
+          <td>${u.lastLoginAt ? fmt(u.lastLoginAt) : '—'}</td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="5">No registered users yet</td></tr>';
+  } catch(e) {}
+}
+
+// ── NEWSLETTER ────────────────────────────────────────────────────────────────
+async function loadNewsletter() {
+  try {
+    const res = await fetch(`${API}/newsletter/subscribers`, { headers: authHeaders() });
+    const data = await res.json();
+    const subs = data.subscribers || [];
+    document.getElementById('newsletterTable').innerHTML = subs.length
+      ? subs.map(s => `<tr>
+          <td>${s.email}</td>
+          <td>${s.name||'—'}</td>
+          <td><span class="badge badge-new">${s.source||'website'}</span></td>
+          <td>${fmt(s.subscribedAt)}</td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="4">No newsletter subscribers yet</td></tr>';
+  } catch(e) {}
+}
+
+// ── BLOG ──────────────────────────────────────────────────────────────────────
+async function loadBlog() {
+  try {
+    const res = await fetch(`${API}/admin/blog`, { headers: authHeaders() });
+    const data = await res.json();
+    const posts = data.posts || [];
+    document.getElementById('blogTable').innerHTML = posts.length
+      ? posts.map(p => `<tr>
+          <td>${p.title}</td>
+          <td>${p.category||'General'}</td>
+          <td><span class="badge ${p.published?'badge-active':'badge-pending'}">${p.published?'Live':'Draft'}</span></td>
+          <td>${p.publishedAt ? fmt(p.publishedAt) : '—'}</td>
+          <td><div class="action-btns">
+            <button class="act-btn act-view" onclick="editBlogPost(${JSON.stringify(p).replace(/"/g,'&quot;').replace(/'/g,'&#39;')})">Edit</button>
+            <button class="act-btn act-delete" onclick="deleteBlogPost('${p.id}')">Delete</button>
+          </div></td>
+        </tr>`).join('')
+      : '<tr class="empty-row"><td colspan="5">No blog posts yet</td></tr>';
+  } catch(e) {}
+}
+
+// ── CURRICULUM MODAL ─────────────────────────────────────────────────────────
+function openCurriculumModal() {
+  document.getElementById('currModalTitle').textContent = 'Add Curriculum';
+  document.getElementById('currModalId').value = '';
+  ['cName','cSlug','cTagline','cDescription','cPriceMin','cPriceMax','cGrades','cStyle','cWorldview','cFormat','cAffiliate'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cTier').value = '';
+  document.getElementById('cFeatured').value = 'false';
+  document.getElementById('cActive').value = 'true';
+  document.getElementById('curriculumModal').classList.add('open');
+}
+function editCurriculum(c) {
+  document.getElementById('currModalTitle').textContent = 'Edit Curriculum';
+  document.getElementById('currModalId').value = c.id;
+  document.getElementById('cName').value = c.name||'';
+  document.getElementById('cSlug').value = c.slug||'';
+  document.getElementById('cTagline').value = c.tagline||'';
+  document.getElementById('cDescription').value = c.description||'';
+  document.getElementById('cPriceMin').value = c.priceMin||'';
+  document.getElementById('cPriceMax').value = c.priceMax||'';
+  document.getElementById('cGrades').value = (c.grades||[]).join(',');
+  document.getElementById('cStyle').value = (c.style||[]).join(',');
+  document.getElementById('cWorldview').value = (c.worldview||[]).join(',');
+  document.getElementById('cFormat').value = (c.format||[]).join(',');
+  document.getElementById('cAffiliate').value = c.affiliateLink||'';
+  document.getElementById('cTier').value = c.sponsorTier||'';
+  document.getElementById('cFeatured').value = c.featured ? 'true' : 'false';
+  document.getElementById('cActive').value = c.active !== false ? 'true' : 'false';
+  document.getElementById('curriculumModal').classList.add('open');
+}
+function closeCurriculumModal() { document.getElementById('curriculumModal').classList.remove('open'); }
+async function saveCurriculum() {
+  const id = document.getElementById('currModalId').value;
+  const payload = {
+    name: document.getElementById('cName').value,
+    slug: document.getElementById('cSlug').value,
+    tagline: document.getElementById('cTagline').value,
+    description: document.getElementById('cDescription').value,
+    priceMin: parseInt(document.getElementById('cPriceMin').value)||0,
+    priceMax: parseInt(document.getElementById('cPriceMax').value)||0,
+    grades: document.getElementById('cGrades').value.split(',').map(s=>s.trim()).filter(Boolean),
+    style: document.getElementById('cStyle').value.split(',').map(s=>s.trim()).filter(Boolean),
+    worldview: document.getElementById('cWorldview').value.split(',').map(s=>s.trim()).filter(Boolean),
+    format: document.getElementById('cFormat').value.split(',').map(s=>s.trim()).filter(Boolean),
+    affiliateLink: document.getElementById('cAffiliate').value,
+    sponsorTier: document.getElementById('cTier').value||null,
+    featured: document.getElementById('cFeatured').value === 'true',
+    active: document.getElementById('cActive').value === 'true',
+  };
+  const url = id ? `${API}/admin/curricula/${id}` : `${API}/admin/curricula`;
+  const method = id ? 'PUT' : 'POST';
+  const res = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
+  const data = await res.json();
+  if (data.success || data.curriculum) { showToast('Curriculum saved!'); closeCurriculumModal(); loadCurricula(); }
+  else showToast(data.error||'Error saving', 'err');
+}
+async function toggleActive(id, active) {
+  await fetch(`${API}/admin/curricula/${id}`, { method:'PUT', headers:authHeaders(), body:JSON.stringify({active}) });
+  showToast(`Curriculum ${active?'activated':'deactivated'}`); loadCurricula();
+}
+
+// ── BLOG MODAL ────────────────────────────────────────────────────────────────
+function openBlogModal() {
+  document.getElementById('blogModalTitle').textContent = 'New Blog Post';
+  document.getElementById('blogModalId').value = '';
+  ['bTitle','bSlug','bExcerpt','bContent','bTags'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('bPublished').value = 'false';
+  document.getElementById('blogModal').classList.add('open');
+}
+function editBlogPost(p) {
+  document.getElementById('blogModalTitle').textContent = 'Edit Post';
+  document.getElementById('blogModalId').value = p.id;
+  document.getElementById('bTitle').value = p.title||'';
+  document.getElementById('bSlug').value = p.slug||'';
+  document.getElementById('bExcerpt').value = p.excerpt||'';
+  document.getElementById('bContent').value = p.content||'';
+  document.getElementById('bCategory').value = p.category||'General';
+  document.getElementById('bTags').value = (p.tags||[]).join(',');
+  document.getElementById('bPublished').value = p.published ? 'true' : 'false';
+  document.getElementById('blogModal').classList.add('open');
+}
+function closeBlogModal() { document.getElementById('blogModal').classList.remove('open'); }
+async function saveBlogPost() {
+  const id = document.getElementById('blogModalId').value;
+  const payload = {
+    title: document.getElementById('bTitle').value,
+    slug: document.getElementById('bSlug').value,
+    excerpt: document.getElementById('bExcerpt').value,
+    content: document.getElementById('bContent').value,
+    category: document.getElementById('bCategory').value,
+    tags: document.getElementById('bTags').value.split(',').map(s=>s.trim()).filter(Boolean),
+    published: document.getElementById('bPublished').value === 'true',
+  };
+  const url = id ? `${API}/blog/${id}` : `${API}/blog`;
+  const method = id ? 'PUT' : 'POST';
+  const res = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
+  const data = await res.json();
+  if (data.success || data.post) { showToast('Post saved!'); closeBlogModal(); loadBlog(); }
+  else showToast(data.error||'Error saving', 'err');
+}
+async function deleteBlogPost(id) {
+  if (!confirm('Delete this post?')) return;
+  await fetch(`${API}/blog/${id}`, { method: 'DELETE', headers: authHeaders() });
+  showToast('Post deleted'); loadBlog();
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────────────────────
+function showTab(tab, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+function filterTable(tableId, q) {
+  const rows = document.getElementById(tableId).querySelectorAll('tr:not(.empty-row)');
+  rows.forEach(r => r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none');
+}
+
+function fmt(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+</script>
+</body>
+</html>

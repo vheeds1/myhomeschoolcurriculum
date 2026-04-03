@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — MyHomeschoolCurriculum</title>
+<meta name="description" content="Homeschool guides, curriculum comparisons, teaching strategies, and advice for homeschool families.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FDF6EC;--warm-white:#FFFBF5;--sage:#7A9E7E;--deep-sage:#4A7550;--terracotta:#C8614A;--gold:#D4A84B;--navy:#1E3A4C;--charcoal:#2C3E3F;--light-sage:#EAF2EB;--border:#E8DDD0;--text-muted:#7A7A6E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal)}
+header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;text-decoration:none}
+.logo-text span{color:var(--gold)}
+nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;margin-left:4px;transition:all .2s}
+nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
+.hero{background:linear-gradient(135deg,var(--navy),#2A4F5A);padding:50px 24px;text-align:center}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;margin-bottom:10px}
+.hero h1 span{color:var(--gold)}
+.hero p{color:rgba(255,255,255,.7);max-width:500px;margin:0 auto;font-size:.95rem}
+.wrap{max-width:1100px;margin:0 auto;padding:50px 24px}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;align-items:center}
+.filter-row span{font-size:.82rem;color:var(--text-muted);font-weight:600;margin-right:4px}
+.cat-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:.78rem;font-weight:500;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif;color:var(--charcoal)}
+.cat-btn:hover,.cat-btn.active{background:var(--deep-sage);border-color:var(--deep-sage);color:#fff}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
+.post-card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;transition:all .22s;cursor:pointer}
+.post-card:hover{border-color:var(--sage);box-shadow:0 8px 28px rgba(74,117,80,.1);transform:translateY(-3px)}
+.post-thumb{height:140px;background:linear-gradient(135deg,var(--light-sage),#d4e8d5);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+.post-cat{position:absolute;top:12px;left:12px;background:var(--deep-sage);color:#fff;padding:3px 10px;border-radius:12px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.post-body{padding:20px}
+.post-title{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:8px;line-height:1.3}
+.post-excerpt{font-size:.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:12px}
+.post-meta{display:flex;align-items:center;justify-content:space-between;font-size:.74rem;color:var(--text-muted)}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.tag{padding:2px 8px;background:var(--light-sage);color:var(--deep-sage);border-radius:8px;font-size:.7rem;font-weight:500}
+.read-btn{color:var(--deep-sage);font-weight:600;font-size:.8rem;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:10px;transition:gap .2s}
+.read-btn:hover{gap:8px}
+.loading{text-align:center;padding:60px;color:var(--text-muted)}
+.empty{text-align:center;padding:60px;color:var(--text-muted)}
+
+/* SINGLE POST */
+#postView{display:none}
+.post-header{background:linear-gradient(135deg,var(--navy),#2A4F5A);padding:50px 24px;text-align:center}
+.post-cat-badge{display:inline-block;background:rgba(212,168,75,.25);color:var(--gold);border:1px solid rgba(212,168,75,.4);padding:4px 14px;border-radius:20px;font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:16px}
+.post-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.6rem);color:#fff;max-width:700px;margin:0 auto 16px;line-height:1.2}
+.post-header .meta{color:rgba(255,255,255,.6);font-size:.82rem}
+.post-content{max-width:720px;margin:0 auto;padding:50px 24px;line-height:1.8;font-size:.95rem;color:#444}
+.post-content h1,.post-content h2{font-family:'Playfair Display',serif;color:var(--navy);margin:32px 0 12px}
+.post-content h2{font-size:1.4rem}
+.post-content h3{font-size:1.1rem;color:var(--charcoal);margin:24px 0 8px;font-weight:600}
+.post-content p{margin-bottom:16px}
+.post-content ul,.post-content ol{margin:12px 0 16px 24px}
+.post-content li{margin-bottom:6px}
+.post-content strong{color:var(--navy)}
+.post-content a{color:var(--deep-sage);font-weight:500}
+.post-content table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.85rem}
+.post-content th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left}
+.post-content td{padding:10px 14px;border-top:1px solid var(--border)}
+.post-content tr:hover td{background:var(--cream)}
+.post-content hr{border:none;border-top:2px solid var(--border);margin:32px 0}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--deep-sage);font-weight:600;text-decoration:none;font-size:.85rem;margin-bottom:24px;cursor:pointer}
+.back-link:hover{color:var(--navy)}
+.newsletter-cta{background:linear-gradient(135deg,var(--deep-sage),var(--sage));border-radius:16px;padding:32px;text-align:center;margin:40px 0;color:#fff}
+.newsletter-cta h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:8px}
+.newsletter-cta p{opacity:.85;font-size:.88rem;margin-bottom:20px}
+.newsletter-form{display:flex;gap:8px;max-width:400px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.newsletter-form input{flex:1;min-width:200px;padding:10px 14px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none}
+.newsletter-form button{padding:10px 20px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.newsletter-form button:hover{background:#c4963f}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:13px 20px;border-radius:10px;font-size:.85rem;z-index:999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:var(--deep-sage)}
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:28px 24px;text-align:center;font-size:.8rem;margin-top:60px}
+footer a{color:var(--gold);text-decoration:none}
+@media(max-width:600px){.blog-grid{grid-template-columns:1fr}}
+</style>
+  <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    // gtag("config", "G-XXXXXXXXXX"); // Uncomment and replace with your GA4 ID
+  </script>
+</head>
+<body>
+<header>
+  <a href="/" class="logo-text">Curriculum<span>Compass</span></a>
+  <nav>
+    <a href="/">Browse</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/legal.html">State Laws</a>
+    <a href="/account.html">My Account</a>
+  </nav>
+</header>
+
+<!-- BLOG LIST VIEW -->
+<div id="listView">
+  <div class="hero">
+    <h1>The <span>Homeschool</span> Blog</h1>
+    <p>Guides, comparisons, teaching strategies, and real advice from the homeschool community.</p>
+  </div>
+  <div class="wrap">
+    <div class="filter-row">
+      <span>Filter:</span>
+      <button class="cat-btn active" data-cat="all" onclick="filterCat(this,'all')">All</button>
+      <button class="cat-btn" data-cat="Getting Started" onclick="filterCat(this,'Getting Started')">Getting Started</button>
+      <button class="cat-btn" data-cat="Teaching Styles" onclick="filterCat(this,'Teaching Styles')">Teaching Styles</button>
+      <button class="cat-btn" data-cat="Budget" onclick="filterCat(this,'Budget')">Budget</button>
+      <button class="cat-btn" data-cat="Special Needs" onclick="filterCat(this,'Special Needs')">Special Needs</button>
+      <button class="cat-btn" data-cat="High School" onclick="filterCat(this,'High School')">High School</button>
+    </div>
+    <div class="blog-grid" id="blogGrid">
+      <div class="loading">Loading posts…</div>
+    </div>
+  </div>
+</div>
+
+<!-- SINGLE POST VIEW -->
+<div id="postView">
+  <div class="post-header" id="postHeader"></div>
+  <div class="post-content" id="postContent">
+    <span class="back-link" onclick="showList()">← Back to Blog</span>
+    <div id="postBody"></div>
+    <div class="newsletter-cta">
+      <h3>Get New Posts in Your Inbox</h3>
+      <p>Join 10,000+ homeschool families getting weekly curriculum tips and reviews.</p>
+      <div class="newsletter-form">
+        <input type="email" id="nlEmail" placeholder="your@email.com">
+        <button onclick="subscribe()">Subscribe Free →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <a href="/">MyHomeschoolCurriculum</a> — Homeschool resource hub for 50,000+ families<br>
+  <span style="font-size:.7rem;opacity:.6">© 2025 MyHomeschoolCurriculum</span>
+</footer>
+
+<script>
+const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+let allPosts = [];
+let currentCat = 'all';
+
+const catEmojis = {
+  'Getting Started':'🌱','Teaching Styles':'📖','Budget':'💰','Special Needs':'🌟',
+  'High School':'🎓','General':'📝','Curriculum Reviews':'🔍','Community':'👨‍👩‍👧‍👦'
+};
+
+async function loadPosts() {
+  try {
+    const res = await fetch(`${API}/blog`);
+    const data = await res.json();
+    allPosts = data.posts || [];
+    renderPosts(allPosts);
+  } catch(e) {
+    document.getElementById('blogGrid').innerHTML = '<div class="empty">Could not load posts. Is the server running?</div>';
+  }
+}
+
+function renderPosts(posts) {
+  const grid = document.getElementById('blogGrid');
+  if (!posts.length) { grid.innerHTML = '<div class="empty">No posts found.</div>'; return; }
+  grid.innerHTML = posts.map(p => `
+    <div class="post-card" onclick="openPost('${p.slug}')">
+      <div class="post-thumb">
+        <span>${catEmojis[p.category]||'📝'}</span>
+        <span class="post-cat">${p.category||'General'}</span>
+      </div>
+      <div class="post-body">
+        <div class="post-title">${p.title}</div>
+        <div class="post-excerpt">${p.excerpt||''}</div>
+        <div class="post-meta">
+          <span>${new Date(p.publishedAt||p.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span>
+          <span>${Math.ceil((p.content||'').split(' ').length / 200)} min read</span>
+        </div>
+        <div class="tags">${(p.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <span class="read-btn">Read article →</span>
+      </div>
+    </div>`).join('');
+}
+
+function filterCat(btn, cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPosts(cat === 'all' ? allPosts : allPosts.filter(p => p.category === cat));
+}
+
+async function openPost(slug) {
+  try {
+    const res = await fetch(`${API}/blog/${slug}`);
+    if (!res.ok) return;
+    const post = await res.json();
+    document.getElementById('postHeader').innerHTML = `
+      <span class="post-cat-badge">${post.category||'General'}</span>
+      <h1>${post.title}</h1>
+      <div class="meta">${new Date(post.publishedAt||post.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})} · ${Math.ceil((post.content||'').split(' ').length/200)} min read</div>`;
+    document.getElementById('postBody').innerHTML = markdownToHtml(post.content||'');
+    document.getElementById('listView').style.display = 'none';
+    document.getElementById('postView').style.display = 'block';
+    window.scrollTo(0,0);
+    history.pushState({}, '', `/blog.html?post=${slug}`);
+  } catch(e) { showToast('Could not load post','error'); }
+}
+
+function showList() {
+  document.getElementById('listView').style.display = 'block';
+  document.getElementById('postView').style.display = 'none';
+  history.pushState({}, '', '/blog.html');
+}
+
+// Simple markdown-to-HTML converter
+function markdownToHtml(md) {
+  return md
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/^\| (.+)$/gm, (m) => {
+      if (m.includes('---')) return '';
+      const cells = m.split('|').filter(c => c.trim());
+      return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+    })
+    .replace(/(<tr>.*<\/tr>\n?)+/gs, (t) => '<table>' + t + '</table>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/gs, '<ul>$&</ul>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[hul]|<li|<table|<hr)(.+)$/gm, '<p>$1</p>');
+}
+
+async function subscribe() {
+  const email = document.getElementById('nlEmail').value.trim();
+  if (!email) { showToast('Please enter your email','error'); return; }
+  try {
+    const res = await fetch(`${API}/newsletter/subscribe`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email, source: 'blog' })
+    });
+    const data = await res.json();
+    showToast(data.message || "You're subscribed!", 'success');
+    document.getElementById('nlEmail').value = '';
+  } catch(e) { showToast('Could not subscribe','error'); }
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// Handle direct post URL
+const postParam = new URLSearchParams(location.search).get('post');
+if (postParam) openPost(postParam);
+else loadPosts();
+</script>
+</body>
+</html>
