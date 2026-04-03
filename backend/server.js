@@ -50,7 +50,7 @@ app.use(cors({
 // Raw body for Stripe webhooks BEFORE express.json()
 app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // Rate limiting
 const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300 });
@@ -810,23 +810,23 @@ ${urls.map(u => `  <url>
 });
 
 // ─── SERVE FRONTEND ──────────────────────────────────────────────────────────
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '../admin/index.html')));
-app.get('/publisher', (req, res) => res.sendFile(path.join(__dirname, '../frontend/publisher.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin/index.html')));
+app.get('/publisher', (req, res) => res.sendFile(path.join(__dirname, 'frontend/publisher.html')));
 app.get(['/blog', '/legal', '/account'], (req, res) => {
   const page = req.path.replace('/', '') + '.html';
-  const file = path.join(__dirname, '../frontend', page);
+  const file = path.join(__dirname, 'frontend', page);
   if (fs.existsSync(file)) res.sendFile(file);
-  else res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  else res.sendFile(path.join(__dirname, 'frontend/index.html'));
 });
 app.use((req, res, next) => {
   if (req.path.startsWith('/api')) return next();
-  const file = path.join(__dirname, '../frontend/index.html');
+  const file = path.join(__dirname, 'frontend/index.html');
   if (fs.existsSync(file)) res.sendFile(file);
   else res.status(404).send('Not found');
 });
 
 // ─── START ───────────────────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`\n🧭 MyHomeschoolCurriculum API v2.0 → http://localhost:${PORT}`);
   console.log(`   Stripe:     ${stripe ? '✅ configured' : '⚠️  not configured (add STRIPE_SECRET_KEY)'}`);
   console.log(`   Email:      ${process.env.SMTP_USER ? '✅ configured' : '⚠️  not configured (add SMTP_* vars)'}`);
