@@ -826,7 +826,7 @@ app.use((req, res, next) => {
 });
 
 // ─── START ───────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n🧭 MyHomeschoolCurriculum API v2.0 → http://localhost:${PORT}`);
   console.log(`   Stripe:     ${stripe ? '✅ configured' : '⚠️  not configured (add STRIPE_SECRET_KEY)'}`);
   console.log(`   Email:      ${process.env.SMTP_USER ? '✅ configured' : '⚠️  not configured (add SMTP_* vars)'}`);
