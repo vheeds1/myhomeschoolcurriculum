@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — MyHomeschoolCurriculum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FDF6EC;--warm-white:#FFFBF5;--sage:#7A9E7E;--deep-sage:#4A7550;--terracotta:#C8614A;--gold:#D4A84B;--navy:#1E3A4C;--charcoal:#2C3E3F;--light-sage:#EAF2EB;--border:#E8DDD0;--text-muted:#7A7A6E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh}
+header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;text-decoration:none}
+.logo-text span{color:var(--gold)}
+nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;margin-left:4px;transition:all .2s}
+nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
+.main{max-width:500px;margin:0 auto;padding:50px 24px}
+.card{background:var(--warm-white);border-radius:20px;border:1px solid var(--border);padding:36px}
+.card-title{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:6px}
+.card-sub{color:var(--text-muted);font-size:.88rem;margin-bottom:26px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.76rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--charcoal);margin-bottom:5px}
+.form-group input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;background:#fff}
+.form-group input:focus{border-color:var(--sage)}
+.btn-primary{width:100%;padding:12px;background:var(--deep-sage);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:#3A6040;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-secondary{width:100%;padding:11px;background:transparent;color:var(--deep-sage);border:1.5px solid var(--deep-sage);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:10px}
+.btn-secondary:hover{background:var(--light-sage)}
+.toggle-link{text-align:center;margin-top:18px;font-size:.85rem;color:var(--text-muted)}
+.toggle-link a{color:var(--deep-sage);font-weight:600;cursor:pointer;text-decoration:none}
+.error-msg{background:#FFE9E6;color:var(--terracotta);border-radius:8px;padding:10px 14px;font-size:.84rem;margin-bottom:14px}
+.success-msg{background:var(--light-sage);color:var(--deep-sage);border-radius:8px;padding:10px 14px;font-size:.84rem;margin-bottom:14px}
+
+/* LOGGED IN VIEW */
+.profile-header{text-align:center;padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.avatar{width:70px;height:70px;background:linear-gradient(135deg,var(--deep-sage),var(--sage));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;margin:0 auto 14px;font-family:'Playfair Display',serif;font-weight:700}
+.profile-name{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);margin-bottom:2px}
+.profile-email{color:var(--text-muted);font-size:.85rem}
+.verified-badge{display:inline-block;background:var(--light-sage);color:var(--deep-sage);padding:2px 10px;border-radius:10px;font-size:.72rem;font-weight:700;margin-top:6px}
+.section-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--charcoal);margin-bottom:14px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.stat-box{background:var(--cream);border-radius:12px;padding:14px;text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);display:block}
+.stat-lbl{font-size:.72rem;color:var(--text-muted);font-weight:500}
+.fav-card{display:flex;align-items:center;gap:12px;padding:12px;background:var(--cream);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:all .18s}
+.fav-card:hover{background:#EDF5EE}
+.fav-emoji{width:40px;height:40px;background:var(--light-sage);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.fav-name{font-size:.88rem;font-weight:600;color:var(--navy)}
+.fav-tagline{font-size:.76rem;color:var(--text-muted)}
+.fav-remove{margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:4px;border-radius:6px;transition:all .15s}
+.fav-remove:hover{color:var(--terracotta);background:#FFE9E6}
+.empty-favs{text-align:center;padding:28px;color:var(--text-muted);font-size:.85rem}
+.empty-favs a{color:var(--deep-sage);font-weight:600;text-decoration:none}
+.divider{height:1px;background:var(--border);margin:20px 0}
+.logout-btn{width:100%;padding:10px;background:none;border:1.5px solid var(--border);color:var(--text-muted);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;transition:all .2s;margin-top:14px}
+.logout-btn:hover{border-color:var(--terracotta);color:var(--terracotta)}
+.newsletter-box{background:linear-gradient(135deg,var(--deep-sage),var(--sage));border-radius:12px;padding:18px;margin-top:20px;color:#fff;text-align:center}
+.newsletter-box h4{font-size:.95rem;font-weight:600;margin-bottom:4px}
+.newsletter-box p{font-size:.78rem;opacity:.85;margin-bottom:12px}
+.newsletter-row{display:flex;gap:6px}
+.newsletter-row input{flex:1;padding:8px 12px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none}
+.newsletter-row button{padding:8px 14px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:13px 20px;border-radius:10px;font-size:.85rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:var(--deep-sage)}
+.toast.error{background:var(--terracotta)}
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:28px 24px;text-align:center;font-size:.8rem;margin-top:60px}
+footer a{color:var(--gold);text-decoration:none}
+</style>
+  <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    // gtag("config", "G-XXXXXXXXXX"); // Uncomment and replace with your GA4 ID
+  </script>
+</head>
+<body>
+<header>
+  <a href="/" class="logo-text">Curriculum<span>Compass</span></a>
+  <nav>
+    <a href="/">Browse</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/legal.html">State Laws</a>
+    <a href="/account.html">My Account</a>
+  </nav>
+</header>
+
+<div class="main">
+  <!-- AUTH CARD (shown when logged out) -->
+  <div class="card" id="authCard">
+    <!-- LOGIN VIEW -->
+    <div id="loginView">
+      <div class="card-title">Sign In</div>
+      <div class="card-sub">Access your saved curricula and personalized recommendations.</div>
+      <div id="loginError"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="loginEmail" placeholder="you@email.com" onkeydown="if(event.key==='Enter')login()"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"></div>
+      <button class="btn-primary" id="loginBtn" onclick="login()">Sign In →</button>
+      <div style="text-align:center;margin-top:12px"><a onclick="showView('resetView')" style="color:var(--text-muted);font-size:.8rem;cursor:pointer">Forgot your password?</a></div>
+      <div class="toggle-link">Don't have an account? <a onclick="showView('registerView')">Create one free →</a></div>
+    </div>
+
+    <!-- REGISTER VIEW -->
+    <div id="registerView" style="display:none">
+      <div class="card-title">Create Account</div>
+      <div class="card-sub">Save favorites, track curricula, and get personalized recommendations.</div>
+      <div id="registerError"></div>
+      <div class="form-group"><label>Your Name</label><input type="text" id="regName" placeholder="Sarah Johnson"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="regEmail" placeholder="you@email.com"></div>
+      <div class="form-group"><label>Password (8+ characters)</label><input type="password" id="regPassword" placeholder="••••••••"></div>
+      <div class="form-group"><label>Confirm Password</label><input type="password" id="regConfirm" placeholder="••••••••" onkeydown="if(event.key==='Enter')register()"></div>
+      <button class="btn-primary" id="registerBtn" onclick="register()">Create Account →</button>
+      <div class="toggle-link">Already have an account? <a onclick="showView('loginView')">Sign in →</a></div>
+    </div>
+
+    <!-- PASSWORD RESET VIEW -->
+    <div id="resetView" style="display:none">
+      <div class="card-title">Reset Password</div>
+      <div class="card-sub">Enter your email and we'll send a reset link.</div>
+      <div id="resetMsg"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="resetEmail" placeholder="you@email.com" onkeydown="if(event.key==='Enter')requestReset()"></div>
+      <button class="btn-primary" onclick="requestReset()">Send Reset Link →</button>
+      <button class="btn-secondary" onclick="showView('loginView')">← Back to Sign In</button>
+    </div>
+
+    <!-- NEW PASSWORD VIEW (from email link) -->
+    <div id="newPasswordView" style="display:none">
+      <div class="card-title">Set New Password</div>
+      <div class="card-sub">Choose a new password for your account.</div>
+      <div id="newPwMsg"></div>
+      <div class="form-group"><label>New Password (8+ characters)</label><input type="password" id="newPw" placeholder="••••••••"></div>
+      <div class="form-group"><label>Confirm New Password</label><input type="password" id="newPwConfirm" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitNewPassword()"></div>
+      <button class="btn-primary" onclick="submitNewPassword()">Set New Password →</button>
+    </div>
+  </div>
+
+  <!-- LOGGED-IN DASHBOARD (shown when logged in) -->
+  <div class="card" id="dashCard" style="display:none">
+    <div class="profile-header">
+      <div class="avatar" id="avatarInitial">?</div>
+      <div class="profile-name" id="profileName">Loading…</div>
+      <div class="profile-email" id="profileEmail"></div>
+      <div class="verified-badge" id="verifiedBadge" style="display:none">✓ Email Verified</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><span class="stat-num" id="favCount">0</span><span class="stat-lbl">Saved Curricula</span></div>
+      <div class="stat-box"><span class="stat-num" id="memberDays">—</span><span class="stat-lbl">Days as Member</span></div>
+    </div>
+
+    <div class="section-title">💖 Saved Curricula</div>
+    <div id="favsList"><div style="text-align:center;padding:20px;color:var(--text-muted)">Loading…</div></div>
+
+    <div class="divider"></div>
+
+    <div class="newsletter-box">
+      <h4>📬 Newsletter</h4>
+      <p>Get weekly curriculum tips, deals, and new reviews.</p>
+      <div class="newsletter-row">
+        <input type="email" id="nlEmail" placeholder="your@email.com">
+        <button onclick="subscribeNewsletter()">Subscribe</button>
+      </div>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">Sign Out</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <a href="/">MyHomeschoolCurriculum</a> — Your homeschool resource hub<br>
+  <span style="font-size:.7rem;opacity:.6">© 2025 MyHomeschoolCurriculum</span>
+</footer>
+
+<script>
+const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+let currentUser = null;
+let authToken = localStorage.getItem('cc_user_token');
+
+function showView(id) {
+  ['loginView','registerView','resetView','newPasswordView'].forEach(v => {
+    document.getElementById(v).style.display = v === id ? 'block' : 'none';
+  });
+}
+
+// ── CHECK SESSION ─────────────────────────────────────────────────────────────
+async function checkSession() {
+  if (!authToken) return;
+  try {
+    const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${authToken}` } });
+    if (res.ok) {
+      currentUser = await res.json();
+      showDashboard();
+    } else {
+      localStorage.removeItem('cc_user_token');
+      authToken = null;
+    }
+  } catch(e) {}
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+async function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) return showError('loginError', 'Email and password required.');
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const res = await fetch(`${API}/auth/login`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      authToken = data.token;
+      currentUser = data.user;
+      localStorage.setItem('cc_user_token', authToken);
+      showDashboard();
+    } else {
+      showError('loginError', data.error || 'Login failed.');
+    }
+  } catch(e) { showError('loginError', 'Could not connect to server.'); }
+  btn.disabled = false; btn.textContent = 'Sign In →';
+}
+
+// ── REGISTER ─────────────────────────────────────────────────────────────────
+async function register() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  if (!name || !email || !password) return showError('registerError', 'All fields required.');
+  if (password !== confirm) return showError('registerError', 'Passwords do not match.');
+  if (password.length < 8) return showError('registerError', 'Password must be at least 8 characters.');
+  const btn = document.getElementById('registerBtn');
+  btn.disabled = true; btn.textContent = 'Creating account…';
+  try {
+    const res = await fetch(`${API}/auth/register`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('registerError').innerHTML = `<div class="success-msg">${data.message}</div>`;
+      setTimeout(() => showView('loginView'), 2000);
+    } else { showError('registerError', data.error || 'Registration failed.'); }
+  } catch(e) { showError('registerError', 'Could not connect to server.'); }
+  btn.disabled = false; btn.textContent = 'Create Account →';
+}
+
+// ── PASSWORD RESET ────────────────────────────────────────────────────────────
+async function requestReset() {
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email) return;
+  try {
+    const res = await fetch(`${API}/auth/request-reset`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    document.getElementById('resetMsg').innerHTML = `<div class="success-msg">${data.message}</div>`;
+  } catch(e) {}
+}
+
+async function submitNewPassword() {
+  const password = document.getElementById('newPw').value;
+  const confirm = document.getElementById('newPwConfirm').value;
+  const token = new URLSearchParams(location.search).get('reset');
+  if (password !== confirm) return document.getElementById('newPwMsg').innerHTML = '<div class="error-msg">Passwords do not match.</div>';
+  try {
+    const res = await fetch(`${API}/auth/reset-password`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('newPwMsg').innerHTML = `<div class="success-msg">${data.message}</div>`;
+      setTimeout(() => showView('loginView'), 2000);
+    } else {
+      document.getElementById('newPwMsg').innerHTML = `<div class="error-msg">${data.error}</div>`;
+    }
+  } catch(e) {}
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function showDashboard() {
+  document.getElementById('authCard').style.display = 'none';
+  document.getElementById('dashCard').style.display = 'block';
+  document.getElementById('avatarInitial').textContent = currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('profileName').textContent = currentUser.name;
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  if (currentUser.emailVerified) document.getElementById('verifiedBadge').style.display = 'inline-block';
+  const days = Math.floor((Date.now() - new Date(currentUser.createdAt)) / (1000 * 60 * 60 * 24));
+  document.getElementById('memberDays').textContent = days;
+  loadFavorites();
+}
+
+async function loadFavorites() {
+  try {
+    const res = await fetch(`${API}/favorites`, { headers: { Authorization: `Bearer ${authToken}` } });
+    const data = await res.json();
+    const favs = data.favorites || [];
+    document.getElementById('favCount').textContent = favs.length;
+    const list = document.getElementById('favsList');
+    if (!favs.length) {
+      list.innerHTML = `<div class="empty-favs">No saved curricula yet.<br><a href="/">Browse and heart your favorites →</a></div>`;
+      return;
+    }
+    list.innerHTML = favs.map(c => `
+      <div class="fav-card" onclick="window.location='/?detail=${c.slug}'">
+        <div class="fav-emoji">${c.emoji||'📘'}</div>
+        <div>
+          <div class="fav-name">${c.name}</div>
+          <div class="fav-tagline">${c.tagline}</div>
+        </div>
+        <button class="fav-remove" onclick="event.stopPropagation();removeFav(${c.id})" title="Remove">✕</button>
+      </div>`).join('');
+  } catch(e) {}
+}
+
+async function removeFav(id) {
+  await fetch(`${API}/favorites/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${authToken}` } });
+  loadFavorites();
+  showToast('Removed from saved curricula');
+}
+
+async function subscribeNewsletter() {
+  const email = document.getElementById('nlEmail').value.trim() || currentUser.email;
+  if (!email) return;
+  try {
+    const res = await fetch(`${API}/newsletter/subscribe`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name: currentUser.name, source: 'account' })
+    });
+    const data = await res.json();
+    showToast(data.message || "Subscribed!", 'success');
+  } catch(e) {}
+}
+
+async function logout() {
+  try { await fetch(`${API}/auth/logout`, { method: 'POST', headers: { Authorization: `Bearer ${authToken}` } }); } catch(e) {}
+  localStorage.removeItem('cc_user_token');
+  authToken = null; currentUser = null;
+  document.getElementById('authCard').style.display = 'block';
+  document.getElementById('dashCard').style.display = 'none';
+  showView('loginView');
+  showToast('Signed out successfully');
+}
+
+function showError(id, msg) {
+  document.getElementById(id).innerHTML = `<div class="error-msg">${msg}</div>`;
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// Handle URL params
+const params = new URLSearchParams(location.search);
+if (params.get('verify')) {
+  fetch(`${API}/auth/verify-email`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: params.get('verify') })
+  }).then(r => r.json()).then(d => {
+    showView('loginView');
+    document.getElementById('loginError').innerHTML = `<div class="success-msg">${d.message || 'Email verified!'}</div>`;
+  });
+}
+if (params.get('reset')) showView('newPasswordView');
+
+checkSession();
+</script>
+</body>
+</html>
