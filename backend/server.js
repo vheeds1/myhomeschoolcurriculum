@@ -37,7 +37,7 @@ try {
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const DB_PATH = path.join(__dirname, '../db/database.json');
+const DB_PATH = path.join(__dirname, 'db/database.json');
 
 // ─── MIDDLEWARE ──────────────────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
