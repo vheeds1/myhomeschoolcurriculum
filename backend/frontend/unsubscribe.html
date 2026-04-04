@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unsubscribe — My Homeschool Curriculum</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FDF6EC;--navy:#1E3A4C;--sage:#4A7550;--gold:#D4A84B;--charcoal:#2C3E3F;--text-muted:#7A7A6E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:#fff;border-radius:20px;padding:48px 40px;max-width:480px;width:100%;text-align:center;box-shadow:0 4px 24px rgba(30,58,76,.08)}
+.logo{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);margin-bottom:24px}
+.logo span{color:var(--gold)}
+.icon{font-size:2.5rem;margin-bottom:16px}
+h1{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:12px}
+p{color:var(--text-muted);font-size:.9rem;line-height:1.6;margin-bottom:20px}
+.btn{display:inline-block;background:var(--sage);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn:hover{background:#3A6040}
+.btn-outline{background:transparent;color:var(--sage);border:1.5px solid var(--sage)}
+.btn-outline:hover{background:var(--sage);color:#fff}
+.msg{padding:14px;border-radius:10px;font-size:.88rem;margin-bottom:16px}
+.msg-success{background:#EAF2EB;color:var(--sage)}
+.msg-error{background:#FDF0ED;color:#C8614A}
+#loading{color:var(--text-muted);font-size:.88rem}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">📚 My Homeschool <span>Curriculum</span></div>
+  <div id="content">
+    <div id="loading">Processing your request...</div>
+  </div>
+</div>
+
+<script>
+const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+const params = new URLSearchParams(window.location.search);
+const email = params.get('email');
+
+async function init() {
+  const content = document.getElementById('content');
+
+  if (!email) {
+    content.innerHTML = `
+      <div class="icon">📧</div>
+      <h1>Unsubscribe from Newsletter</h1>
+      <p>Enter your email address to unsubscribe from our newsletter.</p>
+      <input type="email" id="emailInput" placeholder="your@email.com" style="width:100%;padding:11px 14px;border:1.5px solid #E8DDD0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;margin-bottom:16px;outline:none">
+      <br><button class="btn" onclick="doUnsubscribe()">Unsubscribe</button>
+    `;
+    return;
+  }
+
+  try {
+    const res = await fetch(API + '/newsletter/unsubscribe', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    content.innerHTML = `
+      <div class="icon">👋</div>
+      <h1>You've been unsubscribed</h1>
+      <p>We've removed <strong>${email}</strong> from our newsletter. You won't receive any more emails from us.</p>
+      <p>Changed your mind? You can always resubscribe from our website.</p>
+      <a href="/" class="btn btn-outline">← Back to site</a>
+    `;
+  } catch(e) {
+    content.innerHTML = `
+      <div class="icon">⚠️</div>
+      <h1>Something went wrong</h1>
+      <p>We couldn't process your request. Please try again or contact us at contact@myhomeschoolcurriculum.com</p>
+      <a href="/" class="btn btn-outline">← Back to site</a>
+    `;
+  }
+}
+
+async function doUnsubscribe() {
+  const emailInput = document.getElementById('emailInput').value.trim();
+  if (!emailInput) return;
+  window.location = '/unsubscribe.html?email=' + encodeURIComponent(emailInput);
+}
+
+init();
+</script>
+</body>
+</html>

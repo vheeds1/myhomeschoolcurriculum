@@ -72,31 +72,110 @@ const authLimiter    = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: {
 app.use('/api/', generalLimiter);
 
 // ─── DATABASE HELPERS ────────────────────────────────────────────────────────
+const { Pool } = require('pg');
+
+// PostgreSQL connection (preferred) or fallback to JSON file
+let pgPool = null;
+let dbCache = null; // in-memory cache for PostgreSQL mode
+
+if (process.env.DATABASE_URL) {
+  pgPool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false }
+  });
+}
+
+const DB_DEFAULTS = {
+  curricula: [], reviews: [], affiliateClicks: [], listingInquiries: [],
+  contactMessages: [], quizResults: [], users: [], userFavorites: [],
+  sessions: [], blogPosts: [], newsletterSubscribers: [], publishers: [],
+  publisherSessions: [], stripeSubscriptions: [],
+  analytics: { totalVisits: 0, totalClicks: 0, totalReviews: 0, totalInquiries: 0 }
+};
+
 function readDB() {
+  if (pgPool) {
+    // Return cached data (loaded from PostgreSQL on startup, synced on every write)
+    return dbCache;
+  }
   try { return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8')); }
   catch(e) { console.error('DB read error:', e); return null; }
 }
+
 function writeDB(data) {
+  if (pgPool) {
+    dbCache = data;
+    // Async write to PostgreSQL (fire-and-forget for performance, data is in cache)
+    pgPool.query(
+      `INSERT INTO app_data (id, data) VALUES (1, $1) ON CONFLICT (id) DO UPDATE SET data = $1, updated_at = NOW()`,
+      [JSON.stringify(data)]
+    ).catch(e => console.error('DB write error:', e.message));
+    return true;
+  }
   try { fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf-8'); return true; }
   catch(e) { console.error('DB write error:', e); return false; }
 }
 
-// Ensure all collections exist on startup
-function ensureDB() {
-  const db = readDB() || {};
-  const defaults = {
-    curricula: [], reviews: [], affiliateClicks: [], listingInquiries: [],
-    contactMessages: [], quizResults: [], users: [], userFavorites: [],
-    sessions: [], blogPosts: [], newsletterSubscribers: [], stripeSubscriptions: [],
-    analytics: { totalVisits: 0, totalClicks: 0, totalReviews: 0, totalInquiries: 0 }
-  };
+// Initialize database
+async function initDB() {
+  if (pgPool) {
+    try {
+      // Create table if not exists
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS app_data (
+          id INTEGER PRIMARY KEY DEFAULT 1,
+          data JSONB NOT NULL DEFAULT '{}',
+          updated_at TIMESTAMP DEFAULT NOW()
+        )
+      `);
+      // Load existing data or seed with defaults
+      const result = await pgPool.query('SELECT data FROM app_data WHERE id = 1');
+      if (result.rows.length > 0) {
+        dbCache = result.rows[0].data;
+        // Ensure all collections exist
+        let changed = false;
+        for (const [k, v] of Object.entries(DB_DEFAULTS)) {
+          if (dbCache[k] === undefined) { dbCache[k] = v; changed = true; }
+        }
+        if (changed) writeDB(dbCache);
+      } else {
+        // First time: try to migrate from JSON file, or use defaults
+        let seedData = DB_DEFAULTS;
+        try {
+          const fileData = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
+          if (fileData && fileData.curricula) {
+            seedData = { ...DB_DEFAULTS, ...fileData };
+            console.log('[DB] Migrated existing data from database.json to PostgreSQL');
+          }
+        } catch(e) {}
+        dbCache = seedData;
+        await pgPool.query(
+          'INSERT INTO app_data (id, data) VALUES (1, $1)',
+          [JSON.stringify(seedData)]
+        );
+      }
+      console.log('[DB] ✅ PostgreSQL connected');
+    } catch(e) {
+      console.error('[DB] ❌ PostgreSQL error:', e.message);
+      console.log('[DB] Falling back to JSON file');
+      pgPool = null;
+      ensureFileDB();
+    }
+  } else {
+    ensureFileDB();
+  }
+}
+
+function ensureFileDB() {
+  const db = (() => { try { return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8')); } catch(e) { return {}; } })();
   let changed = false;
-  for (const [k, v] of Object.entries(defaults)) {
+  for (const [k, v] of Object.entries(DB_DEFAULTS)) {
     if (db[k] === undefined) { db[k] = v; changed = true; }
   }
-  if (changed) writeDB(db);
+  if (changed) {
+    try { fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf-8'); } catch(e) {}
+  }
 }
-ensureDB();
 
 // ─── EMAIL ───────────────────────────────────────────────────────────────────
 const FROM_EMAIL = process.env.SMTP_USER || 'contact@myhomeschoolcurriculum.com';
@@ -558,8 +637,9 @@ app.post('/api/newsletter/subscribe', submitLimiter, async (req, res) => {
       });
     } catch(e) { console.log('Mailchimp error:', e.message); }
   }
+  const siteUrl = process.env.SITE_URL || 'http://localhost:3001';
   sendEmail(subscriber.email, 'Welcome to MyHomeschoolCurriculum! 🧭',
-    `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}">Browse curricula →</a></p>`);
+    `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${siteUrl}">Browse curricula →</a></p><p style="font-size:12px;color:#999;margin-top:24px">Don't want these emails? <a href="${siteUrl}/unsubscribe.html?email=${encodeURIComponent(subscriber.email)}" style="color:#999">Unsubscribe</a></p>`);
   sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
     `📬 New Newsletter Subscriber — ${subscriber.email}`,
     `<h2>New Newsletter Signup</h2><p><strong>Email:</strong> ${subscriber.email}</p>${subscriber.name ? `<p><strong>Name:</strong> ${subscriber.name}</p>` : ''}<p><strong>Source:</strong> ${subscriber.source||'website'}</p><p><strong>Date:</strong> ${subscriber.subscribedAt}</p><p>Total active subscribers: ${(db.newsletterSubscribers||[]).filter(s => s.active).length}</p>`);
@@ -576,8 +656,9 @@ app.post('/api/newsletter/unsubscribe', (req, res) => {
 
 app.get('/api/newsletter/subscribers', requireAdmin, (req, res) => {
   const db = readDB();
-  const active = (db.newsletterSubscribers||[]).filter(s => s.active);
-  res.json({ count: active.length, subscribers: active });
+  const all = db.newsletterSubscribers || [];
+  const activeCount = all.filter(s => s.active !== false).length;
+  res.json({ count: activeCount, total: all.length, subscribers: all });
 });
 
 // ════════════════════════════════════════════════════════════════════════════════
@@ -868,11 +949,15 @@ app.use((req, res, next) => {
 });
 
 // ─── START ───────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`\n🧭 MyHomeschoolCurriculum API v2.0 → http://localhost:${PORT}`);
-  console.log(`   Stripe:     ${stripe ? '✅ configured' : '⚠️  not configured (add STRIPE_SECRET_KEY)'}`);
-  console.log(`   Email:      ${resend ? '✅ Resend API' : process.env.SMTP_USER ? '✅ SMTP' : '⚠️  not configured (add RESEND_API_KEY or SMTP_* vars)'}`);
-  console.log(`   Newsletter: ${mailchimp ? '✅ Mailchimp connected' : '⚠️  local only (add MAILCHIMP_API_KEY)'}\n`);
+// Initialize database before starting server
+initDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`\n🧭 MyHomeschoolCurriculum API v2.0 → http://localhost:${PORT}`);
+    console.log(`   Database:   ${pgPool ? '✅ PostgreSQL' : '⚠️  JSON file (add DATABASE_URL for persistence)'}`);
+    console.log(`   Stripe:     ${stripe ? '✅ configured' : '⚠️  not configured (add STRIPE_SECRET_KEY)'}`);
+    console.log(`   Email:      ${resend ? '✅ Resend API' : process.env.SMTP_USER ? '✅ SMTP' : '⚠️  not configured (add RESEND_API_KEY or SMTP_* vars)'}`);
+    console.log(`   Newsletter: ${mailchimp ? '✅ Mailchimp connected' : '⚠️  local only (add MAILCHIMP_API_KEY)'}\n`);
+  });
 });
 
 module.exports = app;
