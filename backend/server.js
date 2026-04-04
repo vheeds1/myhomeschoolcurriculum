@@ -986,8 +986,11 @@ app.post('/api/publisher/register', submitLimiter, (req, res) => {
   db.publishers.push(publisher);
   if (!db.publisherSessions) db.publisherSessions = [];
   writeDB(db);
-  sendEmail(process.env.ADMIN_EMAIL, 'New Publisher Registration — My Homeschool Curriculum',
+  sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER || FROM_EMAIL,
+    'New Publisher Registration — My Homeschool Curriculum',
     `<h2>New publisher registered</h2><p><strong>${name}</strong> (${companyName}) registered at ${email}.</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}/admin">Review in Admin →</a></p>`);
+  sendEmail(publisher.email, 'Welcome to MyHomeschoolCurriculum — Account Under Review',
+    `<h2>Thanks for registering, ${publisher.name}!</h2><p>Your publisher account for <strong>${publisher.companyName}</strong> is under review. Our team will approve your account within 2 business days.</p><p>You'll receive an email once approved. In the meantime, you can log in to explore the publisher portal.</p><p>Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>`);
   res.status(201).json({ success: true, message: 'Account created! Our team will review and approve your account within 2 business days.' });
 });
 
