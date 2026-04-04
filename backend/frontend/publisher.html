@@ -213,22 +213,6 @@ footer a{color:var(--gold);text-decoration:none}
       </ul>
       <button class="btn-tier" onclick="selectTier('gold')">Get Gold Placement</button>
     </div>
-    <div class="pricing-card">
-      <div class="tier-icon">💎</div>
-      <div class="tier-name">Platinum</div>
-      <div class="tier-price">$299 <span>/month</span></div>
-      <div class="tier-desc">The ultimate top-of-site placement. Your curriculum, first and prominently every time.</div>
-      <ul class="tier-features">
-        <li>Everything in Gold</li>
-        <li>Platinum badge + #1 placement</li>
-        <li>Dedicated landing page</li>
-        <li>Newsletter exclusive feature</li>
-        <li>Custom curriculum guide content</li>
-        <li>Quarterly strategy calls</li>
-        <li>Co-branded promotions</li>
-      </ul>
-      <button class="btn-tier" onclick="selectTier('platinum')">Get Platinum</button>
-    </div>
   </div>
 </div>
 
@@ -269,11 +253,10 @@ footer a{color:var(--gold);text-decoration:none}
       <div class="form-group">
         <label>Listing Type *</label>
         <div class="tier-select-grid" id="tierGrid">
-          <label class="tier-radio" onclick="highlightTier(this,'standard')"><input type="radio" name="tier" value="standard">🆓 Standard<br><span style="font-size:.7rem;color:var(--text-muted)">Free</span></label>
-          <label class="tier-radio" onclick="highlightTier(this,'affiliate')"><input type="radio" name="tier" value="affiliate">🔗 Affiliate<br><span style="font-size:.7rem;color:var(--text-muted)">Free + %</span></label>
-          <label class="tier-radio" onclick="highlightTier(this,'silver')"><input type="radio" name="tier" value="silver">🥈 Silver<br><span style="font-size:.7rem;color:var(--text-muted)">$49/mo</span></label>
-          <label class="tier-radio" onclick="highlightTier(this,'gold')"><input type="radio" name="tier" value="gold">🥇 Gold<br><span style="font-size:.7rem;color:var(--text-muted)">$149/mo</span></label>
-          <label class="tier-radio" onclick="highlightTier(this,'platinum')"><input type="radio" name="tier" value="platinum">💎 Platinum<br><span style="font-size:.7rem;color:var(--text-muted)">$299/mo</span></label>
+          <div class="tier-radio" data-tier="standard" onclick="highlightTier(this,'standard')">🆓 Standard<br><span style="font-size:.7rem;color:var(--text-muted)">Free</span></div>
+          <div class="tier-radio" data-tier="affiliate" onclick="highlightTier(this,'affiliate')">🔗 Affiliate<br><span style="font-size:.7rem;color:var(--text-muted)">Free + %</span></div>
+          <div class="tier-radio" data-tier="silver" onclick="highlightTier(this,'silver')">🥈 Silver<br><span style="font-size:.7rem;color:var(--text-muted)">$49/mo</span></div>
+          <div class="tier-radio" data-tier="gold" onclick="highlightTier(this,'gold')">🥇 Gold<br><span style="font-size:.7rem;color:var(--text-muted)">$149/mo</span></div>
         </div>
         <input type="hidden" id="selectedTier" value="">
       </div>
@@ -298,12 +281,12 @@ footer a{color:var(--gold);text-decoration:none}
 
     <div class="contact-row">
       <div class="contact-card">
-        <h4>📧 Email Us Directly</h4>
-        <p>Prefer email? Reach our publisher team directly at <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>
+        <h4>📧 Contact Us</h4>
+        <p>Have questions? Reach us at <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>
       </div>
       <div class="contact-card">
-        <h4>❓ General Questions</h4>
-        <p>For non-publisher inquiries, visit our <a href="/">homepage</a> or email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>
+        <h4>🔑 Publisher Portal</h4>
+        <p>Already a listed publisher? <a href="/publisher-portal.html">Log in to your dashboard</a> to manage your listing and view analytics.</p>
       </div>
     </div>
   </div>
@@ -324,7 +307,7 @@ function selectTier(tier) {
   selectedTierVal = tier;
   document.getElementById('selectedTier').value = tier;
   document.querySelectorAll('.tier-radio').forEach(r => {
-    r.classList.toggle('selected', r.querySelector('input').value === tier);
+    r.classList.toggle('selected', r.dataset.tier === tier);
   });
   document.getElementById('contact').scrollIntoView({ behavior:'smooth' });
 }
@@ -380,4 +363,12 @@ async function submitInquiry() {
   }
 }
 
-function 
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => { t.className = 'toast'; }, 4000);
+}
+</script>
+</body>
+</html>
