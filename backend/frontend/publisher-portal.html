@@ -400,7 +400,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </table>
         </div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;max-width:500px;margin-top:8px">
-          <p style="font-size:.82rem;color:var(--muted);line-height:1.6">📬 <strong style="color:var(--text)">Monthly Reports:</strong> Silver, Gold, and Platinum publishers receive a detailed monthly analytics report by email on the 1st of each month.</p>
+          <p style="font-size:.82rem;color:var(--muted);line-height:1.6">📬 <strong style="color:var(--text)">Monthly Reports:</strong> Silver and Gold publishers receive a detailed monthly analytics report by email on the 1st of each month.</p>
         </div>
       </div>
 
@@ -495,27 +495,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button class="upgrade-btn" onclick="requestUpgrade('Gold')">Upgrade to Gold →</button>
         </div>
 
-        <div class="package-card" style="border-color:rgba(180,100,255,.3)">
-          <div class="package-header">
-            <div>
-              <div class="package-name">💎 Platinum</div>
-              <div class="package-price">$299/month</div>
-            </div>
-          </div>
-          <ul class="package-features">
-            <li>Everything in Gold</li>
-            <li>Platinum badge + #1 placement</li>
-            <li>Dedicated landing page</li>
-            <li>Newsletter exclusive feature</li>
-            <li>Custom curriculum guide content</li>
-            <li>Quarterly strategy calls</li>
-            <li>Co-branded promotions</li>
-          </ul>
-          <button class="upgrade-btn" onclick="requestUpgrade('Platinum')">Upgrade to Platinum →</button>
-        </div>
-
         <p style="font-size:.78rem;color:var(--muted);margin-top:16px">
-          To upgrade your plan, click the button above and our team will send you a payment link within 1 business day. Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com" style="color:var(--gold)">contact@myhomeschoolcurriculum.com</a>
+          Silver and Gold plans include Stripe checkout. Affiliate is free — just apply and we'll set it up. Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com" style="color:var(--gold)">contact@myhomeschoolcurriculum.com</a>
         </p>
       </div>
 
@@ -565,7 +546,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <strong style="color:var(--text)">Standard & Affiliate:</strong> 3–5 business days<br>
             <strong style="color:#c0c0c0">Silver:</strong> 2–3 business days<br>
             <strong style="color:var(--gold)">Gold:</strong> 1–2 business days (priority support)<br>
-            <strong style="color:#d4a0ff">Platinum:</strong> Same or next business day
           </p>
         </div>
 
@@ -761,7 +741,7 @@ function populateDashboard() {
   // Current plan
   const planBox = document.getElementById('currentPlanBox');
   const tier = publisher.tier || 'Standard';
-  const prices = { Standard: 'Free', Affiliate: 'Free + commission', Silver: '$49/month', Gold: '$149/month', Platinum: '$299/month' };
+  const prices = { Standard: 'Free', Affiliate: 'Free + commission', Silver: '$49/month', Gold: '$149/month' };
   planBox.innerHTML = `
     <div class="current-plan">
       <div class="current-plan-label">Your Current Plan</div>
@@ -863,9 +843,31 @@ async function saveProfile() {
 async function requestUpgrade(tier) {
   const publisher = publisherData?.publisher;
   if (!publisher) return;
-  const subject = encodeURIComponent(`Publisher Plan Upgrade Request — ${tier}`);
-  const body = encodeURIComponent(`Hi,\n\nI'd like to upgrade my listing plan to ${tier}.\n\nAccount: ${publisher.email}\nCompany: ${publisher.companyName}\n\nPlease send me the payment link.\n\nThank you!`);
-  window.location = `mailto:contact@myhomeschoolcurriculum.com?subject=${subject}&body=${body}`;
+
+  // Affiliate is free — send email request
+  if (tier === 'Affiliate') {
+    const subject = encodeURIComponent(`Publisher Plan Upgrade Request — Affiliate`);
+    const body = encodeURIComponent(`Hi,\n\nI'd like to apply for the Affiliate program.\n\nAccount: ${publisher.email}\nCompany: ${publisher.companyName}\n\nThank you!`);
+    window.location = `mailto:contact@myhomeschoolcurriculum.com?subject=${subject}&body=${body}`;
+    return;
+  }
+
+  // Silver and Gold — Stripe checkout
+  try {
+    const res = await fetch(`${API}/billing/create-checkout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier: tier.toLowerCase(), email: publisher.email, companyName: publisher.companyName })
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location = data.url;
+    } else {
+      showToast(data.error || 'Could not start checkout. Please try again.', 'error');
+    }
+  } catch(e) {
+    showToast('Could not connect to billing. Please try again.', 'error');
+  }
 }
 
 // ── LOGOUT ────────────────────────────────────────────────────────────────────

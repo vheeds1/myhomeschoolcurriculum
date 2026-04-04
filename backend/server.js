@@ -543,7 +543,6 @@ app.delete('/api/favorites/:curriculumId', requireUser, (req, res) => {
 const STRIPE_PRICES = {
   silver:   process.env.STRIPE_PRICE_SILVER   || null,
   gold:     process.env.STRIPE_PRICE_GOLD     || null,
-  platinum: process.env.STRIPE_PRICE_PLATINUM || null,
 };
 
 app.post('/api/billing/create-checkout', async (req, res) => {
