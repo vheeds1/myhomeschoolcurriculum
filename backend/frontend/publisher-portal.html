@@ -530,6 +530,51 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
 
+<!-- Affiliate Application Modal -->
+<div class="upgrade-overlay" id="affiliateModal">
+  <div class="upgrade-modal" style="text-align:left;max-width:520px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2 style="font-size:1.15rem;margin:0">🔗 Apply for Affiliate Partnership</h2>
+      <button onclick="closeAffiliateModal()" style="background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer">✕</button>
+    </div>
+    <p style="color:var(--muted);font-size:.85rem;line-height:1.6;margin-bottom:20px">As an affiliate partner, we list your curriculum for free and earn a small commission when families purchase through your affiliate link.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px" id="affiliateOptions">
+      <!-- Option A -->
+      <div onclick="showAffiliateForm('hasLink')" style="border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .18s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <strong style="color:var(--text);font-size:.9rem">✅ I can provide an affiliate link now</strong>
+        <p style="color:var(--muted);font-size:.78rem;margin-top:4px">I have an affiliate program and can issue a tracking link for MyHomeschoolCurriculum right now.</p>
+      </div>
+      <!-- Option B -->
+      <div onclick="showAffiliateForm('needSetup')" style="border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .18s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <strong style="color:var(--text);font-size:.9rem">🔧 I have an affiliate program but need to set one up for you</strong>
+        <p style="color:var(--muted);font-size:.78rem;margin-top:4px">I'll provide instructions on how you can sign up for my affiliate program.</p>
+      </div>
+    </div>
+
+    <!-- Form A: Has link -->
+    <div id="affiliateFormLink" style="display:none;margin-top:16px">
+      <div class="form-group">
+        <label style="color:var(--muted)">Your affiliate link for MyHomeschoolCurriculum</label>
+        <input type="url" id="affLink" placeholder="https://yoursite.com/?ref=myhomeschoolcurriculum" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem">
+        <p style="font-size:.72rem;color:var(--muted);margin-top:4px">This is the tracking link we'll use on your listing so we earn commission on referred sales.</p>
+      </div>
+      <button onclick="submitAffiliateLink()" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer">Submit & Activate Affiliate →</button>
+    </div>
+
+    <!-- Form B: Need setup -->
+    <div id="affiliateFormSetup" style="display:none;margin-top:16px">
+      <div class="form-group">
+        <label style="color:var(--muted)">How can we sign up for your affiliate program?</label>
+        <textarea id="affSetupInfo" rows="3" placeholder="e.g. Sign up at our ShareASale page at https://... or email partners@yoursite.com" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;resize:vertical"></textarea>
+      </div>
+      <button onclick="submitAffiliateSetup()" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer">Submit Request →</button>
+    </div>
+
+    <p style="font-size:.75rem;color:var(--muted);margin-top:16px;text-align:center">Don't have an affiliate program? No worries — your Standard listing is free forever, or explore our Silver and Gold paid plans.</p>
+  </div>
+</div>
+
 <!-- Upgrade Prompt -->
 <div class="upgrade-overlay" id="upgradePrompt">
   <div class="upgrade-modal">
@@ -818,6 +863,68 @@ function renderCurriculaTable(containerId, curricula, compact) {
 }
 
 // ── MOBILE MENU ──────────────────────────────────────────────────────────────
+// ── AFFILIATE APPLICATION ─────────────────────────────────────────────────────
+function openAffiliateModal() {
+  document.getElementById('affiliateOptions').style.display = 'flex';
+  document.getElementById('affiliateFormLink').style.display = 'none';
+  document.getElementById('affiliateFormSetup').style.display = 'none';
+  document.getElementById('affiliateModal').classList.add('show');
+}
+function closeAffiliateModal() {
+  document.getElementById('affiliateModal').classList.remove('show');
+}
+function showAffiliateForm(type) {
+  document.getElementById('affiliateOptions').style.display = 'none';
+  document.getElementById('affiliateFormLink').style.display = type === 'hasLink' ? 'block' : 'none';
+  document.getElementById('affiliateFormSetup').style.display = type === 'needSetup' ? 'block' : 'none';
+}
+async function submitAffiliateLink() {
+  const link = document.getElementById('affLink').value.trim();
+  if (!link) { showToast('Please enter your affiliate link.', 'error'); return; }
+  try {
+    const res = await fetch(`${API}/publisher/apply-affiliate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${publisherToken}` },
+      body: JSON.stringify({ affiliateLink: link })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('You\'re now an Affiliate partner! 🎉', 'success');
+      closeAffiliateModal();
+      // Refresh publisher data
+      const me = await fetch(`${API}/publisher/me`, { headers: { Authorization: `Bearer ${publisherToken}` } });
+      publisherData = await me.json();
+      populateDashboard();
+    } else {
+      showToast(data.error || 'Could not process your request.', 'error');
+    }
+  } catch(e) { showToast('Could not reach the server.', 'error'); }
+}
+async function submitAffiliateSetup() {
+  const info = document.getElementById('affSetupInfo').value.trim();
+  if (!info) { showToast('Please describe how we can sign up.', 'error'); return; }
+  const publisher = publisherData?.publisher;
+  try {
+    const res = await fetch(`${API}/listing-inquiry`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        companyName: publisher.companyName, contactName: publisher.name,
+        email: publisher.email, phone: '', website: publisher.website || '',
+        curriculumName: 'Affiliate Setup Request', listingType: 'affiliate',
+        grades: [], description: info,
+        message: `Publisher needs help setting up affiliate link. Instructions: ${info}`
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Thanks! We\'ll get signed up and be in touch soon.', 'success');
+      closeAffiliateModal();
+    } else {
+      showToast(data.error || 'Could not submit request.', 'error');
+    }
+  } catch(e) { showToast('Could not reach the server.', 'error'); }
+}
+
 function closeUpgradePrompt() {
   document.getElementById('upgradePrompt').classList.remove('show');
   const publisher = publisherData?.publisher;
@@ -901,23 +1008,9 @@ async function requestUpgrade(tier) {
   const publisher = publisherData?.publisher;
   if (!publisher) return;
 
-  // Affiliate is free — submit request via API
+  // Affiliate — open application modal
   if (tier === 'Affiliate') {
-    if (!confirm('Apply for the Affiliate program? Our team will review your request and get back to you within 2–3 business days.')) return;
-    try {
-      const res = await fetch(`${API}/listing-inquiry`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          companyName: publisher.companyName, contactName: publisher.name,
-          email: publisher.email, phone: '', website: publisher.website || '',
-          curriculumName: 'Affiliate Upgrade Request', listingType: 'affiliate',
-          grades: [], description: '', message: `Existing publisher requesting upgrade to Affiliate tier. Current tier: ${publisher.tier || 'standard'}`
-        })
-      });
-      const data = await res.json();
-      if (data.success) showToast('Affiliate application submitted! We\'ll be in touch within 2–3 business days.', 'success');
-      else showToast(data.error || 'Could not submit request.', 'error');
-    } catch(e) { showToast('Could not reach the server.', 'error'); }
+    openAffiliateModal();
     return;
   }
 

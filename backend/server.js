@@ -1134,6 +1134,23 @@ app.post('/api/publisher/logout', requirePublisher, (req, res) => {
   res.json({ success: true });
 });
 
+// Publisher: apply for affiliate (auto-approve with link)
+app.post('/api/publisher/apply-affiliate', requirePublisher, (req, res) => {
+  const { affiliateLink } = req.body;
+  if (!affiliateLink || !/^https?:\/\/.+/i.test(affiliateLink))
+    return res.status(400).json({ error: 'Please provide a valid affiliate link (starting with http:// or https://).' });
+  const db = readDB();
+  const publisher = (db.publishers||[]).find(p => p.id === req.publisherId);
+  if (!publisher) return res.status(404).json({ error: 'Publisher not found.' });
+  publisher.tier = 'affiliate';
+  publisher.affiliateLink = affiliateLink.trim();
+  writeDB(db);
+  sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER || FROM_EMAIL,
+    `🔗 Publisher auto-upgraded to Affiliate — ${publisher.companyName}`,
+    `<h2>Affiliate Auto-Upgrade</h2><p><strong>${publisher.name}</strong> (${publisher.companyName}) has upgraded to the Affiliate tier.</p><p><strong>Affiliate link provided:</strong> <a href="${publisher.affiliateLink}">${publisher.affiliateLink}</a></p><p>You can link this to their curriculum listing in the <a href="${process.env.SITE_URL||'http://localhost:3001'}/admin">admin dashboard</a>.</p>`);
+  res.json({ success: true, message: 'You\'re now an Affiliate partner!' });
+});
+
 // Admin: approve publisher + assign tier + link curricula
 app.put('/api/admin/publishers/:id/approve', requireAdmin, (req, res) => {
   const db = readDB();
