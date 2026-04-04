@@ -554,6 +554,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <!-- Form A: Has link -->
     <div id="affiliateFormLink" style="display:none;margin-top:16px">
+      <div id="affLinkStatus"></div>
       <div class="form-group">
         <label style="color:var(--muted)">Which curriculum is this link for?</label>
         <select id="affCurriculumSelect" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem"></select>
@@ -563,8 +564,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <input type="url" id="affLink" placeholder="https://yoursite.com/?ref=myhomeschoolcurriculum" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem">
         <p style="font-size:.72rem;color:var(--muted);margin-top:4px">This is the tracking link we'll use on this listing so we earn commission on referred sales.</p>
       </div>
-      <button onclick="submitAffiliateLink()" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer">Submit & Activate Affiliate →</button>
-      <p style="font-size:.72rem;color:var(--muted);margin-top:8px;text-align:center">Have multiple curricula? You can add links for each one separately.</p>
+      <div style="display:flex;gap:10px">
+        <button onclick="submitAffiliateLink()" style="flex:1;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer">Submit Link →</button>
+        <button onclick="finishAffiliateSetup()" id="affDoneBtn" style="display:none;padding:10px 20px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer">Done ✓</button>
+      </div>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:8px;text-align:center">Have multiple curricula? Submit a link for each one — the form stays open.</p>
     </div>
 
     <!-- Form B: Need setup -->
@@ -871,9 +875,11 @@ function renderCurriculaTable(containerId, curricula, compact) {
 // ── MOBILE MENU ──────────────────────────────────────────────────────────────
 // ── AFFILIATE APPLICATION ─────────────────────────────────────────────────────
 function openAffiliateModal() {
+  affiliateLinksSubmitted = [];
   document.getElementById('affiliateOptions').style.display = 'flex';
   document.getElementById('affiliateFormLink').style.display = 'none';
   document.getElementById('affiliateFormSetup').style.display = 'none';
+  document.getElementById('affDoneBtn').style.display = 'none';
   // Populate curriculum selector
   const curricula = publisherData?.curricula || [];
   const select = document.getElementById('affCurriculumSelect');
@@ -892,9 +898,13 @@ function showAffiliateForm(type) {
   document.getElementById('affiliateFormLink').style.display = type === 'hasLink' ? 'block' : 'none';
   document.getElementById('affiliateFormSetup').style.display = type === 'needSetup' ? 'block' : 'none';
 }
+let affiliateLinksSubmitted = [];
+
 async function submitAffiliateLink() {
   const link = document.getElementById('affLink').value.trim();
-  const curriculumId = document.getElementById('affCurriculumSelect').value;
+  const select = document.getElementById('affCurriculumSelect');
+  const curriculumId = select.value;
+  const curriculumName = select.options[select.selectedIndex]?.text || '';
   if (!link) { showToast('Please enter your affiliate link.', 'error'); return; }
   if (!curriculumId) { showToast('No curriculum selected. Please link a curriculum to your account first.', 'error'); return; }
   try {
@@ -905,16 +915,50 @@ async function submitAffiliateLink() {
     });
     const data = await res.json();
     if (data.success) {
-      showToast('You\'re now an Affiliate partner! 🎉', 'success');
-      closeAffiliateModal();
-      // Refresh publisher data
+      affiliateLinksSubmitted.push(curriculumId);
+      document.getElementById('affLink').value = '';
+      // Update the submitted status display
+      updateAffiliateStatus();
+      // Refresh publisher data in background
       const me = await fetch(`${API}/publisher/me`, { headers: { Authorization: `Bearer ${publisherToken}` } });
       publisherData = await me.json();
-      populateDashboard();
+      // Check if all curricula have links
+      const remaining = (publisherData.curricula||[]).filter(c => !affiliateLinksSubmitted.includes(String(c.id)));
+      if (remaining.length === 0) {
+        showToast('All affiliate links submitted! 🎉', 'success');
+        setTimeout(() => { closeAffiliateModal(); populateDashboard(); }, 1500);
+      } else {
+        showToast(`Link saved for ${curriculumName}! Add more below.`, 'success');
+      }
     } else {
       showToast(data.error || 'Could not process your request.', 'error');
     }
   } catch(e) { showToast('Could not reach the server.', 'error'); }
+}
+
+function updateAffiliateStatus() {
+  const curricula = publisherData?.curricula || [];
+  let statusHTML = '';
+  if (affiliateLinksSubmitted.length > 0) {
+    statusHTML = '<div style="margin-bottom:12px;padding:10px;background:rgba(74,154,84,.1);border-radius:8px;font-size:.82rem">';
+    statusHTML += '<strong style="color:var(--accent)">Links submitted:</strong><br>';
+    affiliateLinksSubmitted.forEach(id => {
+      const c = curricula.find(cur => String(cur.id) === String(id));
+      if (c) statusHTML += `<span style="color:var(--text)">✅ ${c.emoji||'📘'} ${c.name}</span><br>`;
+    });
+    statusHTML += '</div>';
+    // Show the Done button
+    document.getElementById('affDoneBtn').style.display = 'block';
+  }
+  const container = document.getElementById('affLinkStatus');
+  if (container) container.innerHTML = statusHTML;
+}
+
+function finishAffiliateSetup() {
+  affiliateLinksSubmitted = [];
+  closeAffiliateModal();
+  populateDashboard();
+  showToast('Affiliate setup complete! 🎉', 'success');
 }
 async function submitAffiliateSetup() {
   const info = document.getElementById('affSetupInfo').value.trim();
