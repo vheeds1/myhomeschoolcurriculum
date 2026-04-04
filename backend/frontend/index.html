@@ -865,8 +865,17 @@ async function openCompare() {
 }
 
 // ── QUIZ ─────────────────────────────────────────────────────────────────────
-function openQuiz() { quizStep=1; quizAnswers={}; updateQuizStep(); document.getElementById('quizOverlay').classList.add('open'); }
-function resetQuiz() { quizStep=1; quizAnswers={}; updateQuizStep(); }
+function openQuiz() {
+  quizStep=1; quizAnswers={};
+  document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+  updateQuizStep();
+  document.getElementById('quizOverlay').classList.add('open');
+}
+function resetQuiz() {
+  quizStep=1; quizAnswers={};
+  document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+  updateQuizStep();
+}
 
 function selectQuiz(el, key, val) {
   el.closest('.quiz-options').querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
@@ -904,7 +913,9 @@ async function fetchQuizMatches() {
 }
 
 function applyQuizFilters() {
+  clearFilters();
   if (quizAnswers.grade) activateChip('grade', quizAnswers.grade);
+  if (quizAnswers.style) activateChip('style', quizAnswers.style);
   if (quizAnswers.worldview) activateChip('worldview', quizAnswers.worldview);
   closeOverlay('quizOverlay');
   fetchCurricula();
