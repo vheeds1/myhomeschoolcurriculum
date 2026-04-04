@@ -901,11 +901,23 @@ async function requestUpgrade(tier) {
   const publisher = publisherData?.publisher;
   if (!publisher) return;
 
-  // Affiliate is free — send email request
+  // Affiliate is free — submit request via API
   if (tier === 'Affiliate') {
-    const subject = encodeURIComponent(`Publisher Plan Upgrade Request — Affiliate`);
-    const body = encodeURIComponent(`Hi,\n\nI'd like to apply for the Affiliate program.\n\nAccount: ${publisher.email}\nCompany: ${publisher.companyName}\n\nThank you!`);
-    window.location = `mailto:contact@myhomeschoolcurriculum.com?subject=${subject}&body=${body}`;
+    if (!confirm('Apply for the Affiliate program? Our team will review your request and get back to you within 2–3 business days.')) return;
+    try {
+      const res = await fetch(`${API}/listing-inquiry`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyName: publisher.companyName, contactName: publisher.name,
+          email: publisher.email, phone: '', website: publisher.website || '',
+          curriculumName: 'Affiliate Upgrade Request', listingType: 'affiliate',
+          grades: [], description: '', message: `Existing publisher requesting upgrade to Affiliate tier. Current tier: ${publisher.tier || 'standard'}`
+        })
+      });
+      const data = await res.json();
+      if (data.success) showToast('Affiliate application submitted! We\'ll be in touch within 2–3 business days.', 'success');
+      else showToast(data.error || 'Could not submit request.', 'error');
+    } catch(e) { showToast('Could not reach the server.', 'error'); }
     return;
   }
 
