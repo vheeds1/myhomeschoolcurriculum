@@ -395,10 +395,10 @@ app.post('/api/listing-inquiry', submitLimiter, (req, res) => {
   db.analytics.totalInquiries++;
   writeDB(db);
   sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
-    `New Listing Inquiry: ${inquiry.curriculumName} (${inquiry.listingType})`,
-    `<h2>Publisher Inquiry</h2><p><strong>${inquiry.companyName}</strong><br>${inquiry.contactName} &lt;${inquiry.email}&gt;</p><p>Curriculum: <strong>${inquiry.curriculumName}</strong> | Type: <strong>${inquiry.listingType}</strong></p>`);
-  sendEmail(inquiry.email, `Thanks for your listing inquiry — MyHomeschoolCurriculum`,
-    `<p>Hi ${inquiry.contactName},</p><p>Thanks for your interest in listing <strong>${inquiry.curriculumName}</strong>! We'll be in touch within 2–3 business days.</p><p>— MyHomeschoolCurriculum Team</p>`);
+    `New Listing Request: ${inquiry.curriculumName}`,
+    `<h2>New Listing Request</h2><p><strong>${inquiry.companyName}</strong><br>${inquiry.contactName} &lt;${inquiry.email}&gt;</p><p>Curriculum: <strong>${inquiry.curriculumName}</strong></p>${inquiry.description ? `<p>${inquiry.description.substring(0,200)}</p>` : ''}<p><a href="${process.env.SITE_URL||'http://localhost:3001'}/admin">Review in Admin →</a></p>`);
+  sendEmail(inquiry.email, `We received your listing request — MyHomeschoolCurriculum`,
+    `<p>Hi ${inquiry.contactName},</p><p>Thanks for your interest in listing <strong>${inquiry.curriculumName}</strong> on MyHomeschoolCurriculum! Our team will review your request and get back to you within 2–3 business days.</p><p>In the meantime, if you have any questions, feel free to reply to this email.</p><p>— The MyHomeschoolCurriculum Team</p>`);
   res.status(201).json({ success: true, message: "Inquiry received! We'll be in touch within 2–3 business days." });
 });
 
@@ -885,25 +885,11 @@ app.put('/api/admin/inquiries/:id', requireAdmin, (req, res) => {
 
   // Send approval email
   if (req.body.status === 'approved' && prevStatus !== 'approved') {
-    const tierNote = (inq.listingType === 'silver' || inq.listingType === 'gold')
-      ? `<p>Since you selected the <strong>${inq.listingType}</strong> tier, you'll be able to set up billing after creating your account.</p>`
-      : '';
-    const affiliateNote = (inq.listingType === 'affiliate')
-      ? `<h3 style="margin-top:20px;color:#1E3A4C">📎 Next Step: Provide Your Affiliate Link</h3>
-         <p>As part of the Affiliate program, we'll drive traffic to your curriculum through our site. To ensure you receive commission on referred sales, please reply to this email with:</p>
-         <ul>
-           <li>Your <strong>unique affiliate/referral link</strong> for MyHomeschoolCurriculum (from your affiliate program, e.g. ShareASale, Impact, or your own system)</li>
-           <li>Your <strong>commission structure</strong> (e.g. percentage per sale, cookie duration)</li>
-         </ul>
-         <p>If you don't have an affiliate program set up yet, let us know and we can discuss the best way to get started.</p>`
-      : '';
-    sendEmail(inq.email, `Your listing inquiry has been approved! 🎉 — MyHomeschoolCurriculum`,
+    sendEmail(inq.email, `Your listing request has been approved! 🎉 — MyHomeschoolCurriculum`,
       `<h2>Great news, ${inq.contactName}!</h2>
-       <p>Your listing inquiry for <strong>${inq.curriculumName}</strong> has been approved.</p>
-       <p>To get started, create your publisher account:</p>
-       ${tierNote}
+       <p>Your listing request for <strong>${inq.curriculumName}</strong> has been approved.</p>
+       <p>To get started, create your publisher account. Once you're set up, you'll be able to view analytics, manage your listing, and explore upgrade options from your dashboard.</p>
        <p><a href="${siteUrl}/publisher-portal.html" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Create Publisher Account →</a></p>
-       ${affiliateNote}
        <p>Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>`);
   }
 
@@ -912,7 +898,7 @@ app.put('/api/admin/inquiries/:id', requireAdmin, (req, res) => {
     const reason = req.body.denyReason
       ? `<p><strong>Reason:</strong> ${req.body.denyReason}</p>`
       : '';
-    sendEmail(inq.email, `Update on your listing inquiry — MyHomeschoolCurriculum`,
+    sendEmail(inq.email, `Update on your listing request — MyHomeschoolCurriculum`,
       `<h2>Hi ${inq.contactName},</h2>
        <p>Thank you for your interest in listing <strong>${inq.curriculumName}</strong> on MyHomeschoolCurriculum.</p>
        <p>After reviewing your inquiry, we're unable to approve your listing at this time.</p>
@@ -1162,8 +1148,8 @@ app.put('/api/admin/publishers/:id/approve', requireAdmin, (req, res) => {
   writeDB(db);
   sendEmail(publisher.email, 'Your My Homeschool Curriculum publisher account is approved! 🎉',
     `<h2>Welcome to the publisher portal, ${publisher.name}!</h2>
-    <p>Your account for <strong>${publisher.companyName}</strong> has been approved with a <strong>${tier||'Standard'}</strong> listing tier.</p>
-    <p>Log in to your publisher dashboard to view analytics, manage your listing, and track performance:</p>
+    <p>Your account for <strong>${publisher.companyName}</strong> has been approved!</p>
+    <p>Log in to your publisher dashboard to view analytics, manage your listing, and explore available plans:</p>
     <p><a href="${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Access Publisher Portal →</a></p>
     <p>Questions? Reply to this email or contact us at contact@myhomeschoolcurriculum.com</p>`);
   res.json({ success: true });
