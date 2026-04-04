@@ -888,15 +888,14 @@ app.put('/api/admin/inquiries/:id', requireAdmin, (req, res) => {
     const tierNote = (inq.listingType === 'silver' || inq.listingType === 'gold')
       ? `<p>Since you selected the <strong>${inq.listingType}</strong> tier, you'll be able to set up billing after creating your account.</p>`
       : '';
-    const affiliateNote = (inq.listingType !== 'standard')
+    const affiliateNote = (inq.listingType === 'affiliate')
       ? `<h3 style="margin-top:20px;color:#1E3A4C">📎 Next Step: Provide Your Affiliate Link</h3>
-         <p>Your plan includes affiliate link tracking. We'll include your unique tracking link on your curriculum listing so you earn commission on referred sales.</p>
-         <p>Please reply to this email with:</p>
+         <p>As part of the Affiliate program, we'll drive traffic to your curriculum through our site. To ensure you receive commission on referred sales, please reply to this email with:</p>
          <ul>
            <li>Your <strong>unique affiliate/referral link</strong> for MyHomeschoolCurriculum (from your affiliate program, e.g. ShareASale, Impact, or your own system)</li>
-           <li>Your <strong>commission rate</strong> (so we can display it accurately)</li>
+           <li>Your <strong>commission structure</strong> (e.g. percentage per sale, cookie duration)</li>
          </ul>
-         <p>If you don't have an affiliate program yet, let us know and we can discuss other partnership options.</p>`
+         <p>If you don't have an affiliate program set up yet, let us know and we can discuss the best way to get started.</p>`
       : '';
     sendEmail(inq.email, `Your listing inquiry has been approved! 🎉 — MyHomeschoolCurriculum`,
       `<h2>Great news, ${inq.contactName}!</h2>
