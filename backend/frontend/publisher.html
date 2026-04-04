@@ -96,6 +96,28 @@ header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;
 footer{background:var(--navy);color:rgba(255,255,255,.65);padding:30px 24px;text-align:center;font-size:.8rem}
 footer a{color:var(--gold);text-decoration:none}
 @media(max-width:640px){.form-row,.contact-row{grid-template-columns:1fr}.tier-select-grid{grid-template-columns:1fr 1fr}}
+
+  /* ── ACCESSIBILITY ─────────────────────────────────────────────── */
+  /* Skip link */
+  .skip-link{position:absolute;top:-100px;left:16px;background:var(--navy,#1E3A4C);color:#fff;padding:8px 16px;border-radius:0 0 8px 8px;font-size:.85rem;font-weight:600;text-decoration:none;z-index:9999;transition:top .2s}
+  .skip-link:focus{top:0}
+  /* Focus visible outlines for keyboard navigation */
+  :focus-visible{outline:3px solid #4A9A54;outline-offset:2px;border-radius:3px}
+  button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #4A9A54;outline-offset:2px}
+  /* High contrast text helpers */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+
+  /* ── MOBILE NAV ─────────────────────────────────────────────────── */
+  .mobile-menu-btn{display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1}
+  @media(max-width:768px){
+    .mobile-menu-btn{display:block}
+    nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy,#1E3A4C);flex-direction:column;padding:12px 16px;gap:4px;border-top:1px solid rgba(255,255,255,.1);z-index:200}
+    nav.open{display:flex}
+    nav a{padding:10px 14px;border-radius:8px;font-size:.9rem}
+    header{position:relative}
+  }
+
 </style>
   <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID -->
   <script>
@@ -108,9 +130,13 @@ footer a{color:var(--gold);text-decoration:none}
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-67QGQLFQFR"></script>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 <header>
   <a href="/" class="logo-text">My Homeschool <span>Curriculum</span></a>
   <a href="/" class="back-link">← Back to Browse</a>
+  <a href="/publisher-portal.html" style="color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;transition:all .2s;margin-left:auto">Publisher Login →</a>
 </header>
 
 <div class="pub-hero">
@@ -118,7 +144,7 @@ footer a{color:var(--gold);text-decoration:none}
   <p>List your curriculum on MyHomeschoolCurriculum and connect with parents actively searching for the perfect fit — every single day.</p>
   <div class="stat-row">
     <div class="stat"><span class="stat-num">50k+</span><span class="stat-label">Monthly Visitors</span></div>
-    <div class="stat"><span class="stat-num">80+</span><span class="stat-label">Curricula Listed</span></div>
+    <div class="stat"><span class="stat-num">12</span><span class="stat-label">Curricula Listed</span></div>
     <div class="stat"><span class="stat-num">4.8★</span><span class="stat-label">Publisher Satisfaction</span></div>
     <div class="stat"><span class="stat-num">12k+</span><span class="stat-label">Parent Reviews</span></div>
   </div>
@@ -273,11 +299,11 @@ footer a{color:var(--gold);text-decoration:none}
     <div class="contact-row">
       <div class="contact-card">
         <h4>📧 Email Us Directly</h4>
-        <p>Prefer email? Reach our publisher team directly at <a href="/cdn-cgi/l/email-protection#98e8edfaf4f1ebf0fdeaebd8fbedeaeaf1fbedf4edf5fbf7f5e8f9ebebb6fbf7f5"><span class="__cf_email__" data-cfemail="5c2c293e30352f34392e2f1c3f292e2e353f293029313f33312c3d2f2f723f3331">[email&#160;protected]</span></a></p>
+        <p>Prefer email? Reach our publisher team directly at <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>
       </div>
       <div class="contact-card">
         <h4>❓ General Questions</h4>
-        <p>For non-publisher inquiries, visit our <a href="/">homepage</a> or email <a href="/cdn-cgi/l/email-protection#b0d8d5dcdcdff0d3c5c2c2d9d3c5dcc5ddd3dfddc0d1c3c39ed3dfdd"><span class="__cf_email__" data-cfemail="a7cfc2cbcbc8e7c4d2d5d5cec4d2cbd2cac4c8cad7c6d4d489c4c8ca">[email&#160;protected]</span></a></p>
+        <p>For non-publisher inquiries, visit our <a href="/">homepage</a> or email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>
       </div>
     </div>
   </div>
@@ -290,7 +316,7 @@ footer a{color:var(--gold);text-decoration:none}
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const API = window.location.hostname==='localhost' ? 'http://localhost:3001/api' : '/api';
 let selectedTierVal = '';
 

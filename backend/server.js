@@ -41,6 +41,15 @@ const DB_PATH = path.join(__dirname, 'db/database.json');
 
 // ─── MIDDLEWARE ──────────────────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
+
+// Trust Railway's proxy and force HTTPS in production
+app.set('trust proxy', 1);
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(301, `https://${req.headers.host}${req.url}`);
+  }
+  next();
+});
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -834,3 +843,166 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
+// ─── PUBLISHER PORTAL ────────────────────────────────────────────────────────
+
+// Publisher registration
+app.post('/api/publisher/register', submitLimiter, (req, res) => {
+  const { name, email, password, companyName, website } = req.body;
+  if (!name || !email || !password || !companyName)
+    return res.status(400).json({ error: 'Name, email, password, and company name required.' });
+  if (password.length < 8)
+    return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+  const db = readDB();
+  if (!db.publishers) db.publishers = [];
+  if (db.publishers.find(p => p.email === email.toLowerCase()))
+    return res.status(409).json({ error: 'An account with this email already exists.' });
+  const { hash, salt } = hashPassword(password);
+  const publisher = {
+    id: uuidv4(), name: name.trim(), email: email.trim().toLowerCase(),
+    companyName: companyName.trim(), website: website || '',
+    passwordHash: hash, passwordSalt: salt,
+    status: 'pending', tier: null, approved: false,
+    createdAt: new Date().toISOString(), lastLoginAt: null,
+    curriculumIds: [], stripeCustomerId: null, stripeSubscriptionId: null,
+  };
+  db.publishers.push(publisher);
+  if (!db.publisherSessions) db.publisherSessions = [];
+  writeDB(db);
+  sendEmail(process.env.ADMIN_EMAIL, 'New Publisher Registration — My Homeschool Curriculum',
+    `<h2>New publisher registered</h2><p><strong>${name}</strong> (${companyName}) registered at ${email}.</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}/admin">Review in Admin →</a></p>`);
+  res.status(201).json({ success: true, message: 'Account created! Our team will review and approve your account within 2 business days.' });
+});
+
+// Publisher login
+app.post('/api/publisher/login', authLimiter, (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required.' });
+  const db = readDB();
+  if (!db.publishers) return res.status(401).json({ error: 'Invalid email or password.' });
+  const publisher = db.publishers.find(p => p.email === email.toLowerCase());
+  if (!publisher) return res.status(401).json({ error: 'Invalid email or password.' });
+  const { hash } = hashPassword(password, publisher.passwordSalt);
+  if (hash !== publisher.passwordHash) return res.status(401).json({ error: 'Invalid email or password.' });
+  const token = crypto.randomBytes(48).toString('hex');
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  if (!db.publisherSessions) db.publisherSessions = [];
+  db.publisherSessions.push({ token, publisherId: publisher.id, expiresAt });
+  db.publisherSessions = db.publisherSessions.filter(s => new Date(s.expiresAt) > new Date());
+  publisher.lastLoginAt = new Date().toISOString();
+  writeDB(db);
+  res.json({ success: true, token, publisher: {
+    id: publisher.id, name: publisher.name, email: publisher.email,
+    companyName: publisher.companyName, status: publisher.status,
+    tier: publisher.tier, approved: publisher.approved, website: publisher.website
+  }});
+});
+
+// Publisher auth middleware
+function requirePublisher(req, res, next) {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Authentication required.' });
+  const db = readDB();
+  const session = (db.publisherSessions||[]).find(s => s.token === token && new Date(s.expiresAt) > new Date());
+  if (!session) return res.status(401).json({ error: 'Session expired. Please log in again.' });
+  req.publisherId = session.publisherId;
+  next();
+}
+
+// Get publisher profile + stats
+app.get('/api/publisher/me', requirePublisher, (req, res) => {
+  const db = readDB();
+  const publisher = (db.publishers||[]).find(p => p.id === req.publisherId);
+  if (!publisher) return res.status(404).json({ error: 'Publisher not found.' });
+
+  // Get their curricula
+  const curricula = (db.curricula||[]).filter(c => publisher.curriculumIds.includes(c.id));
+
+  // Aggregate click stats for their curricula
+  const clicks = (db.affiliateClicks||[]).filter(c => publisher.curriculumIds.includes(c.curriculumId));
+  const clicksByDay = {};
+  clicks.forEach(c => {
+    const day = c.createdAt?.slice(0, 10) || 'unknown';
+    clicksByDay[day] = (clicksByDay[day] || 0) + 1;
+  });
+
+  // Reviews for their curricula
+  const reviews = (db.reviews||[]).filter(r =>
+    publisher.curriculumIds.includes(r.curriculumId) && r.approved
+  );
+
+  res.json({
+    publisher: {
+      id: publisher.id, name: publisher.name, email: publisher.email,
+      companyName: publisher.companyName, website: publisher.website,
+      status: publisher.status, tier: publisher.tier, approved: publisher.approved,
+      createdAt: publisher.createdAt, lastLoginAt: publisher.lastLoginAt,
+      stripeSubscriptionId: publisher.stripeSubscriptionId
+    },
+    analytics: {
+      totalClicks: clicks.length,
+      clicksThisMonth: clicks.filter(c => new Date(c.createdAt) > new Date(Date.now() - 30*24*60*60*1000)).length,
+      clicksByDay: Object.entries(clicksByDay).sort().slice(-30).map(([date, count]) => ({ date, count })),
+      totalReviews: reviews.length,
+      averageRating: reviews.length ? Math.round(reviews.reduce((s,r) => s + r.rating, 0) / reviews.length * 10) / 10 : null,
+    },
+    curricula: curricula.map(c => ({
+      id: c.id, name: c.name, emoji: c.emoji, slug: c.slug, rating: c.rating,
+      reviewCount: c.reviewCount, active: c.active, tier: c.type,
+      badges: c.badges, sponsored: c.sponsored, featured: c.featured,
+      clicks: (db.affiliateClicks||[]).filter(cl => cl.curriculumId === c.id).length,
+    }))
+  });
+});
+
+// Update publisher profile
+app.put('/api/publisher/profile', requirePublisher, (req, res) => {
+  const db = readDB();
+  const publisher = (db.publishers||[]).find(p => p.id === req.publisherId);
+  if (!publisher) return res.status(404).json({ error: 'Not found.' });
+  const { name, companyName, website } = req.body;
+  if (name) publisher.name = name.trim();
+  if (companyName) publisher.companyName = companyName.trim();
+  if (website !== undefined) publisher.website = website;
+  writeDB(db);
+  res.json({ success: true });
+});
+
+// Publisher logout
+app.post('/api/publisher/logout', requirePublisher, (req, res) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  const db = readDB();
+  db.publisherSessions = (db.publisherSessions||[]).filter(s => s.token !== token);
+  writeDB(db);
+  res.json({ success: true });
+});
+
+// Admin: approve publisher + assign tier + link curricula
+app.put('/api/admin/publishers/:id/approve', requireAdmin, (req, res) => {
+  const db = readDB();
+  if (!db.publishers) return res.status(404).json({ error: 'Not found.' });
+  const publisher = db.publishers.find(p => p.id === req.params.id);
+  if (!publisher) return res.status(404).json({ error: 'Publisher not found.' });
+  const { tier, curriculumIds } = req.body;
+  publisher.approved = true;
+  publisher.status = 'active';
+  if (tier) publisher.tier = tier;
+  if (curriculumIds) publisher.curriculumIds = curriculumIds;
+  writeDB(db);
+  sendEmail(publisher.email, 'Your My Homeschool Curriculum publisher account is approved! 🎉',
+    `<h2>Welcome to the publisher portal, ${publisher.name}!</h2>
+    <p>Your account for <strong>${publisher.companyName}</strong> has been approved with a <strong>${tier||'Standard'}</strong> listing tier.</p>
+    <p>Log in to your publisher dashboard to view analytics, manage your listing, and track performance:</p>
+    <p><a href="${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Access Publisher Portal →</a></p>
+    <p>Questions? Reply to this email or contact us at contact@myhomeschoolcurriculum.com</p>`);
+  res.json({ success: true });
+});
+
+// Admin: get all publishers
+app.get('/api/admin/publishers', requireAdmin, (req, res) => {
+  const db = readDB();
+  res.json({ publishers: (db.publishers||[]).slice().reverse() });
+});
+
+// Serve publisher portal page
+app.get('/publisher-portal', (req, res) => res.sendFile(path.join(__dirname, 'frontend/publisher-portal.html')));

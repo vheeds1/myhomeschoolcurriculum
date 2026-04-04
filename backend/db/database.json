@@ -775,6 +775,1692 @@
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
       "updatedAt": "2025-01-30T00:00:00Z"
+    },
+    {
+      "id": 13,
+      "slug": "abeka",
+      "name": "Abeka",
+      "emoji": "\ud83d\udcd8",
+      "tagline": "Rigorous traditional Christian education with a proven track record",
+      "rating": 4.3,
+      "reviewCount": 1840,
+      "price": "$400\u2013$1,400/year",
+      "priceMin": 400,
+      "priceMax": 1400,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12",
+        "All Grades"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Physical Books",
+        "Video/DVD",
+        "Digital"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "Language Arts",
+        "Math",
+        "Science",
+        "History"
+      ],
+      "special": [],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.abeka.com",
+      "affiliateLink": "https://www.abeka.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "One of the most widely used traditional Christian curricula, Abeka offers complete K-12 programs with a strong emphasis on phonics, grammar, and Biblical worldview.",
+      "longDescription": "Abeka has been a cornerstone of Christian homeschooling for over 50 years. Known for its rigorous academic standards, it follows a traditional school format with daily lesson plans, tests, and detailed teacher guides. Particularly strong in early reading with its intensive phonics approach.",
+      "pros": [
+        "Very structured and thorough",
+        "Strong phonics program",
+        "Well-tested and proven",
+        "Video school option available",
+        "Detailed teacher guides"
+      ],
+      "cons": [
+        "Can feel like traditional school at home",
+        "Expensive for full curriculum",
+        "Less flexibility for different learning styles",
+        "Heavy workload"
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "classical-conversations",
+      "name": "Classical Conversations",
+      "emoji": "\ud83c\udfdb\ufe0f",
+      "tagline": "Community-based classical education built around weekly co-ops",
+      "rating": 4.5,
+      "reviewCount": 2100,
+      "price": "$500\u2013$1,000/year + tuition",
+      "priceMin": 500,
+      "priceMax": 1000,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Classical"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Physical Books",
+        "In-Person Co-op"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "History",
+        "Science",
+        "Language Arts",
+        "Math",
+        "Latin"
+      ],
+      "special": [],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.classicalconversations.com",
+      "affiliateLink": "https://www.classicalconversations.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A nationwide network of classical homeschool co-ops meeting weekly. Children memorize facts in the grammar stage, learn logic, and develop rhetoric skills \u2014 all within a Christian community.",
+      "longDescription": "Classical Conversations is built around a weekly community day where children meet with peers and trained tutors. The Foundations program (K-6) focuses on memory work \u2014 history sentences, science facts, Latin, math \u2014 while Essentials (4-6) adds grammar and writing. Challenge programs serve 7th grade through high school with Socratic seminars and rigorous academics.",
+      "pros": [
+        "Strong community and accountability",
+        "Proven classical framework",
+        "Develops exceptional memory and logic",
+        "Great for multiple children at once",
+        "National network of campuses"
+      ],
+      "cons": [
+        "Requires weekly co-op attendance",
+        "Christian/faith-based only",
+        "Can be expensive with tuition + materials",
+        "Memory-heavy approach not for every child"
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "my-fathers-world",
+      "name": "My Father's World",
+      "emoji": "\ud83c\udf0d",
+      "tagline": "Literature-rich curriculum with a global missions perspective",
+      "rating": 4.4,
+      "reviewCount": 890,
+      "price": "$200\u2013$500/year",
+      "priceMin": 200,
+      "priceMax": 500,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason",
+        "Classical",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "History",
+        "Language Arts",
+        "Science",
+        "Bible"
+      ],
+      "special": [
+        "Multiple Ages"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.mfwbooks.com",
+      "affiliateLink": "https://www.mfwbooks.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A Charlotte Mason-influenced curriculum that weaves together history, literature, science, and Bible with a global perspective. Works beautifully for multiple ages simultaneously.",
+      "longDescription": "My Father's World combines the best of Charlotte Mason, classical, and traditional approaches into an integrated curriculum. History is the spine around which literature, science, Bible, and geography are woven. The multi-level design means families with children of different ages can learn history together while working at their own level for math and language arts.",
+      "pros": [
+        "Works well for multiple ages",
+        "Literature-rich and engaging",
+        "Integrates all subjects meaningfully",
+        "Strong global/missions perspective",
+        "Moderate price point"
+      ],
+      "cons": [
+        "Requires parent involvement",
+        "Some supplementing needed for high school",
+        "Charlotte Mason approach not for every family"
+      ]
+    },
+    {
+      "id": 16,
+      "slug": "rightstart-mathematics",
+      "name": "RightStart Mathematics",
+      "emoji": "\ud83d\udd22",
+      "tagline": "Hands-on math curriculum using the AL Abacus for deep understanding",
+      "rating": 4.6,
+      "reviewCount": 720,
+      "price": "$150\u2013$200/year",
+      "priceMin": 150,
+      "priceMax": 200,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Traditional",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular",
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Hands-On Manipulatives"
+      ],
+      "subject": [
+        "Math"
+      ],
+      "special": [
+        "Special Needs",
+        "Dyslexia Friendly"
+      ],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.rightstartmath.com",
+      "affiliateLink": "https://www.rightstartmath.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A research-based math curriculum using the AL Abacus and visual strategies to build genuine number sense. Exceptional for children who struggle with traditional math approaches.",
+      "longDescription": "RightStart Mathematics was developed by Dr. Joan Cotter based on research into how children actually learn math. It uses an abacus, cards, and games to build deep mathematical understanding rather than rote memorization. Particularly effective for visual and kinesthetic learners, and children who have struggled with traditional math programs.",
+      "pros": [
+        "Builds genuine number sense",
+        "Highly effective for struggling math learners",
+        "Minimal memorization required",
+        "Hands-on and engaging",
+        "Research-backed approach"
+      ],
+      "cons": [
+        "Teacher-intensive (one-on-one instruction)",
+        "Expensive initial manipulative set",
+        "Slower pacing than some programs",
+        "Requires daily commitment"
+      ]
+    },
+    {
+      "id": 17,
+      "slug": "teaching-textbooks",
+      "name": "Teaching Textbooks",
+      "emoji": "\ud83d\udcbb",
+      "tagline": "Self-teaching math with video lessons and automatic grading",
+      "rating": 4.4,
+      "reviewCount": 1650,
+      "price": "$67/year per level",
+      "priceMin": 67,
+      "priceMax": 134,
+      "grades": [
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Online/Self-Paced"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Digital",
+        "App"
+      ],
+      "subject": [
+        "Math"
+      ],
+      "special": [
+        "Learning Differences",
+        "Gifted"
+      ],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "affiliate",
+      "website": "https://www.teachingtextbooks.com",
+      "affiliateLink": "https://www.teachingtextbooks.com",
+      "affiliateCode": "",
+      "commissionRate": 5,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A beloved self-teaching math program where a friendly tutor walks students through every problem via video. Automatic grading takes the burden off parents completely.",
+      "longDescription": "Teaching Textbooks has become one of the most popular math programs in the homeschool community for good reason \u2014 students genuinely like it. Each problem has a step-by-step video explanation available, so students who get stuck can get help immediately without waiting for mom or dad. The completely automated grading and gradebook make record-keeping effortless.",
+      "pros": [
+        "Truly self-teaching from 3rd grade up",
+        "Students actually enjoy it",
+        "Automatic grading and gradebook",
+        "Video help for every problem",
+        "Affordable subscription model"
+      ],
+      "cons": [
+        "Not available for K-2",
+        "Less rigorous than some programs",
+        "Subscription required (not one-time purchase)",
+        "Limited to math only"
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "all-about-reading",
+      "name": "All About Reading",
+      "emoji": "\ud83d\udcd6",
+      "tagline": "Multisensory reading program that works for struggling readers",
+      "rating": 4.8,
+      "reviewCount": 2300,
+      "price": "$100\u2013$120/level",
+      "priceMin": 100,
+      "priceMax": 120,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5"
+      ],
+      "style": [
+        "Traditional",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Hands-On Manipulatives"
+      ],
+      "subject": [
+        "Language Arts"
+      ],
+      "special": [
+        "Dyslexia Friendly",
+        "Special Needs",
+        "Learning Differences"
+      ],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "affiliate",
+      "website": "https://www.allaboutlearningpress.com",
+      "affiliateLink": "https://www.allaboutlearningpress.com",
+      "affiliateCode": "",
+      "commissionRate": 5,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "An Orton-Gillingham based reading program using multisensory techniques. Widely regarded as the gold standard for teaching struggling readers and children with dyslexia.",
+      "longDescription": "All About Reading uses the research-backed Orton-Gillingham approach \u2014 multisensory, systematic, and explicit phonics instruction. Each lesson incorporates seeing, hearing, and touching through letter tiles, fluency pages, and decodable readers. Particularly effective for children with dyslexia or other reading difficulties, but works beautifully for all learners.",
+      "pros": [
+        "Excellent for dyslexia and struggling readers",
+        "Multisensory and engaging",
+        "Very systematic and thorough",
+        "Includes decodable readers",
+        "Clear scripted lessons for parents"
+      ],
+      "cons": [
+        "Expensive per level",
+        "4 levels needed for complete program",
+        "Requires parent-led instruction",
+        "Slower pacing by design"
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "all-about-spelling",
+      "name": "All About Spelling",
+      "emoji": "\u270f\ufe0f",
+      "tagline": "Multisensory spelling using the same Orton-Gillingham approach as AAR",
+      "rating": 4.7,
+      "reviewCount": 1100,
+      "price": "$50\u2013$70/level",
+      "priceMin": 50,
+      "priceMax": 70,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Hands-On Manipulatives"
+      ],
+      "subject": [
+        "Language Arts"
+      ],
+      "special": [
+        "Dyslexia Friendly",
+        "Special Needs"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.allaboutlearningpress.com/spelling",
+      "affiliateLink": "https://www.allaboutlearningpress.com/spelling",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A systematic, multisensory spelling program that pairs perfectly with All About Reading. Teaches spelling rules explicitly rather than rote memorization.",
+      "longDescription": "All About Spelling teaches children why words are spelled the way they are, not just memorizing word lists. Using the same letter tiles as All About Reading, children learn spelling through seeing, hearing, and touching. Seven levels take students from basic phonograms through advanced spelling rules.",
+      "pros": [
+        "Pairs perfectly with All About Reading",
+        "Teaches spelling rules not just memorization",
+        "Multisensory approach",
+        "Great for visual and kinesthetic learners"
+      ],
+      "cons": [
+        "Requires separate purchase from AAR",
+        "Parent-led instruction required",
+        "Multiple levels needed for full program"
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "khan-academy",
+      "name": "Khan Academy",
+      "emoji": "\ud83c\udf93",
+      "tagline": "World-class free education in math, science, and more",
+      "rating": 4.5,
+      "reviewCount": 5200,
+      "price": "Free",
+      "priceMin": 0,
+      "priceMax": 0,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12",
+        "All Grades"
+      ],
+      "style": [
+        "Online/Self-Paced"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Digital",
+        "App"
+      ],
+      "subject": [
+        "Math",
+        "Science",
+        "Language Arts",
+        "History"
+      ],
+      "special": [
+        "Gifted",
+        "Learning Differences"
+      ],
+      "badges": [
+        "Free",
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.khanacademy.org",
+      "affiliateLink": "https://www.khanacademy.org",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "The world's most popular free learning platform. Mastery-based math from pre-K through calculus, plus science, history, SAT prep, and more \u2014 all completely free forever.",
+      "longDescription": "Khan Academy offers a complete, free education covering pre-K through college level math, science, computing, humanities, and test preparation. The mastery-based approach ensures students truly understand concepts before moving on. The parent dashboard provides detailed progress tracking. Widely used as a primary math curriculum or supplement by hundreds of thousands of homeschool families.",
+      "pros": [
+        "Completely free forever",
+        "Mastery-based progression",
+        "Excellent SAT/ACT prep",
+        "Detailed parent dashboard",
+        "Works across all grades"
+      ],
+      "cons": [
+        "Requires screen time",
+        "History and writing less comprehensive than math",
+        "No physical materials",
+        "Self-motivation required"
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "mystery-science",
+      "name": "Mystery Science",
+      "emoji": "\ud83d\udd2c",
+      "tagline": "Inquiry-based elementary science built around fascinating questions",
+      "rating": 4.7,
+      "reviewCount": 980,
+      "price": "Free for home educators",
+      "priceMin": 0,
+      "priceMax": 0,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5"
+      ],
+      "style": [
+        "Eclectic",
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Digital",
+        "Hands-On"
+      ],
+      "subject": [
+        "Science"
+      ],
+      "special": [],
+      "badges": [
+        "Free",
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.mysteryscience.com",
+      "affiliateLink": "https://www.mysteryscience.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "Elementary science built around captivating mystery questions like 'Why do leaves change color?' Each lesson includes a mini-documentary and hands-on activity using household materials.",
+      "longDescription": "Mystery Science hooks children with a compelling question, then guides them through a short video lesson and a hands-on activity. All activities use common household materials. The home educator version is free. Covers life science, earth science, and physical science across K-5 with complete units that take 4-8 weeks each.",
+      "pros": [
+        "Free for homeschoolers",
+        "Kids love the mystery hook",
+        "Hands-on activities with household items",
+        "Builds genuine scientific thinking",
+        "Complete units with no prep required"
+      ],
+      "cons": [
+        "Only covers elementary (K-5)",
+        "Not comprehensive enough as sole science program for older grades",
+        "Secular content"
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "story-of-the-world",
+      "name": "Story of the World",
+      "emoji": "\ud83d\uddfa\ufe0f",
+      "tagline": "Narrative history for children told as an engaging story",
+      "rating": 4.6,
+      "reviewCount": 1450,
+      "price": "$20\u2013$50/volume",
+      "priceMin": 20,
+      "priceMax": 200,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Classical",
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Audio"
+      ],
+      "subject": [
+        "History"
+      ],
+      "special": [
+        "Multiple Ages"
+      ],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.peacehillpress.com",
+      "affiliateLink": "https://www.peacehillpress.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "Susan Wise Bauer's beloved four-volume world history narrative for children. History told as a compelling story from ancient times through the modern age.",
+      "longDescription": "Story of the World is the history spine for thousands of classical and Charlotte Mason homeschools. Written by Susan Wise Bauer, the four volumes cover ancient history, the Middle Ages, early modern history, and modern times. The narrative style makes history come alive. Activity books, audio CDs, and test books are available as companions.",
+      "pros": [
+        "Beautifully written narrative style",
+        "Children genuinely enjoy it",
+        "Available in audio format",
+        "Complete K-8 history spine",
+        "Pairs with living books perfectly"
+      ],
+      "cons": [
+        "4 volumes needed for complete program",
+        "Activity books sold separately",
+        "Not a complete curriculum on its own"
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "five-in-a-row",
+      "name": "Five in a Row",
+      "emoji": "\ud83d\udea3",
+      "tagline": "Unit studies built around classic picture books for young children",
+      "rating": 4.5,
+      "reviewCount": 620,
+      "price": "$80\u2013$150/volume",
+      "priceMin": 80,
+      "priceMax": 150,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5"
+      ],
+      "style": [
+        "Unit Studies",
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "Language Arts",
+        "History",
+        "Science",
+        "Art"
+      ],
+      "special": [
+        "Multiple Ages"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.fiveinarow.com",
+      "affiliateLink": "https://www.fiveinarow.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A gentle, literature-based curriculum that rows the same classic picture book 5 days in a row, exploring social studies, language, science, art, and applied math through each story.",
+      "longDescription": "Five in a Row takes a beloved picture book and 'rows' it for a week \u2014 reading it each day while exploring different subjects through its content. Make Way for Ducklings becomes a study of Boston geography, animal behavior, and community. The approach creates deep, memorable learning for young children in a warm, low-stress environment.",
+      "pros": [
+        "Gentle and enjoyable for young children",
+        "Creates deep learning through repetition",
+        "Low prep for parents",
+        "Beautiful literature choices",
+        "Works for multiple ages simultaneously"
+      ],
+      "cons": [
+        "Math supplement required",
+        "Not rigorous enough as sole curriculum past 2nd grade",
+        "Requires sourcing picture books separately"
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "timberdoodle",
+      "name": "Timberdoodle",
+      "emoji": "\ud83e\udeb5",
+      "tagline": "Curated curriculum kits combining the best materials from multiple publishers",
+      "rating": 4.4,
+      "reviewCount": 540,
+      "price": "$300\u2013$600/year",
+      "priceMin": 300,
+      "priceMax": 600,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Eclectic",
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Hands-On Manipulatives",
+        "Digital"
+      ],
+      "subject": [
+        "Full Curriculum"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.timberdoodle.com",
+      "affiliateLink": "https://www.timberdoodle.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "Thoughtfully curated annual curriculum kits that combine the best hands-on materials, games, and books from multiple publishers into one cohesive package.",
+      "longDescription": "Timberdoodle does the curriculum research for you \u2014 each annual kit combines carefully selected materials from the best publishers: critical thinking workbooks, hands-on STEM toys, language arts, and living books. The kits are secular-friendly and emphasize creative, hands-on learning. Great for parents who want variety without the overwhelm of building their own eclectic curriculum.",
+      "pros": [
+        "All the research done for you",
+        "High-quality curated materials",
+        "Hands-on and engaging",
+        "Faith-neutral",
+        "Excellent customer service"
+      ],
+      "cons": [
+        "Can't customize individual components easily",
+        "Not a complete curriculum \u2014 math sold separately",
+        "Shipping costs for physical materials"
+      ]
+    },
+    {
+      "id": 25,
+      "slug": "veritas-press",
+      "name": "Veritas Press",
+      "emoji": "\ud83d\udcdc",
+      "tagline": "Rigorous classical Christian education with self-paced online options",
+      "rating": 4.3,
+      "reviewCount": 410,
+      "price": "$300\u2013$800/year",
+      "priceMin": 300,
+      "priceMax": 800,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Classical"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital",
+        "Video/DVD"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "History",
+        "Language Arts",
+        "Bible",
+        "Latin"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.veritaspress.com",
+      "affiliateLink": "https://www.veritaspress.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A rigorous classical Christian curriculum with a chronological history spine and strong emphasis on Latin, logic, and the Great Books tradition.",
+      "longDescription": "Veritas Press offers one of the most academically rigorous classical Christian curricula available. Their Omnibus program for grades 7-12 is particularly well-regarded \u2014 students read and discuss primary sources from ancient through modern times in a Socratic format. The self-paced online option allows students to move at their own speed while still receiving structured classical instruction.",
+      "pros": [
+        "Academically rigorous",
+        "Excellent Omnibus program for high school",
+        "Strong classical foundation",
+        "Self-paced online option",
+        "Reformed Christian worldview"
+      ],
+      "cons": [
+        "Very demanding \u2014 not for every student",
+        "Expensive",
+        "Heavy reading load",
+        "Requires motivated, independent learner for self-paced"
+      ]
+    },
+    {
+      "id": 26,
+      "slug": "notgrass-history",
+      "name": "Notgrass History",
+      "emoji": "\ud83c\udffa",
+      "tagline": "Engaging narrative history combining literature, Bible, and writing",
+      "rating": 4.5,
+      "reviewCount": 680,
+      "price": "$150\u2013$185/year",
+      "priceMin": 150,
+      "priceMax": 185,
+      "grades": [
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional",
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Physical Books"
+      ],
+      "subject": [
+        "History",
+        "Language Arts",
+        "Bible"
+      ],
+      "special": [
+        "Multiple Ages"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.notgrass.com",
+      "affiliateLink": "https://www.notgrass.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A family-friendly history curriculum told in warm narrative style, integrating primary sources, literature, Bible, and writing into a unified Christian worldview.",
+      "longDescription": "Notgrass History makes history come alive through engaging narrative lessons written directly to the student. Each unit integrates Bible readings, literature selections, and writing assignments. The From Sea to Shining Sea (American history) and Exploring World History programs are particularly popular for middle and high school.",
+      "pros": [
+        "Engaging narrative writing style",
+        "Integrates Bible and literature naturally",
+        "Affordable",
+        "Can be done independently by older students",
+        "Strong writing component"
+      ],
+      "cons": [
+        "Christian worldview throughout",
+        "Not a complete curriculum \u2014 math and science separate",
+        "Some families find it less rigorous than classical programs"
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "life-of-fred",
+      "name": "Life of Fred",
+      "emoji": "\ud83d\udc31",
+      "tagline": "Math curriculum told as a story about Fred \u2014 surprisingly effective",
+      "rating": 4.2,
+      "reviewCount": 890,
+      "price": "$19\u2013$29/book",
+      "priceMin": 19,
+      "priceMax": 200,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Eclectic",
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books"
+      ],
+      "subject": [
+        "Math"
+      ],
+      "special": [
+        "Gifted"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.lifeoffred.com",
+      "affiliateLink": "https://www.lifeoffred.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A uniquely story-driven math curriculum following the adventures of 5-year-old Fred. Beloved by kids who hate math \u2014 teaches concepts through narrative rather than drill.",
+      "longDescription": "Life of Fred is unlike any other math curriculum. Each chapter is a story about Fred, a 5-year-old math genius, and math concepts arise naturally from the story. The books are funny, whimsical, and genuinely entertaining. While unconventional, many families find it works beautifully as a supplement or for children who shut down with traditional drill-based math.",
+      "pros": [
+        "Children who hate math often love this",
+        "Inexpensive per book",
+        "Teaches math in real-world context",
+        "Whimsical and memorable",
+        "Complete K-12 sequence available"
+      ],
+      "cons": [
+        "Works better as supplement than sole math program for many students",
+        "Unconventional \u2014 may not satisfy standardized test prep needs",
+        "Less practice/drill than traditional programs"
+      ]
+    },
+    {
+      "id": 28,
+      "slug": "explode-the-code",
+      "name": "Explode the Code",
+      "emoji": "\ud83d\udca5",
+      "tagline": "Classic phonics workbooks trusted by homeschoolers for decades",
+      "rating": 4.3,
+      "reviewCount": 760,
+      "price": "$9\u2013$14/book",
+      "priceMin": 9,
+      "priceMax": 100,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital"
+      ],
+      "subject": [
+        "Language Arts"
+      ],
+      "special": [
+        "Dyslexia Friendly"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.explodethe code.com",
+      "affiliateLink": "https://www.explodethecode.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "Time-tested phonics workbooks that systematically build reading and spelling skills through simple, clear exercises. A staple supplement for early readers.",
+      "longDescription": "Explode the Code has been helping children learn to read for over 40 years. The workbooks systematically introduce phonics rules through simple exercises \u2014 matching pictures to words, filling in missing letters, and writing sentences. Available in 8 books plus preparatory books for pre-readers. Affordable and easy to use as a supplement to any reading program.",
+      "pros": [
+        "Very affordable",
+        "Simple and clear exercises",
+        "Great phonics reinforcement",
+        "Works as standalone or supplement",
+        "Proven over decades"
+      ],
+      "cons": [
+        "Workbook format \u2014 not hands-on",
+        "Better as supplement than complete reading program",
+        "Can feel repetitive"
+      ]
+    },
+    {
+      "id": 29,
+      "slug": "institute-for-excellence-in-writing",
+      "name": "IEW (Excellence in Writing)",
+      "emoji": "\u270d\ufe0f",
+      "tagline": "Structured writing program that produces confident, capable writers",
+      "rating": 4.6,
+      "reviewCount": 1120,
+      "price": "$100\u2013$250/year",
+      "priceMin": 100,
+      "priceMax": 250,
+      "grades": [
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional",
+        "Classical"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Video/DVD",
+        "Digital"
+      ],
+      "subject": [
+        "Language Arts"
+      ],
+      "special": [],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.iew.com",
+      "affiliateLink": "https://www.iew.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A structured, incremental writing program that takes students from summarizing sources to crafting original essays. One of the most widely used writing curricula in homeschooling.",
+      "longDescription": "Institute for Excellence in Writing (IEW) uses a structured approach called the TWSS (Teaching Writing: Structure and Style). Students learn to take notes from sources, restructure information, and add stylistic techniques (sentence openers, dress-ups, decorations) to produce polished writing. The video component allows parents to co-learn alongside their children.",
+      "pros": [
+        "Produces confident writers",
+        "Video component teaches parents too",
+        "Very structured \u2014 easy to implement",
+        "Works across many subjects",
+        "Strong for reluctant writers"
+      ],
+      "cons": [
+        "Can feel formulaic for creative writers",
+        "Expensive for video components",
+        "Heavy parent involvement required for younger students"
+      ]
+    },
+    {
+      "id": 30,
+      "slug": "art-of-problem-solving",
+      "name": "Art of Problem Solving",
+      "emoji": "\ud83e\uddee",
+      "tagline": "Challenging math for gifted students who want to go deep",
+      "rating": 4.7,
+      "reviewCount": 540,
+      "price": "$60\u2013$80/book",
+      "priceMin": 60,
+      "priceMax": 300,
+      "grades": [
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional",
+        "Online/Self-Paced"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital",
+        "Online Classes"
+      ],
+      "subject": [
+        "Math"
+      ],
+      "special": [
+        "Gifted"
+      ],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.artofproblemsolving.com",
+      "affiliateLink": "https://www.artofproblemsolving.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "Rigorous, competition-level math for students who find standard curricula too easy. Goes deep into mathematical reasoning and problem-solving rather than just procedures.",
+      "longDescription": "Art of Problem Solving was created for students who love math and want to be challenged. The curriculum goes far deeper than standard programs \u2014 students learn to prove theorems, solve competition-level problems, and develop genuine mathematical thinking. AoPS also offers online classes taught by exceptional mathematicians. Used extensively by Math Olympiad competitors.",
+      "pros": [
+        "Exceptional for mathematically gifted students",
+        "Develops true mathematical thinking",
+        "Prepares for AMC, MATHCOUNTS competitions",
+        "Online community of like-minded students",
+        "Complete high school sequence available"
+      ],
+      "cons": [
+        "Very challenging \u2014 not for average or struggling math students",
+        "Expensive",
+        "Requires self-motivation",
+        "Can feel discouraging if not at the right level"
+      ]
+    },
+    {
+      "id": 31,
+      "slug": "masterbooks",
+      "name": "Masterbooks",
+      "emoji": "\ud83d\udcd7",
+      "tagline": "Christian curriculum with a strong creation science foundation",
+      "rating": 4.2,
+      "reviewCount": 730,
+      "price": "$30\u2013$80/subject",
+      "priceMin": 30,
+      "priceMax": 400,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "Science",
+        "History",
+        "Language Arts",
+        "Math"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.masterbooks.com",
+      "affiliateLink": "https://www.masterbooks.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "An affordable Christian curriculum with a young-earth creation science perspective. Offers complete packages from K-12 with detailed daily lesson plans.",
+      "longDescription": "Masterbooks offers a complete K-12 curriculum built on a Biblical worldview with young-earth creation science integrated throughout. Known for being affordable and including detailed 4-day-per-week lesson plans that make planning easy. Strong in science with real-world application and apologetics content.",
+      "pros": [
+        "Very affordable",
+        "Detailed ready-made lesson plans",
+        "Strong creation science content",
+        "Complete K-12 available",
+        "4-day week schedule"
+      ],
+      "cons": [
+        "Young-earth creation science throughout",
+        "Less rigorous than some classical programs",
+        "Writing instruction weaker than dedicated programs"
+      ]
+    },
+    {
+      "id": 32,
+      "slug": "bookshark",
+      "name": "BookShark",
+      "emoji": "\ud83e\udd88",
+      "tagline": "Secular literature-based learning \u2014 Sonlight without the Bible component",
+      "rating": 4.4,
+      "reviewCount": 580,
+      "price": "$400\u2013$700/year",
+      "priceMin": 400,
+      "priceMax": 700,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Physical Books"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "History",
+        "Language Arts",
+        "Science"
+      ],
+      "special": [
+        "Multiple Ages"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.bookshark.com",
+      "affiliateLink": "https://www.bookshark.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A secular, literature-based curriculum that organizes learning around quality books. Uses a history spine with living books, read-alouds, and hands-on activities.",
+      "longDescription": "BookShark was created by the founders of Sonlight as a secular alternative. It uses the same literature-based, history-focused approach but without the Bible and Christian worldview components. Families get carefully curated book packages with a complete instructor's guide showing exactly what to read and discuss each day. Popular with secular and non-Christian homeschool families who love the literature-based approach.",
+      "pros": [
+        "Secular \u2014 great for non-Christian families",
+        "Beautiful literature selections",
+        "All-in-one packages with instructor guide",
+        "Works for multiple ages",
+        "Strong read-aloud component"
+      ],
+      "cons": [
+        "Expensive \u2014 lots of physical books",
+        "Less structure than traditional curricula",
+        "Math sold separately",
+        "Heavy reading load"
+      ]
+    },
+    {
+      "id": 33,
+      "slug": "brave-writer",
+      "name": "Brave Writer",
+      "emoji": "\ud83e\udd81",
+      "tagline": "Writing curriculum that nurtures your child's natural voice",
+      "rating": 4.5,
+      "reviewCount": 490,
+      "price": "$50\u2013$200/year",
+      "priceMin": 50,
+      "priceMax": 200,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason",
+        "Unschooling/Interest-Led"
+      ],
+      "worldview": [
+        "Secular",
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital",
+        "Online Classes"
+      ],
+      "subject": [
+        "Language Arts"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.bravewriter.com",
+      "affiliateLink": "https://www.bravewriter.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A philosophy-based writing program that focuses on helping children find their authentic voice through freewriting, copywork, and a gentle approach to grammar and mechanics.",
+      "longDescription": "Brave Writer founder Julie Bogart believes writing should be joyful, not formulaic. The program uses a lifestyle approach \u2014 Arrow and Boomerang guides center on quality literature and teach grammar and writing through the book rather than workbooks. Freewriting practice, copywork, and dictation build writing skills organically.",
+      "pros": [
+        "Nurtures authentic voice",
+        "Literature-based grammar instruction",
+        "Low-pressure approach",
+        "Great for reluctant writers",
+        "Strong online community"
+      ],
+      "cons": [
+        "Less structured than IEW or other programs",
+        "May not satisfy standardized testing requirements without supplements",
+        "Philosophy-heavy \u2014 requires parent buy-in"
+      ]
+    },
+    {
+      "id": 34,
+      "slug": "curiosity-chronicles",
+      "name": "Curiosity Chronicles",
+      "emoji": "\ud83d\udd2d",
+      "tagline": "Project-based STEM curriculum for curious, hands-on learners",
+      "rating": 4.3,
+      "reviewCount": 280,
+      "price": "$150\u2013$300/year",
+      "priceMin": 150,
+      "priceMax": 300,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Unschooling/Interest-Led",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Digital",
+        "Hands-On"
+      ],
+      "subject": [
+        "Science",
+        "Math"
+      ],
+      "special": [],
+      "badges": [
+        "New"
+      ],
+      "type": "standard",
+      "website": "https://www.curiositychronicles.com",
+      "affiliateLink": "https://www.curiositychronicles.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A modern project-based STEM curriculum where children design, build, and experiment their way through science and math concepts.",
+      "longDescription": "Curiosity Chronicles takes a maker-education approach to STEM learning. Rather than reading about science, children do science \u2014 designing bridges, building circuits, conducting experiments, and coding simple programs. Each unit is built around a driving question that students work to answer through projects and experiments.",
+      "pros": [
+        "Highly engaging for hands-on learners",
+        "Builds real-world problem solving skills",
+        "Modern STEM focus",
+        "Works well alongside other curricula"
+      ],
+      "cons": [
+        "Requires gathering materials for projects",
+        "Not a complete curriculum",
+        "Less comprehensive for language arts or history"
+      ]
+    },
+    {
+      "id": 35,
+      "slug": "singapore-math",
+      "name": "Singapore Math",
+      "emoji": "\ud83c\uddf8\ud83c\uddec",
+      "tagline": "World-renowned math curriculum built on deep conceptual understanding",
+      "rating": 4.6,
+      "reviewCount": 1380,
+      "price": "$50\u2013$100/year",
+      "priceMin": 50,
+      "priceMax": 100,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Secular",
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books"
+      ],
+      "subject": [
+        "Math"
+      ],
+      "special": [],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.singaporemath.com",
+      "affiliateLink": "https://www.singaporemath.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "The math curriculum behind Singapore's top-ranked math scores. Teaches through concrete, pictorial, and abstract stages to build genuine number sense and problem-solving ability.",
+      "longDescription": "Singapore Math uses a carefully sequenced three-stage approach: concrete (physical manipulatives), pictorial (diagrams and bar models), and abstract (numbers and symbols). This builds true mathematical understanding rather than memorized procedures. The bar model method is particularly powerful for word problems. Used by top-performing countries and many gifted programs worldwide.",
+      "pros": [
+        "Builds genuine number sense",
+        "Bar model method is powerful for word problems",
+        "Fewer topics covered more deeply",
+        "Affordable",
+        "Produces strong math students"
+      ],
+      "cons": [
+        "Requires parent understanding of bar model method",
+        "Less practice/drill than some programs",
+        "Can be challenging without teacher support",
+        "Several editions available \u2014 choosing can be confusing"
+      ]
+    },
+    {
+      "id": 36,
+      "slug": "latin-road-to-english-grammar",
+      "name": "The Latin Road",
+      "emoji": "\ud83c\udfdb\ufe0f",
+      "tagline": "Teaches Latin and English grammar simultaneously for lasting language mastery",
+      "rating": 4.4,
+      "reviewCount": 210,
+      "price": "$100\u2013$150/volume",
+      "priceMin": 100,
+      "priceMax": 300,
+      "grades": [
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Classical"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Video/DVD"
+      ],
+      "subject": [
+        "Language Arts"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.bluestockingpress.com",
+      "affiliateLink": "https://www.bluestockingpress.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A unique approach that teaches Latin and English grammar in parallel, so students master both simultaneously. Used widely in classical homeschools.",
+      "longDescription": "The Latin Road to English Grammar teaches students Latin vocabulary and grammar while simultaneously reinforcing English grammar. The approach produces students with exceptional understanding of how language works \u2014 roots, prefixes, suffixes \u2014 which dramatically improves vocabulary, reading comprehension, and SAT scores.",
+      "pros": [
+        "Teaches both Latin and English grammar simultaneously",
+        "Builds exceptional vocabulary",
+        "Strong classical foundation",
+        "Video instruction available"
+      ],
+      "cons": [
+        "Requires committed parent and student",
+        "Latin not for everyone",
+        "Slower pacing \u2014 deep rather than broad"
+      ]
+    },
+    {
+      "id": 37,
+      "slug": "ambleside-online",
+      "name": "Ambleside Online",
+      "emoji": "\ud83c\udf3f",
+      "tagline": "Free Charlotte Mason curriculum with a rich living books tradition",
+      "rating": 4.5,
+      "reviewCount": 860,
+      "price": "Free",
+      "priceMin": 0,
+      "priceMax": 30,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Christian",
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Digital",
+        "Physical Books"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "History",
+        "Language Arts",
+        "Science",
+        "Art"
+      ],
+      "special": [
+        "Multiple Ages"
+      ],
+      "badges": [
+        "Free"
+      ],
+      "type": "standard",
+      "website": "https://www.amblesideonline.org",
+      "affiliateLink": "https://www.amblesideonline.org",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A free, comprehensive Charlotte Mason curriculum providing year-by-year schedules of living books, narration, nature study, and artist/composer study.",
+      "longDescription": "Ambleside Online is the gold standard of free Charlotte Mason curricula. Volunteer educators have carefully curated a complete K-12 reading list using Charlotte Mason's principles \u2014 living books, narration, nature journals, handicrafts, picture study, and composer study. Most books are free via Project Gutenberg or your local library. The community forums are excellent.",
+      "pros": [
+        "Completely free",
+        "Thorough and well-curated",
+        "Beautiful living books list",
+        "Strong community support",
+        "Faithful to Charlotte Mason's original method"
+      ],
+      "cons": [
+        "Requires significant parent planning and book sourcing",
+        "Less structured than packaged curricula",
+        "Progress harder to measure",
+        "Very reading-intensive"
+      ]
+    },
+    {
+      "id": 38,
+      "slug": "simply-charlotte-mason",
+      "name": "Simply Charlotte Mason",
+      "emoji": "\ud83c\udf38",
+      "tagline": "Practical Charlotte Mason resources for real homeschool families",
+      "rating": 4.5,
+      "reviewCount": 640,
+      "price": "$30\u2013$150/year",
+      "priceMin": 30,
+      "priceMax": 150,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "Language Arts",
+        "History",
+        "Science"
+      ],
+      "special": [
+        "Multiple Ages"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.simplycharlottemason.com",
+      "affiliateLink": "https://www.simplycharlottemason.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "Practical Charlotte Mason curriculum guides and resources that make implementing CM accessible for everyday homeschool families.",
+      "longDescription": "Simply Charlotte Mason provides practical guides, curriculum books, and schedules that make Charlotte Mason's philosophy accessible and implementable. Sonya Shafer's explanations of CM methods are clear and encouraging. Their curriculum books use living books and narration while providing enough structure for parents who feel unsure about pure CM.",
+      "pros": [
+        "More structured than pure CM approaches",
+        "Excellent explanatory resources for CM beginners",
+        "Christian but not overbearing",
+        "Affordable",
+        "Good community resources"
+      ],
+      "cons": [
+        "Not as comprehensive as all-in-one packages",
+        "Still requires sourcing many books separately",
+        "Math not included"
+      ]
+    },
+    {
+      "id": 39,
+      "slug": "monarch-aop",
+      "name": "Monarch (AOP)",
+      "emoji": "\ud83e\udd8b",
+      "tagline": "Online Christian curriculum with automatic grading and flexible scheduling",
+      "rating": 4.1,
+      "reviewCount": 490,
+      "price": "$30/month or $250/year",
+      "priceMin": 250,
+      "priceMax": 300,
+      "grades": [
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Online/Self-Paced",
+        "Traditional"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Digital"
+      ],
+      "subject": [
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "Science",
+        "History",
+        "Bible"
+      ],
+      "special": [
+        "Learning Differences"
+      ],
+      "badges": [],
+      "type": "standard",
+      "website": "https://www.aop.com/monarch",
+      "affiliateLink": "https://www.aop.com/monarch",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "A fully online Christian curriculum covering all core subjects with automatic grading, built-in assessments, and a structured daily schedule.",
+      "longDescription": "Monarch from Alpha Omega Publications offers a complete online curriculum with automatic grading that takes much of the administrative burden off parents. Students work through lessons, quizzes, and tests independently, with parents monitoring via the parent dashboard. The Christian worldview is integrated throughout all subjects.",
+      "pros": [
+        "Fully online \u2014 minimal parent prep",
+        "Automatic grading",
+        "Complete curriculum in one platform",
+        "Flexible scheduling",
+        "Affordable monthly option"
+      ],
+      "cons": [
+        "Screen-heavy",
+        "Less engaging than some programs",
+        "Christian worldview integrated throughout",
+        "Limited customization"
+      ]
+    },
+    {
+      "id": 40,
+      "slug": "critical-thinking-company",
+      "name": "Critical Thinking Co.",
+      "emoji": "\ud83e\udde0",
+      "tagline": "Workbooks and software that build genuine critical thinking skills",
+      "rating": 4.5,
+      "reviewCount": 870,
+      "price": "$20\u2013$45/workbook",
+      "priceMin": 20,
+      "priceMax": 150,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Eclectic",
+        "Traditional"
+      ],
+      "worldview": [
+        "Secular",
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Physical Books",
+        "Digital"
+      ],
+      "subject": [
+        "Math",
+        "Language Arts",
+        "Science",
+        "History"
+      ],
+      "special": [
+        "Gifted",
+        "Learning Differences"
+      ],
+      "badges": [
+        "Top Rated"
+      ],
+      "type": "standard",
+      "website": "https://www.criticalthinking.com",
+      "affiliateLink": "https://www.criticalthinking.com",
+      "affiliateCode": "",
+      "commissionRate": 0,
+      "featured": false,
+      "sponsored": false,
+      "active": true,
+      "description": "Supplemental workbooks and software that develop higher-order thinking skills across all subjects. A staple supplement for homeschoolers wanting to enrich any curriculum.",
+      "longDescription": "The Critical Thinking Company produces some of the best supplemental materials available for homeschoolers. Their workbooks \u2014 Building Thinking Skills, Mathematical Reasoning, Editor in Chief \u2014 develop analytical reasoning across math, language, science, and social studies. Widely used as enrichment with any base curriculum.",
+      "pros": [
+        "Excellent critical thinking development",
+        "Works as supplement with any curriculum",
+        "Wide age range available",
+        "Secular and faith-neutral",
+        "Affordable per workbook"
+      ],
+      "cons": [
+        "Supplement only \u2014 not a complete curriculum",
+        "Workbook format \u2014 not hands-on",
+        "Can be challenging for some learners"
+      ]
     }
   ],
   "reviews": [
@@ -967,5 +2653,7 @@
   "userFavorites": [],
   "sessions": [],
   "newsletterSubscribers": [],
-  "stripeSubscriptions": []
+  "stripeSubscriptions": [],
+  "publishers": [],
+  "publisherSessions": []
 }

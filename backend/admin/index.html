@@ -145,6 +145,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="nav-item" onclick="showTab('messages',this)"><span class="icon">💬</span> Messages</div>
       <div class="nav-item" onclick="showTab('subscriptions',this)"><span class="icon">💳</span> Subscriptions</div>
       <div class="nav-section">People</div>
+      <div class="nav-item" onclick="showTab('publishers',this)"><span class="icon">🏢</span> Publishers <span class="nav-badge" id="publishersBadge" style="display:none"></span></div>
       <div class="nav-item" onclick="showTab('users',this)"><span class="icon">👥</span> Users</div>
       <div class="nav-item" onclick="showTab('newsletter',this)"><span class="icon">📬</span> Newsletter</div>
     </div>
@@ -219,6 +220,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
 
       <!-- USERS TAB -->
+      <div class="tab-content" id="tab-publishers">
+        <div class="section-header">
+          <div class="section-title">🏢 Publisher Accounts</div>
+        </div>
+        <input class="search-input" placeholder="Search publishers…" oninput="filterTable('publishersTable',this.value)">
+        <div class="table-wrap"><table><thead><tr>
+          <th>Company</th><th>Contact</th><th>Email</th><th>Tier</th><th>Status</th><th>Registered</th><th>Actions</th>
+        </tr></thead><tbody id="publishersTable"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody></table></div>
+      </div>
+
       <div class="tab-content" id="tab-users">
         <div class="section-header">
           <div class="section-title">👥 Users</div>
@@ -365,7 +376,7 @@ if (adminToken) {
 
 async function loadAll() {
   document.getElementById('lastRefreshed').textContent = 'Refreshing…';
-  await Promise.all([loadAnalytics(), loadCurricula(), loadReviews(), loadInquiries(), loadMessages(), loadUsers(), loadNewsletter(), loadSubscriptions(), loadBlog()]);
+  await Promise.all([loadAnalytics(), loadCurricula(), loadReviews(), loadInquiries(), loadMessages(), loadUsers(), loadNewsletter(), loadSubscriptions(), loadBlog(), loadPublishers()]);
   document.getElementById('lastRefreshed').textContent = 'Updated ' + new Date().toLocaleTimeString();
 }
 
@@ -568,6 +579,46 @@ async function loadNewsletter() {
 }
 
 // ── BLOG ──────────────────────────────────────────────────────────────────────
+async function loadPublishers() {
+  try {
+    const res = await fetch(`${API}/admin/publishers`, { headers: { Authorization: `Bearer ${token}` } });
+    const data = await res.json();
+    const publishers = data.publishers || [];
+    const pending = publishers.filter(p => !p.approved).length;
+    const badge = document.getElementById('publishersBadge');
+    if (pending > 0) { badge.textContent = pending; badge.style.display = 'inline'; }
+    const tbody = document.getElementById('publishersTable');
+    if (!publishers.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No publisher accounts yet.</td></tr>'; return; }
+    tbody.innerHTML = publishers.map(p => `
+      <tr>
+        <td><strong>${p.companyName||'—'}</strong></td>
+        <td>${p.name||'—'}</td>
+        <td>${p.email}</td>
+        <td>${p.tier||'—'}</td>
+        <td><span class="status-badge ${p.approved ? 'approved' : 'pending'}">${p.status||'pending'}</span></td>
+        <td>${p.createdAt ? new Date(p.createdAt).toLocaleDateString() : '—'}</td>
+        <td>
+          ${!p.approved ? `<button class="action-btn approve" onclick="approvePublisher('${p.id}')">Approve</button>` : ''}
+          <a href="mailto:${p.email}" class="action-btn" style="text-decoration:none">Email</a>
+        </td>
+      </tr>`).join('');
+  } catch(e) { console.error('loadPublishers error', e); }
+}
+
+async function approvePublisher(id) {
+  const tier = prompt('Enter tier for this publisher:\nstandard, affiliate, silver, gold, platinum', 'standard');
+  if (!tier) return;
+  try {
+    const res = await fetch(`${API}/admin/publishers/${id}/approve`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ tier, curriculumIds: [] })
+    });
+    if (res.ok) { showToast('Publisher approved! Confirmation email sent.', 'success'); loadPublishers(); }
+    else showToast('Could not approve publisher.', 'error');
+  } catch(e) { showToast('Server error.', 'error'); }
+}
+
 async function loadBlog() {
   try {
     const res = await fetch(`${API}/admin/blog`, { headers: authHeaders() });

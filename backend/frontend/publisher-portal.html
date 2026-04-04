@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publisher Portal — My Homeschool Curriculum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Google Analytics 4 -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-67QGQLFQFR");
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-67QGQLFQFR"></script>
+<style>
+:root{
+  --bg:#0F1923;--surface:#162230;--surface2:#1C2D3D;--border:#253545;
+  --accent:#4A9A54;--gold:#D4A84B;--red:#E05A47;--navy:#1E3A4C;
+  --text:#E8EDF2;--muted:#7A8EA0;--cream:#FDF6EC;
+  --sage:#4A7550;--light-sage:#EAF2EB;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ── AUTH SCREENS ── */
+#authScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(135deg,#0F1923,#1C2D3D)}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:440px}
+.auth-logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text);text-align:center;margin-bottom:6px}
+.auth-logo span{color:var(--gold)}
+.auth-sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:28px}
+.auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.auth-tab{flex:1;padding:10px;text-align:center;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .18s;color:var(--muted);background:transparent;border:none;font-family:'DM Sans',sans-serif}
+.auth-tab.active{background:var(--accent);color:#fff}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.form-group input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border .18s}
+.form-group input:focus{border-color:var(--accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-primary{width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .18s;margin-top:4px}
+.btn-primary:hover{background:#3d8446}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.auth-msg{text-align:center;font-size:.82rem;margin-top:14px;padding:10px;border-radius:8px}
+.auth-msg.error{background:rgba(224,90,71,.15);color:#ff8a7a;border:1px solid rgba(224,90,71,.3)}
+.auth-msg.success{background:rgba(74,154,84,.15);color:#7ddb87;border:1px solid rgba(74,154,84,.3)}
+.auth-note{text-align:center;font-size:.78rem;color:var(--muted);margin-top:16px;line-height:1.5}
+.auth-note a{color:var(--gold);text-decoration:none}
+
+/* ── DASHBOARD ── */
+#dashScreen{display:none}
+.dash-layout{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:20px 18px;border-bottom:1px solid var(--border)}
+.sidebar-logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text)}
+.sidebar-logo-text span{color:var(--gold)}
+.sidebar-subtitle{font-size:.7rem;color:var(--muted);margin-top:2px}
+.nav-section{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:14px 18px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;transition:all .18s;border-left:3px solid transparent;font-size:.85rem;color:var(--muted)}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.nav-item.active{color:var(--text);background:rgba(74,154,84,.1);border-left-color:var(--accent)}
+.nav-item .icon{font-size:1rem;width:20px;text-align:center}
+.sidebar-footer{margin-top:auto;padding:16px 18px;border-top:1px solid var(--border)}
+.publisher-info{font-size:.78rem;color:var(--muted);margin-bottom:8px}
+.publisher-info strong{color:var(--text);display:block;font-size:.85rem}
+.tier-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.68rem;font-weight:700;text-transform:uppercase;margin-top:4px}
+.tier-standard{background:rgba(122,142,160,.2);color:var(--muted)}
+.tier-affiliate{background:rgba(74,154,84,.2);color:#7ddb87}
+.tier-silver{background:rgba(192,192,192,.2);color:#c0c0c0}
+.tier-gold{background:rgba(212,168,75,.2);color:var(--gold)}
+.tier-platinum{background:rgba(180,100,255,.2);color:#d4a0ff}
+.pending-badge{background:rgba(232,184,75,.2);color:#E8B84B;padding:2px 10px;border-radius:10px;font-size:.68rem;font-weight:700}
+.btn-logout{width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;margin-top:8px;transition:all .18s}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* Main content */
+.dash-main{margin-left:240px;flex:1;padding:32px;min-height:100vh}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text);margin-bottom:4px}
+.page-sub{color:var(--muted);font-size:.85rem;margin-bottom:28px}
+
+/* Pending state */
+.pending-banner{background:linear-gradient(135deg,rgba(232,184,75,.15),rgba(212,168,75,.1));border:1px solid rgba(212,168,75,.3);border-radius:14px;padding:24px;margin-bottom:24px;text-align:center}
+.pending-banner h3{color:var(--gold);font-size:1.1rem;margin-bottom:8px}
+.pending-banner p{color:var(--muted);font-size:.85rem;line-height:1.6}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
+.stat-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px}
+.stat-value{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--text)}
+.stat-sub{font-size:.72rem;color:var(--muted);margin-top:3px}
+.stat-card.highlight{border-color:var(--accent);background:rgba(74,154,84,.08)}
+.stat-card.highlight .stat-value{color:var(--accent)}
+
+/* Charts */
+.chart-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px}
+.chart-title{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:16px}
+.bar-chart{display:flex;align-items:flex-end;gap:3px;height:100px;overflow-x:auto;padding-bottom:4px}
+.bar{flex-shrink:0;width:14px;background:var(--accent);border-radius:3px 3px 0 0;opacity:.8;transition:opacity .2s;position:relative}
+.bar:hover{opacity:1}
+.bar-label{font-size:.6rem;color:var(--muted);text-align:center;margin-top:4px;transform:rotate(-45deg);transform-origin:top left;width:20px}
+.chart-empty{color:var(--muted);font-size:.82rem;text-align:center;padding:20px}
+
+/* Curricula table */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.table-title{font-size:.88rem;font-weight:600;color:var(--text)}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 16px;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border)}
+td{padding:12px 16px;font-size:.82rem;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{padding:2px 8px;border-radius:6px;font-size:.68rem;font-weight:700}
+.badge-active{background:rgba(74,154,84,.2);color:#7ddb87}
+.badge-inactive{background:rgba(122,142,160,.15);color:var(--muted)}
+.badge-featured{background:rgba(212,168,75,.2);color:var(--gold)}
+
+/* Package info */
+.package-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
+.package-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.package-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text)}
+.package-price{font-size:.85rem;color:var(--muted)}
+.package-features{list-style:none;display:flex;flex-direction:column;gap:8px}
+.package-features li{font-size:.82rem;color:var(--muted);display:flex;align-items:flex-start;gap:8px}
+.package-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0}
+.upgrade-btn{background:var(--gold);color:var(--navy);border:none;padding:10px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;margin-top:16px;transition:all .18s}
+.upgrade-btn:hover{background:#c4963f}
+.current-plan{background:rgba(74,154,84,.15);border:1px solid rgba(74,154,84,.3);border-radius:10px;padding:16px;margin-bottom:20px}
+.current-plan-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);margin-bottom:4px}
+.current-plan-name{font-size:1rem;font-weight:600;color:var(--text)}
+
+/* Profile form */
+.profile-form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:500px}
+.profile-form .form-group label{color:var(--muted)}
+.profile-form .form-group input{background:var(--surface2)}
+.save-btn{background:var(--accent);color:#fff;border:none;padding:10px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;margin-top:8px}
+.save-btn:hover{background:#3d8446}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:13px 20px;border-radius:10px;font-size:.85rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:300px;border:1px solid var(--border)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:var(--sage);border-color:var(--accent)}
+.toast.error{background:#7a1f1f;border-color:var(--red)}
+
+/* Support */
+.support-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px;max-width:500px}
+.support-card h3{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:8px}
+.support-card p{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.support-card a{color:var(--gold);text-decoration:none;font-weight:600}
+
+@media(max-width:768px){
+  .sidebar{width:100%;height:auto;position:relative;flex-direction:row;flex-wrap:wrap}
+  .dash-main{margin-left:0}
+  .form-row{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+}
+
+  .skip-link{position:absolute;top:-100px;left:16px;background:#1E3A4C;color:#fff;padding:8px 16px;border-radius:0 0 8px 8px;font-size:.85rem;font-weight:600;text-decoration:none;z-index:9999;transition:top .2s}
+  .skip-link:focus{top:0}
+  :focus-visible{outline:3px solid #4A9A54;outline-offset:2px;border-radius:3px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+</style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ══ AUTH SCREEN ══════════════════════════════════════════════════════════ -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">📚 My Homeschool <span>Curriculum</span></div>
+    <div class="auth-sub">Publisher Portal</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Log In</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" aria-label="Email address" placeholder="you@company.com" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" aria-label="Password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn-primary" onclick="doLogin()" id="loginBtn">Log In →</button>
+      <div id="loginMsg" class="auth-msg" style="display:none"></div>
+      <div class="auth-note">
+        Don't have an account? <a href="#" onclick="switchTab('register');return false">Create one free →</a><br>
+        <a href="/" style="color:var(--muted)">← Back to site</a>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" style="display:none">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="regName" placeholder="Jenny Phillips">
+        </div>
+        <div class="form-group">
+          <label>Company Name *</label>
+          <input type="text" id="regCompany" placeholder="Bright Ideas Press">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" id="regEmail" placeholder="you@company.com">
+      </div>
+      <div class="form-group">
+        <label>Website</label>
+        <input type="url" id="regWebsite" placeholder="https://yoursite.com">
+      </div>
+      <div class="form-group">
+        <label>Password * (8+ characters)</label>
+        <input type="password" id="regPassword" placeholder="Create a strong password">
+      </div>
+      <button class="btn-primary" onclick="doRegister()" id="registerBtn">Create Publisher Account →</button>
+      <div id="registerMsg" class="auth-msg" style="display:none"></div>
+      <div class="auth-note">
+        After registering, our team will review and approve your account within 2 business days.<br>
+        Already have an account? <a href="#" onclick="switchTab('login');return false">Log in →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ════════════════════════════════════════════════════════════ -->
+<div id="dashScreen">
+  <div class="dash-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-text">📚 My Homeschool <span>Curriculum</span></div>
+        <div class="sidebar-subtitle">Publisher Portal</div>
+      </div>
+
+      <div class="nav-section">Dashboard</div>
+      <div class="nav-item active" onclick="showPage('overview',this)">
+        <span class="icon">📊</span> Overview
+      </div>
+
+      <div class="nav-section">My Listings</div>
+      <div class="nav-item" onclick="showPage('listings',this)">
+        <span class="icon">📚</span> My Curricula
+      </div>
+      <div class="nav-item" onclick="showPage('analytics',this)">
+        <span class="icon">📈</span> Analytics
+      </div>
+      <div class="nav-item" onclick="showPage('reviews',this)">
+        <span class="icon">⭐</span> Reviews
+      </div>
+
+      <div class="nav-section">Account</div>
+      <div class="nav-item" onclick="showPage('billing',this)">
+        <span class="icon">💳</span> Plan & Billing
+      </div>
+      <div class="nav-item" onclick="showPage('profile',this)">
+        <span class="icon">👤</span> Profile
+      </div>
+      <div class="nav-item" onclick="showPage('support',this)">
+        <span class="icon">💬</span> Support
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="publisher-info">
+          <strong id="sidebarName">—</strong>
+          <span id="sidebarCompany">—</span><br>
+          <span id="sidebarTierBadge"></span>
+        </div>
+        <button class="btn-logout" onclick="doLogout()">Log Out</button>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="dash-main" id="main-content" role="main">
+
+      <!-- OVERVIEW -->
+      <div class="page active" id="page-overview">
+        <div class="page-title">Dashboard</div>
+        <div class="page-sub" id="overviewSub">Welcome back!</div>
+        <div id="pendingBanner" style="display:none">
+          <div class="pending-banner">
+            <h3>⏳ Account Pending Approval</h3>
+            <p>Our team is reviewing your application and will approve your account within 2 business days. You'll receive an email at <strong id="pendingEmail"></strong> once approved.<br><br>
+            In the meantime, feel free to explore the portal. Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com" style="color:var(--gold)">contact@myhomeschoolcurriculum.com</a></p>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card highlight">
+            <div class="stat-label">Total Clicks</div>
+            <div class="stat-value" id="statTotalClicks">—</div>
+            <div class="stat-sub">All time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Clicks This Month</div>
+            <div class="stat-value" id="statMonthClicks">—</div>
+            <div class="stat-sub">Last 30 days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Reviews</div>
+            <div class="stat-value" id="statReviews">—</div>
+            <div class="stat-sub">Approved reviews</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg. Rating</div>
+            <div class="stat-value" id="statRating">—</div>
+            <div class="stat-sub">Across all listings</div>
+          </div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title">📈 Clicks — Last 30 Days</div>
+          <div class="bar-chart" id="clickChart"><div class="chart-empty">No click data yet</div></div>
+        </div>
+        <div class="table-wrap" id="overviewCurriculaWrap">
+          <div class="table-header"><span class="table-title">My Listings</span></div>
+          <div id="overviewCurriculaTable"></div>
+        </div>
+      </div>
+
+      <!-- LISTINGS -->
+      <div class="page" id="page-listings">
+        <div class="page-title">My Curricula</div>
+        <div class="page-sub">Your listed curricula on My Homeschool Curriculum</div>
+        <div class="table-wrap">
+          <div class="table-header"><span class="table-title">All Listings</span></div>
+          <div id="listingsTable"></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:500px">
+          <h3 style="font-size:.95rem;color:var(--text);margin-bottom:8px">➕ Want to add another curriculum?</h3>
+          <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:12px">To add a new curriculum to your account, send us the details and we'll get it listed within 2 business days.</p>
+          <a href="mailto:contact@myhomeschoolcurriculum.com?subject=New Curriculum Listing Request" style="background:var(--accent);color:#fff;padding:10px 20px;border-radius:10px;font-size:.82rem;font-weight:600;text-decoration:none;display:inline-block">Request New Listing →</a>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="page" id="page-analytics">
+        <div class="page-title">Analytics</div>
+        <div class="page-sub">Track clicks, impressions, and performance for your listings</div>
+        <div class="stats-grid">
+          <div class="stat-card highlight">
+            <div class="stat-label">Total Clicks (All Time)</div>
+            <div class="stat-value" id="ana-totalClicks">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">This Month</div>
+            <div class="stat-value" id="ana-monthClicks">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Rating</div>
+            <div class="stat-value" id="ana-rating">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Reviews</div>
+            <div class="stat-value" id="ana-reviews">—</div>
+          </div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title">📊 Daily Clicks — Last 30 Days</div>
+          <div class="bar-chart" id="analyticsChart"><div class="chart-empty">No click data yet. Clicks appear here as parents visit your listing.</div></div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-header"><span class="table-title">Performance by Curriculum</span></div>
+          <table>
+            <thead><tr><th>Curriculum</th><th>Clicks (Total)</th><th>Rating</th><th>Reviews</th><th>Status</th></tr></thead>
+            <tbody id="analyticsTable"></tbody>
+          </table>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;max-width:500px;margin-top:8px">
+          <p style="font-size:.82rem;color:var(--muted);line-height:1.6">📬 <strong style="color:var(--text)">Monthly Reports:</strong> Silver, Gold, and Platinum publishers receive a detailed monthly analytics report by email on the 1st of each month.</p>
+        </div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="page" id="page-reviews">
+        <div class="page-title">Reviews</div>
+        <div class="page-sub">Parent reviews for your listed curricula</div>
+        <div class="table-wrap">
+          <div class="table-header"><span class="table-title">Approved Reviews</span></div>
+          <div id="reviewsContent" style="padding:20px;color:var(--muted);font-size:.85rem">Loading reviews…</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;max-width:500px">
+          <p style="font-size:.82rem;color:var(--muted);line-height:1.6">
+            🔍 All reviews are moderated before appearing on the site. If you believe a review violates our guidelines, contact us at 
+            <a href="mailto:contact@myhomeschoolcurriculum.com" style="color:var(--gold)">contact@myhomeschoolcurriculum.com</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- BILLING -->
+      <div class="page" id="page-billing">
+        <div class="page-title">Plan & Billing</div>
+        <div class="page-sub">Manage your listing tier and subscription</div>
+        <div id="currentPlanBox"></div>
+
+        <h3 style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:16px">Available Plans</h3>
+
+        <div class="package-card">
+          <div class="package-header">
+            <div>
+              <div class="package-name">🆓 Standard</div>
+              <div class="package-price">Free forever</div>
+            </div>
+          </div>
+          <ul class="package-features">
+            <li>Basic listing in the directory</li>
+            <li>Filter and search visibility</li>
+            <li>Parent reviews enabled</li>
+            <li>Direct link to your website</li>
+          </ul>
+        </div>
+
+        <div class="package-card">
+          <div class="package-header">
+            <div>
+              <div class="package-name">🔗 Affiliate</div>
+              <div class="package-price">Free + commission on referred sales</div>
+            </div>
+          </div>
+          <ul class="package-features">
+            <li>Everything in Standard</li>
+            <li>Affiliate link tracking</li>
+            <li>Performance reporting</li>
+            <li>Promoted in search results</li>
+            <li>Newsletter features</li>
+          </ul>
+          <button class="upgrade-btn" onclick="requestUpgrade('Affiliate')">Apply for Affiliate →</button>
+        </div>
+
+        <div class="package-card" style="border-color:rgba(192,192,192,.3)">
+          <div class="package-header">
+            <div>
+              <div class="package-name">🥈 Silver</div>
+              <div class="package-price">$49/month</div>
+            </div>
+          </div>
+          <ul class="package-features">
+            <li>Everything in Affiliate</li>
+            <li>Silver featured badge</li>
+            <li>Mid-page featured placement</li>
+            <li>Included in quiz recommendations</li>
+            <li>Monthly analytics report emailed to you</li>
+          </ul>
+          <button class="upgrade-btn" onclick="requestUpgrade('Silver')">Upgrade to Silver →</button>
+        </div>
+
+        <div class="package-card" style="border-color:rgba(212,168,75,.3)">
+          <div class="package-header">
+            <div>
+              <div class="package-name">🥇 Gold</div>
+              <div class="package-price">$149/month</div>
+            </div>
+          </div>
+          <ul class="package-features">
+            <li>Everything in Silver</li>
+            <li>Gold sponsor badge + top placement</li>
+            <li>Featured in quiz results</li>
+            <li>Homepage banner inclusion</li>
+            <li>Social media spotlight</li>
+            <li>Priority email support</li>
+          </ul>
+          <button class="upgrade-btn" onclick="requestUpgrade('Gold')">Upgrade to Gold →</button>
+        </div>
+
+        <div class="package-card" style="border-color:rgba(180,100,255,.3)">
+          <div class="package-header">
+            <div>
+              <div class="package-name">💎 Platinum</div>
+              <div class="package-price">$299/month</div>
+            </div>
+          </div>
+          <ul class="package-features">
+            <li>Everything in Gold</li>
+            <li>Platinum badge + #1 placement</li>
+            <li>Dedicated landing page</li>
+            <li>Newsletter exclusive feature</li>
+            <li>Custom curriculum guide content</li>
+            <li>Quarterly strategy calls</li>
+            <li>Co-branded promotions</li>
+          </ul>
+          <button class="upgrade-btn" onclick="requestUpgrade('Platinum')">Upgrade to Platinum →</button>
+        </div>
+
+        <p style="font-size:.78rem;color:var(--muted);margin-top:16px">
+          To upgrade your plan, click the button above and our team will send you a payment link within 1 business day. Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com" style="color:var(--gold)">contact@myhomeschoolcurriculum.com</a>
+        </p>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="page" id="page-profile">
+        <div class="page-title">Profile</div>
+        <div class="page-sub">Update your publisher account details</div>
+        <div class="profile-form">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="profileName" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" id="profileCompany" placeholder="Your company">
+          </div>
+          <div class="form-group">
+            <label>Website</label>
+            <input type="url" id="profileWebsite" placeholder="https://yoursite.com">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="profileEmail" disabled style="opacity:.5;cursor:not-allowed">
+          </div>
+          <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+        </div>
+        <div style="margin-top:24px;max-width:500px">
+          <h3 style="font-size:.88rem;color:var(--text);margin-bottom:8px">Change Password</h3>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:12px">To change your password, email us at <a href="mailto:contact@myhomeschoolcurriculum.com" style="color:var(--gold)">contact@myhomeschoolcurriculum.com</a> from your registered address.</p>
+        </div>
+      </div>
+
+      <!-- SUPPORT -->
+      <div class="page" id="page-support">
+        <div class="page-title">Support</div>
+        <div class="page-sub">We're here to help you get the most out of your listing</div>
+
+        <div class="support-card">
+          <h3>📧 Email Support</h3>
+          <p>For any questions about your listing, analytics, billing, or anything else — email us directly.</p>
+          <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a>
+        </div>
+
+        <div class="support-card">
+          <h3>⏱️ Response Times</h3>
+          <p>
+            <strong style="color:var(--text)">Standard & Affiliate:</strong> 3–5 business days<br>
+            <strong style="color:#c0c0c0">Silver:</strong> 2–3 business days<br>
+            <strong style="color:var(--gold)">Gold:</strong> 1–2 business days (priority support)<br>
+            <strong style="color:#d4a0ff">Platinum:</strong> Same or next business day
+          </p>
+        </div>
+
+        <div class="support-card">
+          <h3>📋 Request a Listing Update</h3>
+          <p>Need to update your curriculum's description, pricing, grades, or images? Email us with the changes and we'll update it within 2 business days.</p>
+          <a href="mailto:contact@myhomeschoolcurriculum.com?subject=Listing Update Request" style="color:var(--gold);font-weight:600">Send update request →</a>
+        </div>
+
+        <div class="support-card">
+          <h3>💳 Billing Questions</h3>
+          <p>Questions about your invoice, subscription, or upgrading your plan? We're happy to help.</p>
+          <a href="mailto:contact@myhomeschoolcurriculum.com?subject=Billing Question" style="color:var(--gold);font-weight:600">Contact billing →</a>
+        </div>
+      </div>
+
+    </div><!-- /dash-main -->
+  </div><!-- /dash-layout -->
+</div><!-- /dashScreen -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+let publisherToken = localStorage.getItem('pub_token');
+let publisherData = null;
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(async function init() {
+  if (publisherToken) {
+    try {
+      const res = await fetch(`${API}/publisher/me`, {
+        headers: { Authorization: `Bearer ${publisherToken}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        publisherData = data;
+        showDashboard();
+        return;
+      }
+    } catch(e) {}
+    localStorage.removeItem('pub_token');
+    publisherToken = null;
+  }
+  document.getElementById('authScreen').style.display = 'flex';
+})();
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  const msg = document.getElementById('loginMsg');
+  if (!email || !password) { showAuthMsg('loginMsg', 'Please enter your email and password.', 'error'); return; }
+  btn.disabled = true; btn.textContent = 'Logging in…';
+  try {
+    const res = await fetch(`${API}/publisher/login`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { showAuthMsg('loginMsg', data.error || 'Login failed.', 'error'); return; }
+    publisherToken = data.token;
+    localStorage.setItem('pub_token', publisherToken);
+    // Load full data
+    const me = await fetch(`${API}/publisher/me`, { headers: { Authorization: `Bearer ${publisherToken}` } });
+    publisherData = await me.json();
+    showDashboard();
+  } catch(e) {
+    showAuthMsg('loginMsg', 'Could not connect to server. Please try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Log In →';
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const company = document.getElementById('regCompany').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const website = document.getElementById('regWebsite').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const btn = document.getElementById('registerBtn');
+  if (!name || !company || !email || !password) {
+    showAuthMsg('registerMsg', 'Please fill in all required fields.', 'error'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Creating account…';
+  try {
+    const res = await fetch(`${API}/publisher/register`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, companyName: company, website })
+    });
+    const data = await res.json();
+    if (!res.ok) { showAuthMsg('registerMsg', data.error || 'Registration failed.', 'error'); return; }
+    showAuthMsg('registerMsg', '✅ Account created! Our team will review and approve you within 2 business days. Check your email for confirmation.', 'success');
+    btn.textContent = 'Account Created!';
+  } catch(e) {
+    showAuthMsg('registerMsg', 'Could not connect to server. Please try again.', 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function showAuthMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `auth-msg ${type}`;
+  el.style.display = 'block';
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function showDashboard() {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('dashScreen').style.display = 'block';
+  populateDashboard();
+}
+
+function populateDashboard() {
+  const { publisher, analytics, curricula } = publisherData;
+
+  // Sidebar
+  document.getElementById('sidebarName').textContent = publisher.name;
+  document.getElementById('sidebarCompany').textContent = publisher.companyName;
+  const tierClass = publisher.tier ? `tier-${publisher.tier.toLowerCase()}` : 'tier-standard';
+  document.getElementById('sidebarTierBadge').innerHTML = publisher.approved
+    ? `<span class="tier-badge ${tierClass}">${publisher.tier || 'Standard'}</span>`
+    : `<span class="pending-badge">Pending Approval</span>`;
+
+  // Pending banner
+  if (!publisher.approved) {
+    document.getElementById('pendingBanner').style.display = 'block';
+    document.getElementById('pendingEmail').textContent = publisher.email;
+  }
+
+  // Overview sub
+  document.getElementById('overviewSub').textContent = `Welcome back, ${publisher.name}!`;
+
+  // Stats
+  document.getElementById('statTotalClicks').textContent = analytics.totalClicks.toLocaleString();
+  document.getElementById('statMonthClicks').textContent = analytics.clicksThisMonth.toLocaleString();
+  document.getElementById('statReviews').textContent = analytics.totalReviews.toLocaleString();
+  document.getElementById('statRating').textContent = analytics.averageRating ? `${analytics.averageRating}★` : '—';
+
+  // Analytics page
+  document.getElementById('ana-totalClicks').textContent = analytics.totalClicks.toLocaleString();
+  document.getElementById('ana-monthClicks').textContent = analytics.clicksThisMonth.toLocaleString();
+  document.getElementById('ana-rating').textContent = analytics.averageRating ? `${analytics.averageRating}★` : '—';
+  document.getElementById('ana-reviews').textContent = analytics.totalReviews.toLocaleString();
+
+  // Charts
+  renderChart('clickChart', analytics.clicksByDay);
+  renderChart('analyticsChart', analytics.clicksByDay);
+
+  // Curricula tables
+  renderCurriculaTable('overviewCurriculaTable', curricula, true);
+  renderCurriculaTable('listingsTable', curricula, false);
+
+  // Analytics table
+  const tbody = document.getElementById('analyticsTable');
+  if (!curricula.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:20px">No curricula linked to your account yet. Email us to get listed.</td></tr>';
+  } else {
+    tbody.innerHTML = curricula.map(c => `
+      <tr>
+        <td>${c.emoji} <strong>${c.name}</strong></td>
+        <td>${c.clicks.toLocaleString()}</td>
+        <td>${c.rating ? `${c.rating}★` : '—'}</td>
+        <td>${c.reviewCount || 0}</td>
+        <td><span class="badge ${c.active ? 'badge-active' : 'badge-inactive'}">${c.active ? 'Active' : 'Inactive'}</span></td>
+      </tr>`).join('');
+  }
+
+  // Reviews
+  const reviewsEl = document.getElementById('reviewsContent');
+  if (!curricula.length) {
+    reviewsEl.innerHTML = '<p style="color:var(--muted)">No curricula linked to your account yet.</p>';
+  } else {
+    // Show curricula with their ratings as a summary
+    reviewsEl.innerHTML = curricula.map(c => `
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+        <strong style="color:var(--text)">${c.emoji} ${c.name}</strong>
+        <span style="color:var(--muted);font-size:.82rem;margin-left:12px">${c.rating ? `${c.rating}★` : 'No rating yet'} · ${c.reviewCount || 0} review${c.reviewCount !== 1 ? 's' : ''}</span>
+      </div>`).join('') || '<p style="padding:16px;color:var(--muted)">No reviews yet.</p>';
+  }
+
+  // Current plan
+  const planBox = document.getElementById('currentPlanBox');
+  const tier = publisher.tier || 'Standard';
+  const prices = { Standard: 'Free', Affiliate: 'Free + commission', Silver: '$49/month', Gold: '$149/month', Platinum: '$299/month' };
+  planBox.innerHTML = `
+    <div class="current-plan">
+      <div class="current-plan-label">Your Current Plan</div>
+      <div class="current-plan-name">${tier} — ${prices[tier] || 'Free'}</div>
+      ${!publisher.approved ? '<p style="font-size:.78rem;color:var(--muted);margin-top:6px">Plan upgrades are available once your account is approved.</p>' : ''}
+    </div>`;
+
+  // Profile
+  document.getElementById('profileName').value = publisher.name || '';
+  document.getElementById('profileCompany').value = publisher.companyName || '';
+  document.getElementById('profileWebsite').value = publisher.website || '';
+  document.getElementById('profileEmail').value = publisher.email || '';
+}
+
+function renderChart(containerId, clicksByDay) {
+  const el = document.getElementById(containerId);
+  if (!clicksByDay || !clicksByDay.length) {
+    el.innerHTML = '<div class="chart-empty">No click data yet. Clicks appear here as parents visit your curriculum listing.</div>';
+    return;
+  }
+  const maxVal = Math.max(...clicksByDay.map(d => d.count), 1);
+  el.innerHTML = clicksByDay.map(d => {
+    const pct = Math.round((d.count / maxVal) * 100);
+    const label = d.date.slice(5); // MM-DD
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+      <div class="bar" style="height:${Math.max(pct,4)}px" title="${d.date}: ${d.count} clicks"></div>
+      <div class="bar-label">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderCurriculaTable(containerId, curricula, compact) {
+  const el = document.getElementById(containerId);
+  if (!curricula.length) {
+    el.innerHTML = '<p style="padding:20px;color:var(--muted);font-size:.85rem">No curricula linked to your account yet. Our team will link your listings once your account is approved.</p>';
+    return;
+  }
+  el.innerHTML = `<table>
+    <thead><tr>
+      <th>Curriculum</th>
+      ${compact ? '' : '<th>Tier</th>'}
+      <th>Clicks</th>
+      <th>Rating</th>
+      <th>Reviews</th>
+      <th>Status</th>
+    </tr></thead>
+    <tbody>${curricula.map(c => `<tr>
+      <td><strong>${c.emoji} ${c.name}</strong></td>
+      ${compact ? '' : `<td><span class="badge tier-${(c.tier||'standard').toLowerCase()}">${c.tier||'Standard'}</span></td>`}
+      <td>${c.clicks.toLocaleString()}</td>
+      <td>${c.rating ? `${c.rating}★` : '—'}</td>
+      <td>${c.reviewCount || 0}</td>
+      <td><span class="badge ${c.active ? 'badge-active' : 'badge-inactive'}">${c.active ? 'Active' : 'Inactive'}</span>
+          ${c.featured ? '<span class="badge badge-featured" style="margin-left:4px">Featured</span>' : ''}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function showPage(name, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  if (navEl) navEl.classList.add('active');
+}
+
+// ── PROFILE ───────────────────────────────────────────────────────────────────
+async function saveProfile() {
+  const name = document.getElementById('profileName').value.trim();
+  const companyName = document.getElementById('profileCompany').value.trim();
+  const website = document.getElementById('profileWebsite').value.trim();
+  try {
+    const res = await fetch(`${API}/publisher/profile`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${publisherToken}` },
+      body: JSON.stringify({ name, companyName, website })
+    });
+    if (res.ok) {
+      publisherData.publisher.name = name;
+      publisherData.publisher.companyName = companyName;
+      publisherData.publisher.website = website;
+      document.getElementById('sidebarName').textContent = name;
+      document.getElementById('sidebarCompany').textContent = companyName;
+      showToast('Profile updated!', 'success');
+    } else {
+      showToast('Could not save changes.', 'error');
+    }
+  } catch(e) { showToast('Server error.', 'error'); }
+}
+
+// ── BILLING UPGRADE ───────────────────────────────────────────────────────────
+async function requestUpgrade(tier) {
+  const publisher = publisherData?.publisher;
+  if (!publisher) return;
+  const subject = encodeURIComponent(`Publisher Plan Upgrade Request — ${tier}`);
+  const body = encodeURIComponent(`Hi,\n\nI'd like to upgrade my listing plan to ${tier}.\n\nAccount: ${publisher.email}\nCompany: ${publisher.companyName}\n\nPlease send me the payment link.\n\nThank you!`);
+  window.location = `mailto:contact@myhomeschoolcurriculum.com?subject=${subject}&body=${body}`;
+}
+
+// ── LOGOUT ────────────────────────────────────────────────────────────────────
+async function doLogout() {
+  try {
+    await fetch(`${API}/publisher/logout`, {
+      method: 'POST', headers: { Authorization: `Bearer ${publisherToken}` }
+    });
+  } catch(e) {}
+  localStorage.removeItem('pub_token');
+  window.location.reload();
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast show ${type}`;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
