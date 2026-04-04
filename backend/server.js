@@ -548,17 +548,18 @@ const STRIPE_PRICES = {
 
 app.post('/api/billing/create-checkout', async (req, res) => {
   if (!stripe) return res.status(503).json({ error: 'Billing not configured. Add STRIPE_SECRET_KEY to .env' });
-  const { tier, email, companyName } = req.body;
-  if (!tier || !STRIPE_PRICES[tier]) return res.status(400).json({ error: 'Invalid tier. Valid: silver, gold, platinum' });
+  const { tier, email, companyName, publisherId } = req.body;
+  if (!tier || !STRIPE_PRICES[tier]) return res.status(400).json({ error: 'Invalid tier. Valid: silver, gold' });
+  const siteUrl = process.env.SITE_URL || 'http://localhost:3001';
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'subscription',
       customer_email: email,
       line_items: [{ price: STRIPE_PRICES[tier], quantity: 1 }],
-      metadata: { tier, companyName: companyName||'' },
-      success_url: `${process.env.SITE_URL||'http://localhost:3001'}/publisher?success=1&tier=${tier}`,
-      cancel_url:  `${process.env.SITE_URL||'http://localhost:3001'}/publisher?canceled=1`,
+      metadata: { tier, companyName: companyName||'', publisherId: publisherId||'' },
+      success_url: `${siteUrl}/publisher-portal.html?success=1&tier=${tier}`,
+      cancel_url:  `${siteUrl}/publisher-portal.html?canceled=1`,
     });
     res.json({ url: session.url });
   } catch(e) { res.status(500).json({ error: e.message }); }
@@ -578,6 +579,21 @@ app.post('/api/billing/create-portal', requireUser, async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+// Publisher billing portal (manage/cancel subscription)
+app.post('/api/billing/publisher-portal', requirePublisher, async (req, res) => {
+  if (!stripe) return res.status(503).json({ error: 'Billing not configured' });
+  const db = readDB();
+  const publisher = (db.publishers||[]).find(p => p.id === req.publisherId);
+  if (!publisher?.stripeCustomerId) return res.status(400).json({ error: 'No billing account found. Contact support.' });
+  try {
+    const session = await stripe.billingPortal.sessions.create({
+      customer: publisher.stripeCustomerId,
+      return_url: `${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html`
+    });
+    res.json({ url: session.url });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 app.post('/api/billing/webhook', (req, res) => {
   if (!stripe) return res.status(503).send('Billing not configured');
   const sig = req.headers['stripe-signature'];
@@ -592,15 +608,38 @@ app.post('/api/billing/webhook', (req, res) => {
       id: uuidv4(), stripeSessionId: s.id, stripeSubscriptionId: s.subscription,
       stripeCustomerId: s.customer, email: s.customer_email,
       tier: s.metadata.tier, companyName: s.metadata.companyName,
+      publisherId: s.metadata.publisherId||null,
       status: 'active', createdAt: new Date().toISOString()
     });
+    // Update publisher tier and store Stripe customer ID
+    if (s.metadata.publisherId) {
+      const publisher = (db.publishers||[]).find(p => p.id === s.metadata.publisherId);
+      if (publisher) {
+        publisher.tier = s.metadata.tier;
+        publisher.stripeCustomerId = s.customer;
+        publisher.stripeSubscriptionId = s.subscription;
+      }
+    }
     sendEmail(process.env.ADMIN_EMAIL||process.env.SMTP_USER,
       `🎉 New ${s.metadata.tier} Subscription — ${s.customer_email}`,
-      `<h2>New Subscription!</h2><p>Tier: <strong>${s.metadata.tier}</strong></p><p>Email: ${s.customer_email}</p>`);
+      `<h2>New Subscription!</h2><p>Tier: <strong>${s.metadata.tier}</strong></p><p>Email: ${s.customer_email}</p>${s.metadata.companyName?`<p>Company: ${s.metadata.companyName}</p>`:''}`);
   }
   if (event.type === 'customer.subscription.deleted') {
     const sub = db.stripeSubscriptions.find(s => s.stripeSubscriptionId === event.data.object.id);
-    if (sub) sub.status = 'canceled';
+    if (sub) {
+      sub.status = 'canceled';
+      // Downgrade publisher back to standard
+      if (sub.publisherId) {
+        const publisher = (db.publishers||[]).find(p => p.id === sub.publisherId);
+        if (publisher) {
+          publisher.tier = 'standard';
+          publisher.stripeSubscriptionId = null;
+        }
+      }
+      sendEmail(process.env.ADMIN_EMAIL||process.env.SMTP_USER,
+        `⚠️ Subscription Canceled — ${sub.email}`,
+        `<h2>Subscription Canceled</h2><p>Email: ${sub.email}</p><p>Tier: ${sub.tier}</p><p>Publisher has been downgraded to Standard.</p>`);
+    }
   }
   writeDB(db);
   res.json({ received: true });

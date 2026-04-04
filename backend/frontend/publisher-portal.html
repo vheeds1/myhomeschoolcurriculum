@@ -779,11 +779,13 @@ function populateDashboard() {
   const currentTier = (publisher.tier || 'standard').toLowerCase();
   const tierLabels = { standard: 'Standard', affiliate: 'Affiliate', silver: 'Silver', gold: 'Gold' };
   const tierPrices = { standard: 'Free', affiliate: 'Free + commission', silver: '$49/month', gold: '$149/month' };
+  const hasPaidPlan = currentTier === 'silver' || currentTier === 'gold';
   planBox.innerHTML = `
     <div class="current-plan">
       <div class="current-plan-label">Your Current Plan</div>
       <div class="current-plan-name">${tierLabels[currentTier]||'Standard'} — ${tierPrices[currentTier] || 'Free'}</div>
       ${!publisher.approved ? '<p style="font-size:.78rem;color:var(--muted);margin-top:6px">Plan upgrades are available once your account is approved.</p>' : ''}
+      ${hasPaidPlan ? '<button onclick="manageSubscription()" style="margin-top:10px;background:transparent;color:var(--muted);border:1px solid var(--border);padding:8px 16px;border-radius:8px;font-family:\'DM Sans\',sans-serif;font-size:.78rem;cursor:pointer">Manage Subscription →</button>' : ''}
     </div>`;
 
   // Render plans grid
@@ -985,6 +987,21 @@ async function submitAffiliateSetup() {
   } catch(e) { showToast('Could not reach the server.', 'error'); }
 }
 
+async function manageSubscription() {
+  try {
+    const res = await fetch(`${API}/billing/publisher-portal`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${publisherToken}` }
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location = data.url;
+    } else {
+      showToast(data.error || 'Could not open billing portal. Contact support.', 'error');
+    }
+  } catch(e) { showToast('Could not reach the server.', 'error'); }
+}
+
 async function downgradeToStandard() {
   if (!confirm('Switch back to Standard? Your affiliate links will be removed from your listings.')) return;
   try {
@@ -1096,7 +1113,7 @@ async function requestUpgrade(tier) {
     const res = await fetch(`${API}/billing/create-checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tier: tier.toLowerCase(), email: publisher.email, companyName: publisher.companyName })
+      body: JSON.stringify({ tier: tier.toLowerCase(), email: publisher.email, companyName: publisher.companyName, publisherId: publisher.id })
     });
     const data = await res.json();
     if (data.url) {
