@@ -919,9 +919,8 @@ function applyQuizFilters() {
   document.getElementById('searchInput').value='';
   document.getElementById('priceRange').value=1500;
   document.getElementById('priceLabel').textContent='Any price';
-  // Apply quiz selections
+  // Apply only grade and worldview to avoid overly narrow results
   if (quizAnswers.grade) activateChip('grade', quizAnswers.grade);
-  if (quizAnswers.style) activateChip('style', quizAnswers.style);
   if (quizAnswers.worldview) activateChip('worldview', quizAnswers.worldview);
   closeOverlay('quizOverlay');
   fetchCurricula();
