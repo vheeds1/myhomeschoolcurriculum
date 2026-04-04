@@ -120,15 +120,34 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .badge-featured{background:rgba(212,168,75,.2);color:var(--gold)}
 
 /* Package info */
-.package-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
-.package-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.package-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text)}
-.package-price{font-size:.85rem;color:var(--muted)}
-.package-features{list-style:none;display:flex;flex-direction:column;gap:8px}
-.package-features li{font-size:.82rem;color:var(--muted);display:flex;align-items:flex-start;gap:8px}
+.plans-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.package-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:24px;display:flex;flex-direction:column;position:relative;transition:all .2s}
+.package-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.package-card.current-tier{border-color:var(--accent);background:rgba(74,154,84,.08)}
+.package-card.popular-plan{border-color:var(--gold)}
+.popular-plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);padding:2px 14px;border-radius:10px;font-size:.68rem;font-weight:700;white-space:nowrap}
+.package-header{margin-bottom:16px}
+.package-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text);margin-bottom:4px}
+.package-price{font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.package-price span{font-size:.75rem;font-weight:400;color:var(--muted)}
+.package-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+.package-features{list-style:none;display:flex;flex-direction:column;gap:8px;flex:1}
+.package-features li{font-size:.78rem;color:var(--muted);display:flex;align-items:flex-start;gap:8px}
 .package-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0}
-.upgrade-btn{background:var(--gold);color:var(--navy);border:none;padding:10px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;margin-top:16px;transition:all .18s}
+.upgrade-btn{background:var(--gold);color:var(--navy);border:none;padding:10px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;margin-top:16px;transition:all .18s;width:100%;text-align:center}
 .upgrade-btn:hover{background:#c4963f}
+.upgrade-btn.current{background:var(--accent);color:#fff;cursor:default}
+
+/* Upgrade prompt modal */
+.upgrade-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:24px}
+.upgrade-overlay.show{display:flex}
+.upgrade-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;max-width:520px;width:100%;text-align:center;position:relative}
+.upgrade-modal h2{font-family:'Playfair Display',serif;color:var(--text);font-size:1.3rem;margin-bottom:8px}
+.upgrade-modal p{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:20px}
+.upgrade-modal .dismiss{background:none;border:none;color:var(--muted);font-size:.82rem;cursor:pointer;margin-top:12px;text-decoration:underline}
+
+@media(max-width:900px){.plans-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.plans-grid{grid-template-columns:1fr}}
 .current-plan{background:rgba(74,154,84,.15);border:1px solid rgba(74,154,84,.3);border-radius:10px;padding:16px;margin-bottom:20px}
 .current-plan-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);margin-bottom:4px}
 .current-plan-name{font-size:1rem;font-weight:600;color:var(--text)}
@@ -436,77 +455,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="page-sub">Your current plan and available upgrades</div>
         <div id="currentPlanBox"></div>
 
-        <h3 style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:16px">Upgrade Your Listing</h3>
-        <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px;line-height:1.6">Get more visibility and features by upgrading your plan. All plans include your basic directory listing.</p>
+        <div class="plans-grid" id="plansGrid"></div>
 
-        <div class="package-card">
-          <div class="package-header">
-            <div>
-              <div class="package-name">🆓 Standard</div>
-              <div class="package-price">Free forever</div>
-            </div>
-          </div>
-          <ul class="package-features">
-            <li>Basic listing in the directory</li>
-            <li>Filter and search visibility</li>
-            <li>Parent reviews enabled</li>
-            <li>Direct link to your website</li>
-          </ul>
-        </div>
-
-        <div class="package-card">
-          <div class="package-header">
-            <div>
-              <div class="package-name">🔗 Affiliate Partnership</div>
-              <div class="package-price">Free — we earn a small commission on referrals</div>
-            </div>
-          </div>
-          <ul class="package-features">
-            <li>Everything in Standard</li>
-            <li>Your affiliate link on your listing</li>
-            <li>Referral tracking & reporting</li>
-            <li>Promoted in search results</li>
-            <li>Newsletter features</li>
-          </ul>
-          <button class="upgrade-btn" onclick="requestUpgrade('Affiliate')">Apply for Affiliate →</button>
-        </div>
-
-        <div class="package-card" style="border-color:rgba(192,192,192,.3)">
-          <div class="package-header">
-            <div>
-              <div class="package-name">🥈 Silver</div>
-              <div class="package-price">$49/month</div>
-            </div>
-          </div>
-          <ul class="package-features">
-            <li>Everything in Standard</li>
-            <li>Silver featured badge</li>
-            <li>Mid-page featured placement</li>
-            <li>Included in quiz recommendations</li>
-            <li>Monthly analytics report emailed to you</li>
-          </ul>
-          <button class="upgrade-btn" onclick="requestUpgrade('Silver')">Upgrade to Silver →</button>
-        </div>
-
-        <div class="package-card" style="border-color:rgba(212,168,75,.3)">
-          <div class="package-header">
-            <div>
-              <div class="package-name">🥇 Gold</div>
-              <div class="package-price">$149/month</div>
-            </div>
-          </div>
-          <ul class="package-features">
-            <li>Everything in Silver</li>
-            <li>Gold sponsor badge + top placement</li>
-            <li>Featured in quiz results</li>
-            <li>Homepage banner inclusion</li>
-            <li>Social media spotlight</li>
-            <li>Priority email support</li>
-          </ul>
-          <button class="upgrade-btn" onclick="requestUpgrade('Gold')">Upgrade to Gold →</button>
-        </div>
-
-        <p style="font-size:.78rem;color:var(--muted);margin-top:16px">
+        <p style="font-size:.78rem;color:var(--muted);margin-top:8px;text-align:center">
           Questions about plans? Email <a href="mailto:contact@myhomeschoolcurriculum.com" style="color:var(--gold)">contact@myhomeschoolcurriculum.com</a>
         </p>
       </div>
@@ -578,6 +529,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 </div><!-- /dashScreen -->
 
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+
+<!-- Upgrade Prompt -->
+<div class="upgrade-overlay" id="upgradePrompt">
+  <div class="upgrade-modal">
+    <h2>🚀 Get More From Your Listing</h2>
+    <p>You're currently on the <strong>Standard</strong> plan. Upgrade to get featured placement, a badge on your listing, quiz recommendations, and more.</p>
+    <button class="upgrade-btn" onclick="closeUpgradePrompt();showPage('billing',document.querySelector('[onclick*=billing]'))" style="width:auto;padding:12px 28px;font-size:.88rem">View Plans →</button>
+    <br><button class="dismiss" onclick="closeUpgradePrompt()">Maybe later</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -761,14 +722,49 @@ function populateDashboard() {
 
   // Current plan
   const planBox = document.getElementById('currentPlanBox');
-  const tier = publisher.tier || 'Standard';
-  const prices = { Standard: 'Free', Affiliate: 'Free + commission', Silver: '$49/month', Gold: '$149/month' };
+  const currentTier = (publisher.tier || 'standard').toLowerCase();
+  const tierLabels = { standard: 'Standard', affiliate: 'Affiliate', silver: 'Silver', gold: 'Gold' };
+  const tierPrices = { standard: 'Free', affiliate: 'Free + commission', silver: '$49/month', gold: '$149/month' };
   planBox.innerHTML = `
     <div class="current-plan">
       <div class="current-plan-label">Your Current Plan</div>
-      <div class="current-plan-name">${tier} — ${prices[tier] || 'Free'}</div>
+      <div class="current-plan-name">${tierLabels[currentTier]||'Standard'} — ${tierPrices[currentTier] || 'Free'}</div>
       ${!publisher.approved ? '<p style="font-size:.78rem;color:var(--muted);margin-top:6px">Plan upgrades are available once your account is approved.</p>' : ''}
     </div>`;
+
+  // Render plans grid
+  const plans = [
+    { key:'standard', icon:'🆓', name:'Standard', price:'Free', priceLabel:'forever', desc:'Basic directory listing', features:['Listed in the directory','Filter and search visibility','Parent reviews enabled','Direct link to your website'] },
+    { key:'affiliate', icon:'🔗', name:'Affiliate', price:'Free', priceLabel:'+ referral commission', desc:'We promote your curriculum', features:['Everything in Standard','Your affiliate link on listing','Referral tracking & reporting','Promoted in search results','Newsletter features'] },
+    { key:'silver', icon:'🥈', name:'Silver', price:'$49', priceLabel:'/month', desc:'Featured placement', features:['Everything in Standard','Silver featured badge','Mid-page featured placement','Quiz recommendations','Monthly analytics report'], popular:true },
+    { key:'gold', icon:'🥇', name:'Gold', price:'$149', priceLabel:'/month', desc:'Premium top placement', features:['Everything in Silver','Gold badge + top placement','Featured in quiz results','Homepage banner inclusion','Social media spotlight','Priority email support'] }
+  ];
+  const tierOrder = ['standard','affiliate','silver','gold'];
+  const currentIdx = tierOrder.indexOf(currentTier);
+  document.getElementById('plansGrid').innerHTML = plans.map(p => {
+    const isCurrent = p.key === currentTier;
+    const isUpgrade = tierOrder.indexOf(p.key) > currentIdx;
+    return `<div class="package-card${isCurrent?' current-tier':''}${p.popular?' popular-plan':''}">
+      ${p.popular ? '<div class="popular-plan-badge">⭐ Popular</div>' : ''}
+      <div class="package-header">
+        <div class="package-name">${p.icon} ${p.name}</div>
+        <div class="package-price">${p.price} <span>${p.priceLabel}</span></div>
+        <div class="package-desc">${p.desc}</div>
+      </div>
+      <ul class="package-features">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      ${isCurrent ? '<button class="upgrade-btn current">Current Plan</button>' :
+        isUpgrade ? `<button class="upgrade-btn" onclick="requestUpgrade('${p.name}')">${p.key==='affiliate'?'Apply':'Upgrade'} →</button>` :
+        ''}
+    </div>`;
+  }).join('');
+
+  // Show upgrade prompt for standard tier on first login
+  if (publisher.approved && currentTier === 'standard') {
+    const dismissedKey = `upgrade_dismissed_${publisher.id}`;
+    if (!sessionStorage.getItem(dismissedKey)) {
+      setTimeout(() => { document.getElementById('upgradePrompt').classList.add('show'); }, 1000);
+    }
+  }
 
   // Profile
   document.getElementById('profileName').value = publisher.name || '';
@@ -822,6 +818,12 @@ function renderCurriculaTable(containerId, curricula, compact) {
 }
 
 // ── MOBILE MENU ──────────────────────────────────────────────────────────────
+function closeUpgradePrompt() {
+  document.getElementById('upgradePrompt').classList.remove('show');
+  const publisher = publisherData?.publisher;
+  if (publisher) sessionStorage.setItem(`upgrade_dismissed_${publisher.id}`, '1');
+}
+
 function toggleMobileMenu() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('mobileOverlay').classList.toggle('show');
