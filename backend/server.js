@@ -888,12 +888,23 @@ app.put('/api/admin/inquiries/:id', requireAdmin, (req, res) => {
     const tierNote = (inq.listingType === 'silver' || inq.listingType === 'gold')
       ? `<p>Since you selected the <strong>${inq.listingType}</strong> tier, you'll be able to set up billing after creating your account.</p>`
       : '';
+    const affiliateNote = (inq.listingType === 'affiliate')
+      ? `<h3 style="margin-top:20px;color:#1E3A4C">📎 Next Step: Provide Your Affiliate Link</h3>
+         <p>As an affiliate partner, we'll include your unique tracking link on your curriculum listing so you earn commission on referred sales.</p>
+         <p>Please reply to this email with:</p>
+         <ul>
+           <li>Your <strong>unique affiliate/referral link</strong> for MyHomeschoolCurriculum (from your affiliate program, e.g. ShareASale, Impact, or your own system)</li>
+           <li>Your <strong>commission rate</strong> (so we can display it accurately)</li>
+         </ul>
+         <p>If you don't have an affiliate program yet, let us know and we can discuss other partnership options.</p>`
+      : '';
     sendEmail(inq.email, `Your listing inquiry has been approved! 🎉 — MyHomeschoolCurriculum`,
       `<h2>Great news, ${inq.contactName}!</h2>
        <p>Your listing inquiry for <strong>${inq.curriculumName}</strong> has been approved.</p>
        <p>To get started, create your publisher account:</p>
        ${tierNote}
        <p><a href="${siteUrl}/publisher-portal.html" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Create Publisher Account →</a></p>
+       ${affiliateNote}
        <p>Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>`);
   }
 
