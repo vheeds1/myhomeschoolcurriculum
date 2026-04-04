@@ -489,9 +489,9 @@ async function loadInquiries() {
           <td><span class="badge badge-${i.status}">${i.status}</span></td>
           <td>${fmt(i.createdAt)}</td>
           <td><div class="action-btns">
-            ${i.status === 'new' ? `<button class="act-btn act-approve" onclick="markInquiry('${i.id}','contacted')">Mark Contacted</button>` : ''}
-            ${i.status === 'contacted' ? `<button class="act-btn act-approve" onclick="markInquiry('${i.id}','closed')">Close</button>` : ''}
-            ${i.status === 'closed' ? `<span style="font-size:.75rem;color:var(--muted)">Closed</span>` : ''}
+            ${i.status === 'new' || i.status === 'contacted' ? `<button class="act-btn act-approve" onclick="approveInquiry('${i.id}')">Approve</button><button class="act-btn act-delete" onclick="denyInquiry('${i.id}')">Deny</button>` : ''}
+            ${i.status === 'approved' ? `<span class="badge badge-active">Approved</span>` : ''}
+            ${i.status === 'denied' ? `<span class="badge badge-inactive">Denied</span>` : ''}
             ${i.message ? `<button class="act-btn" onclick="viewInquiryNote('${i.id}')">View Note</button>` : ''}
           </div></td>
         </tr>`).join('')
@@ -502,9 +502,16 @@ function viewInquiryNote(id) {
   const inq = allInquiries.find(i => i.id === id);
   if (inq && inq.message) alert('Message from ' + inq.contactName + ':\n\n' + inq.message);
 }
-async function markInquiry(id, status) {
-  await fetch(`${API}/admin/inquiries/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status }) });
-  showToast('Status updated'); loadInquiries();
+async function approveInquiry(id) {
+  if (!confirm('Approve this inquiry? The applicant will receive an email to create their publisher account.')) return;
+  await fetch(`${API}/admin/inquiries/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status: 'approved' }) });
+  showToast('Inquiry approved! Email sent.', 'success'); loadInquiries();
+}
+async function denyInquiry(id) {
+  const reason = prompt('Optional: Enter a reason for denying this inquiry (or leave blank):');
+  if (reason === null) return; // user clicked cancel
+  await fetch(`${API}/admin/inquiries/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status: 'denied', denyReason: reason || '' }) });
+  showToast('Inquiry denied. Email sent.'); loadInquiries();
 }
 
 // ── REVENUE & BILLING ────────────────────────────────────────────────────────

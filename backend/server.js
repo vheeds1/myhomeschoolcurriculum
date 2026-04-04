@@ -877,7 +877,41 @@ app.put('/api/admin/inquiries/:id', requireAdmin, (req, res) => {
   const db = readDB();
   const inq = (db.listingInquiries||[]).find(i => i.id === req.params.id);
   if (!inq) return res.status(404).json({ error: 'Not found' });
-  Object.assign(inq, req.body); writeDB(db); res.json({ success: true });
+  const prevStatus = inq.status;
+  Object.assign(inq, req.body);
+  writeDB(db);
+
+  const siteUrl = process.env.SITE_URL || 'http://localhost:3001';
+
+  // Send approval email
+  if (req.body.status === 'approved' && prevStatus !== 'approved') {
+    const tierNote = (inq.listingType === 'silver' || inq.listingType === 'gold')
+      ? `<p>Since you selected the <strong>${inq.listingType}</strong> tier, you'll be able to set up billing after creating your account.</p>`
+      : '';
+    sendEmail(inq.email, `Your listing inquiry has been approved! 🎉 — MyHomeschoolCurriculum`,
+      `<h2>Great news, ${inq.contactName}!</h2>
+       <p>Your listing inquiry for <strong>${inq.curriculumName}</strong> has been approved.</p>
+       <p>To get started, create your publisher account:</p>
+       ${tierNote}
+       <p><a href="${siteUrl}/publisher-portal.html" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Create Publisher Account →</a></p>
+       <p>Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>`);
+  }
+
+  // Send denial email
+  if (req.body.status === 'denied' && prevStatus !== 'denied') {
+    const reason = req.body.denyReason
+      ? `<p><strong>Reason:</strong> ${req.body.denyReason}</p>`
+      : '';
+    sendEmail(inq.email, `Update on your listing inquiry — MyHomeschoolCurriculum`,
+      `<h2>Hi ${inq.contactName},</h2>
+       <p>Thank you for your interest in listing <strong>${inq.curriculumName}</strong> on MyHomeschoolCurriculum.</p>
+       <p>After reviewing your inquiry, we're unable to approve your listing at this time.</p>
+       ${reason}
+       <p>If you have questions or would like to discuss further, feel free to reach out to us at <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a>.</p>
+       <p>— The MyHomeschoolCurriculum Team</p>`);
+  }
+
+  res.json({ success: true });
 });
 app.get('/api/admin/messages', requireAdmin, (req, res) => {
   const db = readDB(); res.json({ messages: (db.contactMessages||[]).slice().reverse() });
