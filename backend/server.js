@@ -97,6 +97,7 @@ ensureDB();
 // ─── EMAIL ───────────────────────────────────────────────────────────────────
 async function sendEmail(to, subject, html) {
   if (!process.env.SMTP_USER) { console.log('[Email skipped - no SMTP config]', subject); return true; }
+  console.log(`[Email] Sending to ${to}: "${subject}"`);
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
@@ -105,8 +106,9 @@ async function sendEmail(to, subject, html) {
       auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
     });
     await transporter.sendMail({ from: `"MyHomeschoolCurriculum" <${process.env.SMTP_USER}>`, to, subject, html });
+    console.log(`[Email] ✅ Sent to ${to}: "${subject}"`);
     return true;
-  } catch(e) { console.error('Email error:', e.message); return false; }
+  } catch(e) { console.error(`[Email] ❌ Failed to ${to}: "${subject}" — ${e.message}`); return false; }
 }
 
 // ─── AUTH HELPERS ────────────────────────────────────────────────────────────
