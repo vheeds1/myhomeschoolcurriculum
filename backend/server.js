@@ -64,6 +64,7 @@ app.use(cors({
 app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'frontend')));
+app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
 // Rate limiting
 const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300 });
@@ -989,8 +990,9 @@ app.post('/api/publisher/register', submitLimiter, (req, res) => {
   sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER || FROM_EMAIL,
     'New Publisher Registration — My Homeschool Curriculum',
     `<h2>New publisher registered</h2><p><strong>${name}</strong> (${companyName}) registered at ${email}.</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}/admin">Review in Admin →</a></p>`);
+  const portalUrl = `${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html`;
   sendEmail(publisher.email, 'Welcome to MyHomeschoolCurriculum — Account Under Review',
-    `<h2>Thanks for registering, ${publisher.name}!</h2><p>Your publisher account for <strong>${publisher.companyName}</strong> is under review. Our team will approve your account within 2 business days.</p><p>You'll receive an email once approved. In the meantime, you can log in to explore the publisher portal.</p><p>Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>`);
+    `<h2>Thanks for registering, ${publisher.name}!</h2><p>Your publisher account for <strong>${publisher.companyName}</strong> is under review. Our team will approve your account within 2 business days.</p><p>You'll receive an email once approved. In the meantime, you can log in to explore the publisher portal:</p><p><a href="${portalUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Log in to Publisher Portal →</a></p><p>Questions? Email <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a></p>`);
   res.status(201).json({ success: true, message: 'Account created! Our team will review and approve your account within 2 business days.' });
 });
 

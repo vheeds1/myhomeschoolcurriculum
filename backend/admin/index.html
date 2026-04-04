@@ -586,7 +586,7 @@ async function unsubscribeNewsletter(email) {
 // ── BLOG ──────────────────────────────────────────────────────────────────────
 async function loadPublishers() {
   try {
-    const res = await fetch(`${API}/admin/publishers`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetch(`${API}/admin/publishers`, { headers: authHeaders() });
     const data = await res.json();
     const publishers = data.publishers || [];
     const pending = publishers.filter(p => !p.approved).length;
