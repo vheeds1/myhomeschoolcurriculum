@@ -197,7 +197,7 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .quiz-q{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy);margin-bottom:16px}
 .quiz-options{display:flex;flex-direction:column;gap:8px}
 .quiz-option{padding:13px 16px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all .18s;font-size:.88rem;background:#fff}
-.quiz-option:hover{border-color:var(--sage);background:var(--light-sage)}
+@media(hover:hover){.quiz-option:hover{border-color:var(--sage);background:var(--light-sage)}}
 .quiz-option.selected{border-color:var(--deep-sage);background:var(--light-sage)}
 .quiz-progress{height:4px;background:var(--border);border-radius:2px;margin-bottom:22px}
 .quiz-bar{height:100%;background:var(--deep-sage);border-radius:2px;transition:width .3s}
@@ -913,7 +913,13 @@ async function fetchQuizMatches() {
 }
 
 function applyQuizFilters() {
-  clearFilters();
+  // Reset filters without fetching
+  activeFilters = {};
+  document.querySelectorAll('.chip.active').forEach(c=>c.classList.remove('active'));
+  document.getElementById('searchInput').value='';
+  document.getElementById('priceRange').value=1500;
+  document.getElementById('priceLabel').textContent='Any price';
+  // Apply quiz selections
   if (quizAnswers.grade) activateChip('grade', quizAnswers.grade);
   if (quizAnswers.style) activateChip('style', quizAnswers.style);
   if (quizAnswers.worldview) activateChip('worldview', quizAnswers.worldview);
