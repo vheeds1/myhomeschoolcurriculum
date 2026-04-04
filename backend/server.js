@@ -14,6 +14,10 @@ const fs = require('fs');
 const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+
+// Optional: Resend email API (preferred over SMTP for cloud hosting)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 // Optional: Stripe (gracefully disabled if no key)
 let stripe = null;
@@ -95,21 +99,35 @@ function ensureDB() {
 ensureDB();
 
 // ─── EMAIL ───────────────────────────────────────────────────────────────────
+const FROM_EMAIL = process.env.SMTP_USER || 'contact@myhomeschoolcurriculum.com';
+
 async function sendEmail(to, subject, html) {
-  if (!process.env.SMTP_USER) { console.log('[Email skipped - no SMTP config]', subject); return true; }
   console.log(`[Email] Sending to ${to}: "${subject}"`);
+
+  // Prefer Resend (works over HTTPS, no SMTP port issues)
+  if (resend) {
+    try {
+      await resend.emails.send({ from: `MyHomeschoolCurriculum <${FROM_EMAIL}>`, to, subject, html });
+      console.log(`[Email] ✅ Sent via Resend to ${to}: "${subject}"`);
+      return true;
+    } catch(e) { console.error(`[Email] ❌ Resend failed to ${to}: "${subject}" — ${e.message}`); return false; }
+  }
+
+  // Fallback to SMTP
+  if (!process.env.SMTP_USER) { console.log('[Email skipped - no email config]', subject); return true; }
   try {
-    const port = parseInt(process.env.SMTP_PORT) || 587;
+    const port = parseInt(process.env.SMTP_PORT) || 465;
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port,
       secure: port === 465,
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      tls: { rejectUnauthorized: false }
     });
-    await transporter.sendMail({ from: `"MyHomeschoolCurriculum" <${process.env.SMTP_USER}>`, to, subject, html });
-    console.log(`[Email] ✅ Sent to ${to}: "${subject}"`);
+    await transporter.sendMail({ from: `"MyHomeschoolCurriculum" <${FROM_EMAIL}>`, to, subject, html });
+    console.log(`[Email] ✅ Sent via SMTP to ${to}: "${subject}"`);
     return true;
-  } catch(e) { console.error(`[Email] ❌ Failed to ${to}: "${subject}" — ${e.message}`); return false; }
+  } catch(e) { console.error(`[Email] ❌ SMTP failed to ${to}: "${subject}" — ${e.message}`); return false; }
 }
 
 // ─── AUTH HELPERS ────────────────────────────────────────────────────────────
@@ -853,7 +871,7 @@ app.use((req, res, next) => {
 app.listen(PORT, () => {
   console.log(`\n🧭 MyHomeschoolCurriculum API v2.0 → http://localhost:${PORT}`);
   console.log(`   Stripe:     ${stripe ? '✅ configured' : '⚠️  not configured (add STRIPE_SECRET_KEY)'}`);
-  console.log(`   Email:      ${process.env.SMTP_USER ? '✅ configured' : '⚠️  not configured (add SMTP_* vars)'}`);
+  console.log(`   Email:      ${resend ? '✅ Resend API' : process.env.SMTP_USER ? '✅ SMTP' : '⚠️  not configured (add RESEND_API_KEY or SMTP_* vars)'}`);
   console.log(`   Newsletter: ${mailchimp ? '✅ Mailchimp connected' : '⚠️  local only (add MAILCHIMP_API_KEY)'}\n`);
 });
 
