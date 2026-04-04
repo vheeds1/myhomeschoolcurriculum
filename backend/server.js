@@ -1117,10 +1117,19 @@ app.put('/api/publisher/profile', requirePublisher, (req, res) => {
   const db = readDB();
   const publisher = (db.publishers||[]).find(p => p.id === req.publisherId);
   if (!publisher) return res.status(404).json({ error: 'Not found.' });
-  const { name, companyName, website } = req.body;
+  const { name, companyName, website, tier } = req.body;
   if (name) publisher.name = name.trim();
   if (companyName) publisher.companyName = companyName.trim();
   if (website !== undefined) publisher.website = website;
+  // Allow downgrade to standard (remove affiliate links from curricula)
+  if (tier === 'standard' && publisher.tier !== 'standard') {
+    publisher.tier = 'standard';
+    // Remove affiliate links from their linked curricula
+    (publisher.curriculumIds||[]).forEach(cid => {
+      const c = (db.curricula||[]).find(cur => cur.id === cid);
+      if (c && c.type === 'affiliate') { c.affiliateLink = ''; c.type = 'standard'; }
+    });
+  }
   writeDB(db);
   res.json({ success: true });
 });
@@ -1134,21 +1143,34 @@ app.post('/api/publisher/logout', requirePublisher, (req, res) => {
   res.json({ success: true });
 });
 
-// Publisher: apply for affiliate (auto-approve with link)
+// Publisher: apply for affiliate (auto-approve with link per curriculum)
 app.post('/api/publisher/apply-affiliate', requirePublisher, (req, res) => {
-  const { affiliateLink } = req.body;
+  const { affiliateLink, curriculumId } = req.body;
   if (!affiliateLink || !/^https?:\/\/.+/i.test(affiliateLink))
     return res.status(400).json({ error: 'Please provide a valid affiliate link (starting with http:// or https://).' });
   const db = readDB();
   const publisher = (db.publishers||[]).find(p => p.id === req.publisherId);
   if (!publisher) return res.status(404).json({ error: 'Publisher not found.' });
+
+  // Update publisher tier to affiliate
   publisher.tier = 'affiliate';
-  publisher.affiliateLink = affiliateLink.trim();
+
+  // Store affiliate link on the specific curriculum
+  let curriculumName = 'their account';
+  if (curriculumId) {
+    const curriculum = (db.curricula||[]).find(c => c.id === curriculumId);
+    if (curriculum && publisher.curriculumIds.includes(curriculumId)) {
+      curriculum.affiliateLink = affiliateLink.trim();
+      curriculum.type = 'affiliate';
+      curriculumName = curriculum.name;
+    }
+  }
+
   writeDB(db);
   sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER || FROM_EMAIL,
-    `🔗 Publisher auto-upgraded to Affiliate — ${publisher.companyName}`,
-    `<h2>Affiliate Auto-Upgrade</h2><p><strong>${publisher.name}</strong> (${publisher.companyName}) has upgraded to the Affiliate tier.</p><p><strong>Affiliate link provided:</strong> <a href="${publisher.affiliateLink}">${publisher.affiliateLink}</a></p><p>You can link this to their curriculum listing in the <a href="${process.env.SITE_URL||'http://localhost:3001'}/admin">admin dashboard</a>.</p>`);
-  res.json({ success: true, message: 'You\'re now an Affiliate partner!' });
+    `🔗 Affiliate link added — ${publisher.companyName}`,
+    `<h2>Affiliate Link Update</h2><p><strong>${publisher.name}</strong> (${publisher.companyName}) provided an affiliate link for <strong>${curriculumName}</strong>.</p><p><strong>Link:</strong> <a href="${affiliateLink}">${affiliateLink}</a></p><p>This has been automatically applied to the curriculum listing.</p>`);
+  res.json({ success: true, message: 'Affiliate link added!' });
 });
 
 // Admin: approve publisher + assign tier + link curricula

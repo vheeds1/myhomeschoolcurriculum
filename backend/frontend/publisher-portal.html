@@ -555,11 +555,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <!-- Form A: Has link -->
     <div id="affiliateFormLink" style="display:none;margin-top:16px">
       <div class="form-group">
-        <label style="color:var(--muted)">Your affiliate link for MyHomeschoolCurriculum</label>
+        <label style="color:var(--muted)">Which curriculum is this link for?</label>
+        <select id="affCurriculumSelect" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem"></select>
+      </div>
+      <div class="form-group">
+        <label style="color:var(--muted)">Your affiliate link for this curriculum</label>
         <input type="url" id="affLink" placeholder="https://yoursite.com/?ref=myhomeschoolcurriculum" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem">
-        <p style="font-size:.72rem;color:var(--muted);margin-top:4px">This is the tracking link we'll use on your listing so we earn commission on referred sales.</p>
+        <p style="font-size:.72rem;color:var(--muted);margin-top:4px">This is the tracking link we'll use on this listing so we earn commission on referred sales.</p>
       </div>
       <button onclick="submitAffiliateLink()" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer">Submit & Activate Affiliate →</button>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:8px;text-align:center">Have multiple curricula? You can add links for each one separately.</p>
     </div>
 
     <!-- Form B: Need setup -->
@@ -799,6 +804,7 @@ function populateDashboard() {
       <ul class="package-features">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
       ${isCurrent ? '<button class="upgrade-btn current">Current Plan</button>' :
         isUpgrade ? `<button class="upgrade-btn" onclick="requestUpgrade('${p.name}')">${p.key==='affiliate'?'Apply':'Upgrade'} →</button>` :
+        (p.key==='standard' && currentTier!=='standard') ? `<button class="upgrade-btn" style="background:transparent;color:var(--muted);border:1px solid var(--border)" onclick="downgradeToStandard()">Switch to Standard</button>` :
         ''}
     </div>`;
   }).join('');
@@ -868,6 +874,14 @@ function openAffiliateModal() {
   document.getElementById('affiliateOptions').style.display = 'flex';
   document.getElementById('affiliateFormLink').style.display = 'none';
   document.getElementById('affiliateFormSetup').style.display = 'none';
+  // Populate curriculum selector
+  const curricula = publisherData?.curricula || [];
+  const select = document.getElementById('affCurriculumSelect');
+  if (curricula.length) {
+    select.innerHTML = curricula.map(c => `<option value="${c.id}">${c.emoji||'📘'} ${c.name}</option>`).join('');
+  } else {
+    select.innerHTML = '<option value="">No curricula linked yet</option>';
+  }
   document.getElementById('affiliateModal').classList.add('show');
 }
 function closeAffiliateModal() {
@@ -880,12 +894,14 @@ function showAffiliateForm(type) {
 }
 async function submitAffiliateLink() {
   const link = document.getElementById('affLink').value.trim();
+  const curriculumId = document.getElementById('affCurriculumSelect').value;
   if (!link) { showToast('Please enter your affiliate link.', 'error'); return; }
+  if (!curriculumId) { showToast('No curriculum selected. Please link a curriculum to your account first.', 'error'); return; }
   try {
     const res = await fetch(`${API}/publisher/apply-affiliate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${publisherToken}` },
-      body: JSON.stringify({ affiliateLink: link })
+      body: JSON.stringify({ affiliateLink: link, curriculumId: parseInt(curriculumId) })
     });
     const data = await res.json();
     if (data.success) {
@@ -922,6 +938,23 @@ async function submitAffiliateSetup() {
     } else {
       showToast(data.error || 'Could not submit request.', 'error');
     }
+  } catch(e) { showToast('Could not reach the server.', 'error'); }
+}
+
+async function downgradeToStandard() {
+  if (!confirm('Switch back to Standard? Your affiliate links will be removed from your listings.')) return;
+  try {
+    const res = await fetch(`${API}/publisher/profile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${publisherToken}` },
+      body: JSON.stringify({ tier: 'standard' })
+    });
+    if (res.ok) {
+      showToast('Switched to Standard plan.', 'success');
+      const me = await fetch(`${API}/publisher/me`, { headers: { Authorization: `Bearer ${publisherToken}` } });
+      publisherData = await me.json();
+      populateDashboard();
+    } else { showToast('Could not change plan.', 'error'); }
   } catch(e) { showToast('Could not reach the server.', 'error'); }
 }
 
