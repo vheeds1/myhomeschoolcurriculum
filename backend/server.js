@@ -326,6 +326,9 @@ app.post('/api/auth/register', authLimiter, (req, res) => {
   const verifyUrl = `${process.env.SITE_URL||'http://localhost:3001'}/account?verify=${verifyToken}`;
   sendEmail(user.email, 'Verify your MyHomeschoolCurriculum account',
     `<h2>Welcome, ${user.name}!</h2><p>Please verify your email:</p><p><a href="${verifyUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Verify Email →</a></p>`);
+  sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
+    `👤 New User Registration — ${user.email}`,
+    `<h2>New User Signup</h2><p><strong>Name:</strong> ${user.name}</p><p><strong>Email:</strong> ${user.email}</p><p><strong>Date:</strong> ${user.createdAt}</p><p>Total users: ${db.users.length}</p>`);
   res.status(201).json({ success: true, message: 'Account created! Check your email to verify.' });
 });
 
@@ -536,6 +539,9 @@ app.post('/api/newsletter/subscribe', submitLimiter, async (req, res) => {
   }
   sendEmail(subscriber.email, 'Welcome to MyHomeschoolCurriculum! 🧭',
     `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}">Browse curricula →</a></p>`);
+  sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
+    `📬 New Newsletter Subscriber — ${subscriber.email}`,
+    `<h2>New Newsletter Signup</h2><p><strong>Email:</strong> ${subscriber.email}</p>${subscriber.name ? `<p><strong>Name:</strong> ${subscriber.name}</p>` : ''}<p><strong>Source:</strong> ${subscriber.source||'website'}</p><p><strong>Date:</strong> ${subscriber.subscribedAt}</p><p>Total active subscribers: ${(db.newsletterSubscribers||[]).filter(s => s.active).length}</p>`);
   res.status(201).json({ success: true, message: "You're subscribed! Check your inbox for a welcome email." });
 });
 
@@ -749,7 +755,13 @@ app.put('/api/admin/reviews/:id/approve', requireAdmin, (req, res) => {
     c.rating = Math.round(approved.reduce((s,r) => s + r.rating, 0) / approved.length * 10) / 10;
     c.reviewCount = approved.length;
   }
-  writeDB(db); res.json({ success: true });
+  writeDB(db);
+  if (review.email) {
+    const currName = c ? c.name : 'a curriculum';
+    sendEmail(review.email, `Your review of ${currName} is now live! ⭐`,
+      `<h2>Your review has been approved!</h2><p>Hi ${review.name},</p><p>Thanks for sharing your experience with <strong>${currName}</strong>. Your review is now live on MyHomeschoolCurriculum and helping other families make their decision.</p><p><a href="${process.env.SITE_URL||'http://localhost:3001'}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">See it on the site →</a></p>`);
+  }
+  res.json({ success: true });
 });
 app.delete('/api/admin/reviews/:id', requireAdmin, (req, res) => {
   const db = readDB();

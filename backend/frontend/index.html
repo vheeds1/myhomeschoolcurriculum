@@ -777,6 +777,7 @@ async function openDetail(slug, fromQuiz) {
           <div class="form-group"><label>Grades Used</label><input type="text" id="rGrades" placeholder="3rd–5th grade"></div>
           <div class="form-group"><label>How Long</label><input type="text" id="rYears" placeholder="2 years"></div>
         </div>
+        <div class="form-group"><label>Email (optional — we'll notify you when published)</label><input type="email" id="rEmail" placeholder="you@email.com"></div>
         <div class="form-group"><label>Review Title *</label><input type="text" id="rTitle" placeholder="Great for our family!"></div>
         <div class="form-group"><label>Your Review *</label><textarea id="rBody" placeholder="Share your honest experience (at least 20 characters)…" rows="4"></textarea></div>
         <button class="btn-primary" onclick="submitReview(${c.id},'${c.slug}')">Submit Review →</button>
@@ -808,6 +809,7 @@ async function submitReview(curriculumId, curriculumSlug) {
     const res = await fetch(`${API}/reviews`, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ curriculumId, curriculumSlug, name, rating, title, body,
+        email: document.getElementById('rEmail').value.trim(),
         location: document.getElementById('rLocation').value,
         gradesUsed: document.getElementById('rGrades').value,
         yearsUsing: document.getElementById('rYears').value })
