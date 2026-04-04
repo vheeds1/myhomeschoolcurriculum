@@ -1107,6 +1107,11 @@ app.get('/api/publisher/me', requirePublisher, (req, res) => {
       reviewCount: c.reviewCount, active: c.active, tier: c.type,
       badges: c.badges, sponsored: c.sponsored, featured: c.featured,
       clicks: (db.affiliateClicks||[]).filter(cl => cl.curriculumId === c.id).length,
+    })),
+    reviews: reviews.map(r => ({
+      id: r.id, curriculumId: r.curriculumId, curriculumName: (curricula.find(c => c.id === r.curriculumId)||{}).name || 'Unknown',
+      name: r.name, rating: r.rating, title: r.title, body: r.body,
+      location: r.location, gradesUsed: r.gradesUsed, createdAt: r.createdAt
     }))
   });
 });
@@ -1158,6 +1163,27 @@ app.put('/api/admin/publishers/:id/approve', requireAdmin, (req, res) => {
 app.get('/api/admin/publishers', requireAdmin, (req, res) => {
   const db = readDB();
   res.json({ publishers: (db.publishers||[]).slice().reverse() });
+});
+
+// Admin: edit publisher
+app.put('/api/admin/publishers/:id', requireAdmin, (req, res) => {
+  const db = readDB();
+  const publisher = (db.publishers||[]).find(p => p.id === req.params.id);
+  if (!publisher) return res.status(404).json({ error: 'Publisher not found.' });
+  const { name, companyName, email, website, tier, status, curriculumIds } = req.body;
+  if (name !== undefined) publisher.name = name.trim();
+  if (companyName !== undefined) publisher.companyName = companyName.trim();
+  if (email !== undefined) publisher.email = email.trim().toLowerCase();
+  if (website !== undefined) publisher.website = website.trim();
+  if (tier !== undefined) publisher.tier = tier;
+  if (curriculumIds !== undefined) publisher.curriculumIds = curriculumIds;
+  if (status !== undefined) {
+    publisher.status = status;
+    if (status === 'deactivated') publisher.approved = false;
+    if (status === 'active') publisher.approved = true;
+  }
+  writeDB(db);
+  res.json({ success: true });
 });
 
 // Serve publisher portal page

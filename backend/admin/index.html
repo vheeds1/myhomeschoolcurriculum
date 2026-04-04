@@ -218,8 +218,36 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <input class="search-input" placeholder="Search publishers…" oninput="filterTable('publishersTable',this.value)">
         <div class="table-wrap"><table><thead><tr>
-          <th>Company</th><th>Contact</th><th>Email</th><th>Tier</th><th>Status</th><th>Registered</th><th>Actions</th>
-        </tr></thead><tbody id="publishersTable"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody></table></div>
+          <th>Company</th><th>Contact</th><th>Email</th><th>Tier</th><th>Curricula</th><th>Status</th><th>Registered</th><th>Actions</th>
+        </tr></thead><tbody id="publishersTable"><tr class="empty-row"><td colspan="8">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- PUBLISHER EDIT MODAL -->
+      <div id="publisherModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:24px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+            <h3 style="font-size:1.1rem;color:var(--text)">Edit Publisher</h3>
+            <button onclick="closePublisherModal()" style="background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer">✕</button>
+          </div>
+          <input type="hidden" id="editPubId">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">Contact Name</label><input id="editPubName" style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif"></div>
+            <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">Company</label><input id="editPubCompany" style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">Email</label><input id="editPubEmail" style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif"></div>
+            <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">Website</label><input id="editPubWebsite" style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+            <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">Tier</label><select id="editPubTier" style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif"><option value="standard">Standard</option><option value="affiliate">Affiliate</option><option value="silver">Silver</option><option value="gold">Gold</option></select></div>
+            <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px">Status</label><select id="editPubStatus" style="width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif"><option value="active">Active</option><option value="pending">Pending</option><option value="deactivated">Deactivated</option></select></div>
+          </div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:8px">Linked Curricula</label>
+            <div id="editPubCurricula" style="max-height:200px;overflow-y:auto;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px"></div>
+          </div>
+          <button onclick="savePublisher()" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer">Save Changes</button>
+        </div>
       </div>
 
       <div class="tab-content" id="tab-users">
@@ -591,29 +619,42 @@ async function unsubscribeNewsletter(email) {
 }
 
 // ── BLOG ──────────────────────────────────────────────────────────────────────
+let allPublishers = [];
+let allCurriculaList = [];
+
 async function loadPublishers() {
   try {
-    const res = await fetch(`${API}/admin/publishers`, { headers: authHeaders() });
-    const data = await res.json();
-    const publishers = data.publishers || [];
-    const pending = publishers.filter(p => !p.approved).length;
+    const [pubRes, curRes] = await Promise.all([
+      fetch(`${API}/admin/publishers`, { headers: authHeaders() }),
+      fetch(`${API}/admin/curricula`, { headers: authHeaders() })
+    ]);
+    const pubData = await pubRes.json();
+    const curData = await curRes.json();
+    allPublishers = pubData.publishers || [];
+    allCurriculaList = curData || [];
+    const pending = allPublishers.filter(p => !p.approved).length;
     const badge = document.getElementById('publishersBadge');
     if (pending > 0) { badge.textContent = pending; badge.style.display = 'inline'; }
     const tbody = document.getElementById('publishersTable');
-    if (!publishers.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No publisher accounts yet.</td></tr>'; return; }
-    tbody.innerHTML = publishers.map(p => `
-      <tr>
+    if (!allPublishers.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No publisher accounts yet.</td></tr>'; return; }
+    tbody.innerHTML = allPublishers.map(p => {
+      const linkedCount = (p.curriculumIds||[]).length;
+      const linkedNames = (p.curriculumIds||[]).map(id => (allCurriculaList.find(c=>c.id===id)||{}).name).filter(Boolean).join(', ');
+      return `<tr>
         <td><strong>${p.companyName||'—'}</strong></td>
         <td>${p.name||'—'}</td>
-        <td>${p.email}</td>
-        <td>${p.tier||'—'}</td>
-        <td><span class="status-badge ${p.approved ? 'approved' : 'pending'}">${p.status||'pending'}</span></td>
+        <td><a href="mailto:${p.email}" style="color:var(--accent)">${p.email}</a></td>
+        <td><span class="badge badge-${p.tier||'standard'}">${p.tier||'—'}</span></td>
+        <td>${linkedCount ? `<span title="${linkedNames}">${linkedCount} linked</span>` : '<span style="color:var(--muted)">None</span>'}</td>
+        <td><span class="badge badge-${p.status||'pending'}">${p.status||'pending'}</span></td>
         <td>${p.createdAt ? new Date(p.createdAt).toLocaleDateString() : '—'}</td>
-        <td>
-          ${!p.approved ? `<button class="action-btn approve" onclick="approvePublisher('${p.id}')">Approve</button>` : ''}
-          <a href="mailto:${p.email}" class="action-btn" style="text-decoration:none">Email</a>
-        </td>
-      </tr>`).join('');
+        <td><div class="action-btns">
+          ${!p.approved && p.status !== 'deactivated' ? `<button class="act-btn act-approve" onclick="approvePublisher('${p.id}')">Approve</button>` : ''}
+          <button class="act-btn" onclick="editPublisher('${p.id}')">Edit</button>
+          ${p.status !== 'deactivated' ? `<button class="act-btn act-delete" onclick="deactivatePublisher('${p.id}')">Deactivate</button>` : `<button class="act-btn act-approve" onclick="reactivatePublisher('${p.id}')">Reactivate</button>`}
+        </div></td>
+      </tr>`;
+    }).join('');
   } catch(e) { console.error('loadPublishers error', e); }
 }
 
@@ -626,9 +667,62 @@ async function approvePublisher(id) {
       headers: authHeaders(),
       body: JSON.stringify({ tier, curriculumIds: [] })
     });
-    if (res.ok) { showToast('Publisher approved! Confirmation email sent.', 'success'); loadPublishers(); }
+    if (res.ok) { showToast('Publisher approved!', 'success'); loadPublishers(); }
     else showToast('Could not approve publisher.', 'error');
   } catch(e) { showToast('Server error.', 'error'); }
+}
+
+function editPublisher(id) {
+  const p = allPublishers.find(pub => pub.id === id);
+  if (!p) return;
+  document.getElementById('editPubId').value = p.id;
+  document.getElementById('editPubName').value = p.name || '';
+  document.getElementById('editPubCompany').value = p.companyName || '';
+  document.getElementById('editPubEmail').value = p.email || '';
+  document.getElementById('editPubWebsite').value = p.website || '';
+  document.getElementById('editPubTier').value = p.tier || 'standard';
+  document.getElementById('editPubStatus').value = p.status || 'pending';
+  // Render curriculum checkboxes
+  const container = document.getElementById('editPubCurricula');
+  const linked = p.curriculumIds || [];
+  container.innerHTML = allCurriculaList.length
+    ? allCurriculaList.map(c => `<label style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:.82rem;color:var(--text);cursor:pointer"><input type="checkbox" value="${c.id}" ${linked.includes(c.id)?'checked':''}> ${c.emoji||'📘'} ${c.name}</label>`).join('')
+    : '<p style="color:var(--muted);font-size:.82rem">No curricula available</p>';
+  document.getElementById('publisherModal').style.display = 'flex';
+}
+
+function closePublisherModal() {
+  document.getElementById('publisherModal').style.display = 'none';
+}
+
+async function savePublisher() {
+  const id = document.getElementById('editPubId').value;
+  const curriculumIds = Array.from(document.querySelectorAll('#editPubCurricula input:checked')).map(i => parseInt(i.value));
+  const body = {
+    name: document.getElementById('editPubName').value.trim(),
+    companyName: document.getElementById('editPubCompany').value.trim(),
+    email: document.getElementById('editPubEmail').value.trim(),
+    website: document.getElementById('editPubWebsite').value.trim(),
+    tier: document.getElementById('editPubTier').value,
+    status: document.getElementById('editPubStatus').value,
+    curriculumIds
+  };
+  try {
+    const res = await fetch(`${API}/admin/publishers/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(body) });
+    if (res.ok) { showToast('Publisher updated!', 'success'); closePublisherModal(); loadPublishers(); }
+    else showToast('Could not save.', 'error');
+  } catch(e) { showToast('Server error.', 'error'); }
+}
+
+async function deactivatePublisher(id) {
+  if (!confirm('Deactivate this publisher? They will lose access to the portal.')) return;
+  await fetch(`${API}/admin/publishers/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status: 'deactivated' }) });
+  showToast('Publisher deactivated.'); loadPublishers();
+}
+
+async function reactivatePublisher(id) {
+  await fetch(`${API}/admin/publishers/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status: 'active' }) });
+  showToast('Publisher reactivated!', 'success'); loadPublishers();
 }
 
 async function loadBlog() {
