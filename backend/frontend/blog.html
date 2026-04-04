@@ -122,6 +122,7 @@ footer a{color:var(--gold);text-decoration:none}
     <a href="/account.html">Sign In</a>
     <a href="/publisher.html" style="background:var(--terracotta);color:#fff;border-radius:20px;padding:7px 14px;font-weight:600">List Your Curriculum</a>
   </nav>
+  <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
 </header>
 
 <!-- BLOG LIST VIEW -->
@@ -287,6 +288,10 @@ function showToast(msg, type='') {
 }
 
 // Handle direct post URL
+function toggleMenu() {
+  document.querySelector('nav').classList.toggle('open');
+}
+
 const postParam = new URLSearchParams(location.search).get('post');
 if (postParam) openPost(postParam);
 else loadPosts();

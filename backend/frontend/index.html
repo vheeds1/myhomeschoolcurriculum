@@ -244,9 +244,15 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 .curriculum-card:nth-child(7){animation-delay:.24s}
 
 /* ── RESPONSIVE ── */
+/* Mobile filter toggle */
+.mobile-filter-btn{display:none;background:var(--deep-sage);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;width:100%;margin-bottom:16px}
+.mobile-filter-btn:hover{background:#3A6040}
+
 @media(max-width:860px){
   .main-wrap{grid-template-columns:1fr}
-  .sidebar{position:relative;top:0}
+  .sidebar{position:relative;top:0;display:none}
+  .sidebar.open{display:block}
+  .mobile-filter-btn{display:block}
   .footer-grid{grid-template-columns:1fr 1fr}
   .card-body{grid-template-columns:1fr}
   .card-actions{flex-direction:row;align-items:center}
@@ -296,6 +302,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
       <a href="/account.html" id="navAccountLink">Sign In</a>
       <a href="/publisher.html" class="header-cta">List Your Curriculum</a>
     </nav>
+    <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
   </div>
 </header>
 
@@ -320,7 +327,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 </div>
 
 <div class="main-wrap">
-  <aside class="sidebar">
+  <button class="mobile-filter-btn" onclick="toggleFilters()">⚙️ Show Filters</button>
+  <aside class="sidebar" id="filterSidebar">
     <div class="sidebar-header">
       <h3>⚙️ Filter Curricula</h3>
       <button class="clear-btn" onclick="clearFilters()">Clear All</button>
@@ -1048,6 +1056,18 @@ function exportComparePDF() {
 // ── GOOGLE ANALYTICS HELPERS ─────────────────────────────────────────────────
 function gtag() {
   if (typeof window.gtag === 'function') window.gtag(...arguments);
+}
+
+// ── MOBILE MENU & FILTERS ────────────────────────────────────────────────────
+function toggleMenu() {
+  document.querySelector('nav').classList.toggle('open');
+}
+
+function toggleFilters() {
+  const sidebar = document.getElementById('filterSidebar');
+  const btn = document.querySelector('.mobile-filter-btn');
+  sidebar.classList.toggle('open');
+  btn.textContent = sidebar.classList.contains('open') ? '✕ Hide Filters' : '⚙️ Show Filters';
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────

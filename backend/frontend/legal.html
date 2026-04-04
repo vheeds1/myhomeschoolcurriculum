@@ -119,6 +119,7 @@ footer a{color:var(--gold);text-decoration:none}
     <a href="/account.html">Sign In</a>
     <a href="/publisher.html" style="background:var(--terracotta);color:#fff;border-radius:20px;padding:7px 14px;font-weight:600">List Your Curriculum</a>
   </nav>
+  <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
 </header>
 
 <div class="hero">
@@ -245,6 +246,10 @@ async function openState(stateEncoded) {
 function closeModal() { document.getElementById('stateOverlay').classList.remove('open'); }
 
 // Pre-select state from URL
+function toggleMenu() {
+  document.querySelector('nav').classList.toggle('open');
+}
+
 const stateParam = new URLSearchParams(location.search).get('state');
 loadStates().then(() => { if (stateParam) openState(stateParam); });
 </script>
