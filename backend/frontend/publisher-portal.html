@@ -496,31 +496,34 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="page-title">Support</div>
         <div class="page-sub">We're here to help you get the most out of your listing</div>
 
-        <div class="support-card">
-          <h3>📧 Email Support</h3>
-          <p>For any questions about your listing, analytics, billing, or anything else — email us directly.</p>
-          <a href="mailto:contact@myhomeschoolcurriculum.com">contact@myhomeschoolcurriculum.com</a>
+        <div class="support-card" style="max-width:520px">
+          <h3>📧 Send Us a Message</h3>
+          <p style="margin-bottom:16px">Fill out the form below and we'll get back to you as soon as possible.</p>
+          <div class="form-group">
+            <label>Subject</label>
+            <select id="supportSubject" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem">
+              <option value="General Question">General Question</option>
+              <option value="Listing Update Request">Listing Update Request</option>
+              <option value="Billing Question">Billing Question</option>
+              <option value="Technical Issue">Technical Issue</option>
+              <option value="Feature Request">Feature Request</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="supportMessage" rows="4" placeholder="How can we help?" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;resize:vertical"></textarea>
+          </div>
+          <button onclick="submitSupport()" id="supportBtn" style="width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer">Send Message →</button>
         </div>
 
-        <div class="support-card">
+        <div class="support-card" style="max-width:520px">
           <h3>⏱️ Response Times</h3>
           <p>
             <strong style="color:var(--text)">Standard & Affiliate:</strong> 3–5 business days<br>
             <strong style="color:#c0c0c0">Silver:</strong> 2–3 business days<br>
-            <strong style="color:var(--gold)">Gold:</strong> 1–2 business days (priority support)<br>
+            <strong style="color:var(--gold)">Gold:</strong> 1–2 business days (priority support)
           </p>
-        </div>
-
-        <div class="support-card">
-          <h3>📋 Request a Listing Update</h3>
-          <p>Need to update your curriculum's description, pricing, grades, or images? Email us with the changes and we'll update it within 2 business days.</p>
-          <a href="mailto:contact@myhomeschoolcurriculum.com?subject=Listing Update Request" style="color:var(--gold);font-weight:600">Send update request →</a>
-        </div>
-
-        <div class="support-card">
-          <h3>💳 Billing Questions</h3>
-          <p>Questions about your invoice, subscription, or upgrading your plan? We're happy to help.</p>
-          <a href="mailto:contact@myhomeschoolcurriculum.com?subject=Billing Question" style="color:var(--gold);font-weight:600">Contact billing →</a>
         </div>
       </div>
 
@@ -985,6 +988,40 @@ async function submitAffiliateSetup() {
       showToast(data.error || 'Could not submit request.', 'error');
     }
   } catch(e) { showToast('Could not reach the server.', 'error'); }
+}
+
+async function submitSupport() {
+  const subject = document.getElementById('supportSubject').value;
+  const message = document.getElementById('supportMessage').value.trim();
+  if (!message) { showToast('Please enter a message.', 'error'); return; }
+  const publisher = publisherData?.publisher;
+  const btn = document.getElementById('supportBtn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const res = await fetch(`${API}/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: publisher ? `${publisher.name} (${publisher.companyName})` : 'Publisher',
+        email: publisher?.email || '',
+        subject: `[Publisher] ${subject}`,
+        message
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Message sent! We\'ll get back to you soon.', 'success');
+      document.getElementById('supportMessage').value = '';
+      btn.textContent = 'Sent ✓';
+      setTimeout(() => { btn.disabled = false; btn.textContent = 'Send Message →'; }, 3000);
+    } else {
+      showToast(data.error || 'Could not send message.', 'error');
+      btn.disabled = false; btn.textContent = 'Send Message →';
+    }
+  } catch(e) {
+    showToast('Could not reach the server.', 'error');
+    btn.disabled = false; btn.textContent = 'Send Message →';
+  }
 }
 
 async function manageSubscription() {
