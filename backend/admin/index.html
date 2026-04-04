@@ -611,12 +611,12 @@ async function loadPublishers() {
 }
 
 async function approvePublisher(id) {
-  const tier = prompt('Enter tier for this publisher:\nstandard, affiliate, silver, gold, platinum', 'standard');
+  const tier = prompt('Enter tier for this publisher:\nstandard, affiliate, silver, gold', 'standard');
   if (!tier) return;
   try {
     const res = await fetch(`${API}/admin/publishers/${id}/approve`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: authHeaders(),
       body: JSON.stringify({ tier, curriculumIds: [] })
     });
     if (res.ok) { showToast('Publisher approved! Confirmation email sent.', 'success'); loadPublishers(); }
