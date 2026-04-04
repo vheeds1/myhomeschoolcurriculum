@@ -444,7 +444,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 </div>
 
 <!-- Detail Modal -->
-<div class="overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-label="Curriculum detail" onclick="if(event.target===this)closeOverlay('detailOverlay')">
+<div class="overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-label="Curriculum detail" style="z-index:350" onclick="if(event.target===this)closeOverlay('detailOverlay')">
   <div class="modal" style="max-width:720px" id="detailModal">
     <button class="modal-close" onclick="closeOverlay('detailOverlay')">✕</button>
     <div id="detailBody"></div>
@@ -704,7 +704,9 @@ function makePromoStrip() {
 }
 
 // ── DETAIL MODAL ────────────────────────────────────────────────────────────
-async function openDetail(slug) {
+let openedFromQuiz = false;
+async function openDetail(slug, fromQuiz) {
+  openedFromQuiz = !!fromQuiz;
   document.getElementById('detailBody').innerHTML = '<div style="text-align:center;padding:40px"><div class="skeleton" style="height:60px;margin-bottom:14px"></div><div class="skeleton" style="height:14px;width:60%;margin-bottom:8px"></div></div>';
   document.getElementById('detailOverlay').classList.add('open');
 
@@ -754,7 +756,9 @@ async function openDetail(slug) {
       ${c.type!=='standard'?`<p style="font-size:.7rem;color:var(--text-muted);margin-bottom:14px">${c.type==='sponsored'?'⚠️ Sponsored listing — this curriculum paid for featured placement. Our written review is independent.':'⚠️ Affiliate link — we earn a small commission if you purchase through our link, at no cost to you.'}</p>`:''}
       <div class="modal-cta" style="margin-bottom:24px">
         <a class="btn-primary" href="${c.affiliateLink}" target="_blank" rel="noopener" onclick="trackClick(${c.id})">Visit Official Website →</a>
-        <button class="btn-secondary" onclick="closeOverlay('detailOverlay')">Close</button>
+        ${openedFromQuiz
+          ? '<button class="btn-secondary" onclick="closeOverlay(\'detailOverlay\')">← Back to Quiz Results</button>'
+          : '<button class="btn-secondary" onclick="closeOverlay(\'detailOverlay\')">Close</button>'}
       </div>
       <hr style="border:none;border-top:1px solid var(--border);margin-bottom:20px">
       <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:14px">Parent Reviews</h3>
@@ -907,7 +911,7 @@ async function fetchQuizMatches() {
       <div class="quiz-result-card">
         <span class="emoji">${c.emoji}</span>
         <div style="flex:1"><strong>${c.name}</strong><span>${c.tagline}</span></div>
-        <button class="btn-primary" style="padding:7px 13px;font-size:.76rem" onclick="closeOverlay('quizOverlay');openDetail('${c.slug}')">View →</button>
+        <button class="btn-primary" style="padding:7px 13px;font-size:.76rem" onclick="openDetail('${c.slug}',true)">View →</button>
       </div>`).join('') || '<p style="color:var(--text-muted)">No close matches found. Try adjusting your quiz answers.</p>';
   } catch(e) { document.getElementById('quizResults').innerHTML='<p style="color:var(--terracotta)">Could not fetch matches.</p>'; }
 }
