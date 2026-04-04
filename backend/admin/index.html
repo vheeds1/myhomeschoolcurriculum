@@ -201,7 +201,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="section-title">📋 Listing Inquiries</div>
           <input class="search-input" placeholder="Search…" oninput="filterTable('inquiriesTable',this.value)">
         </div>
-        <div class="table-wrap"><table><thead><tr><th>Curriculum</th><th>Company</th><th>Contact</th><th>Email</th><th>Type</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="inquiriesTable"><tr class="empty-row"><td colspan="8">Loading…</td></tr></tbody></table></div>
+        <div class="table-wrap"><table><thead><tr><th>Curriculum</th><th>Company</th><th>Contact</th><th>Email</th><th>Phone</th><th>Website</th><th>Type</th><th>Grades</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="inquiriesTable"><tr class="empty-row"><td colspan="11">Loading…</td></tr></tbody></table></div>
       </div>
 
       <!-- MESSAGES TAB -->
@@ -477,24 +477,38 @@ async function deleteReview(id) {
 }
 
 // ── INQUIRIES ─────────────────────────────────────────────────────────────────
+let allInquiries = [];
 async function loadInquiries() {
   try {
     const res = await fetch(`${API}/admin/inquiries`, { headers: authHeaders() });
     const data = await res.json();
     const inqs = data.inquiries || [];
+    allInquiries = inqs;
     document.getElementById('inquiriesTable').innerHTML = inqs.length
       ? inqs.map(i => `<tr>
-          <td><strong>${i.curriculumName}</strong></td>
+          <td><strong>${i.curriculumName}</strong>${i.description ? `<br><span style="font-size:.75rem;color:var(--muted)">${i.description.substring(0,100)}${i.description.length>100?'…':''}</span>` : ''}</td>
           <td>${i.companyName}</td>
           <td>${i.contactName}</td>
           <td><a href="mailto:${i.email}" style="color:var(--accent)">${i.email}</a></td>
+          <td>${i.phone || '—'}</td>
+          <td>${i.website ? `<a href="${i.website}" target="_blank" rel="noopener" style="color:var(--accent)">${i.website.replace(/^https?:\/\//,'').substring(0,25)}</a>` : '—'}</td>
           <td><span class="badge badge-${i.listingType}">${i.listingType}</span></td>
+          <td>${(i.grades||[]).join(', ') || '—'}</td>
           <td><span class="badge badge-${i.status}">${i.status}</span></td>
           <td>${fmt(i.createdAt)}</td>
-          <td><button class="act-btn act-approve" onclick="markInquiry('${i.id}','contacted')">Mark Contacted</button></td>
+          <td><div class="action-btns">
+            ${i.status === 'new' ? `<button class="act-btn act-approve" onclick="markInquiry('${i.id}','contacted')">Mark Contacted</button>` : ''}
+            ${i.status === 'contacted' ? `<button class="act-btn act-approve" onclick="markInquiry('${i.id}','closed')">Close</button>` : ''}
+            ${i.status === 'closed' ? `<span style="font-size:.75rem;color:var(--muted)">Closed</span>` : ''}
+            ${i.message ? `<button class="act-btn" onclick="viewInquiryNote('${i.id}')">View Note</button>` : ''}
+          </div></td>
         </tr>`).join('')
-      : '<tr class="empty-row"><td colspan="8">No inquiries yet</td></tr>';
+      : '<tr class="empty-row"><td colspan="11">No inquiries yet</td></tr>';
   } catch(e) {}
+}
+function viewInquiryNote(id) {
+  const inq = allInquiries.find(i => i.id === id);
+  if (inq && inq.message) alert('Message from ' + inq.contactName + ':\n\n' + inq.message);
 }
 async function markInquiry(id, status) {
   await fetch(`${API}/admin/inquiries/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify({ status }) });
