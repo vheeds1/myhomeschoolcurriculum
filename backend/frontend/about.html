@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — My Homeschool Curriculum</title>
+<meta name="description" content="Learn about MyHomeschoolCurriculum — built by a homeschool parent to help families find the right curriculum without the overwhelm.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-67QGQLFQFR"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-67QGQLFQFR");</script>
+<style>
+:root{--cream:#FDF6EC;--warm-white:#FFFBF5;--sage:#7A9E7E;--deep-sage:#4A7550;--terracotta:#C8614A;--gold:#D4A84B;--navy:#1E3A4C;--charcoal:#2C3E3F;--light-sage:#EAF2EB;--border:#E8DDD0;--text-muted:#7A7A6E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);line-height:1.6}
+
+/* Header */
+header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;text-decoration:none}
+.logo-text span{color:var(--gold)}
+nav{display:flex;gap:6px}
+nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;transition:all .2s}
+nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
+.header-cta{background:var(--terracotta)!important;color:#fff!important;font-weight:600!important}
+.mobile-menu-btn{display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1}
+@media(max-width:768px){
+  .mobile-menu-btn{display:block}
+  nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy);flex-direction:column;padding:12px 16px;gap:4px;border-top:1px solid rgba(255,255,255,.1);z-index:200}
+  nav.open{display:flex}
+  nav a{padding:10px 14px;border-radius:8px;font-size:.9rem}
+  header{position:relative}
+}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#2A4F5A 50%,#1A3340 100%);padding:80px 24px 70px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 80%,rgba(122,158,126,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(212,168,75,.1) 0%,transparent 50%)}
+.hero-content{position:relative;max-width:640px;margin:0 auto}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;line-height:1.2;margin-bottom:16px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p{color:rgba(255,255,255,.75);font-size:1.05rem;max-width:520px;margin:0 auto}
+
+/* Content */
+.content-wrap{max-width:760px;margin:0 auto;padding:60px 24px}
+.section{margin-bottom:48px}
+.section h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:16px}
+.section h2 span{color:var(--gold)}
+.section p{color:#555;font-size:.95rem;line-height:1.8;margin-bottom:14px}
+
+/* Values */
+.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:24px}
+.value-card{background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center}
+.value-icon{font-size:2rem;margin-bottom:10px}
+.value-card h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:8px}
+.value-card p{font-size:.82rem;color:var(--text-muted);line-height:1.6}
+
+/* Transparency */
+.transparency-box{background:var(--light-sage);border:1px solid rgba(74,117,80,.2);border-radius:14px;padding:28px;margin-top:24px}
+.transparency-box h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:12px}
+.transparency-box ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.transparency-box li{font-size:.88rem;color:#555;display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+.transparency-box li::before{content:'✓';color:var(--deep-sage);font-weight:700;flex-shrink:0}
+
+/* CTA */
+.cta-section{background:linear-gradient(135deg,var(--navy),#2A4F5A);border-radius:20px;padding:48px 32px;text-align:center;margin-top:48px}
+.cta-section h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:12px}
+.cta-section p{color:rgba(255,255,255,.75);font-size:.95rem;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--deep-sage);color:#fff;border:none;padding:12px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-primary:hover{background:#3A6040;transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);padding:11px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-secondary:hover{background:rgba(255,255,255,.1)}
+
+/* Footer */
+footer{background:var(--navy);color:rgba(255,255,255,.65);padding:32px 24px;text-align:center;margin-top:60px;font-size:.82rem}
+footer a{color:var(--gold);text-decoration:none}
+
+/* Accessibility */
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:0 0 8px 8px;font-size:.85rem;font-weight:600;text-decoration:none;z-index:9999;transition:top .2s}
+.skip-link:focus{top:0}
+:focus-visible{outline:3px solid #4A9A54;outline-offset:2px;border-radius:3px}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header>
+  <a href="/" class="logo-text">My Homeschool <span>Curriculum</span></a>
+  <nav aria-label="Main navigation">
+    <a href="/">Browse</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/legal.html">State Laws</a>
+    <a href="/about.html" class="active">About</a>
+    <a href="/account.html">Sign In</a>
+    <a href="/publisher.html" class="header-cta">List Your Curriculum</a>
+  </nav>
+  <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Built by a <em>Homeschool Parent</em>,<br>for Homeschool Families</h1>
+    <p>We know the journey. We're here to make it easier.</p>
+  </div>
+</section>
+
+<div class="content-wrap" id="main-content">
+
+  <div class="section">
+    <h2>Our <span>Story</span></h2>
+    <p>When I started homeschooling my own kids, I quickly discovered that one of the most overwhelming parts wasn't the teaching itself — it was choosing a curriculum. There are hundreds of options out there, each with different teaching styles, worldviews, grade ranges, and price points. I spent weeks researching, reading forums, watching YouTube reviews, and still felt unsure.</p>
+    <p>I knew I wasn't alone. Homeschooling is growing rapidly, and every year thousands of new families face the same overwhelming decision. So I built MyHomeschoolCurriculum — a place where families can compare curricula side by side, filter by what matters most to them, and read honest reviews from real parents.</p>
+  </div>
+
+  <div class="section">
+    <h2>Our <span>Mission</span></h2>
+    <p>To ease the stress on new and experienced homeschool families by providing a trusted hub for homeschool curriculum information, community, and resources. We believe choosing a curriculum shouldn't feel like a full-time job — it should feel empowering.</p>
+  </div>
+
+  <div class="section">
+    <h2>What We <span>Believe</span></h2>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🤝</div>
+        <h3>Honest Reviews</h3>
+        <p>Every review on our site comes from real homeschool parents. We never edit or remove reviews based on publisher relationships.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🌿</div>
+        <h3>Every Family Is Different</h3>
+        <p>There's no one-size-fits-all curriculum. Our filters help you find what works for your family's unique style, worldview, and budget.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">💚</div>
+        <h3>Always Free to Use</h3>
+        <p>Browsing, comparing, and reading reviews will always be free. We built this to help families, not to sell to them.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">📚</div>
+        <h3>Community First</h3>
+        <p>We're building more than a directory — we're building a place where homeschool families can connect, share, and support each other.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>How the Site <span>Works</span></h2>
+    <p>We research and list curricula across all grade levels, teaching styles, and worldviews. Parents can filter, compare side-by-side, take our recommendation quiz, and read reviews from other families. Our goal is to give you the information you need to make a confident decision.</p>
+
+    <div class="transparency-box">
+      <h3>Our Commitment to Transparency</h3>
+      <ul>
+        <li>Parent reviews are always independent — publishers cannot edit or remove them</li>
+        <li>Some listings include affiliate links, which means we may earn a small commission if you purchase — at no extra cost to you</li>
+        <li>Sponsored and featured listings are clearly marked so you always know what you're looking at</li>
+        <li>Our written curriculum descriptions and quiz recommendations are editorially independent</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Ready to Find Your Curriculum?</h2>
+    <p>Browse 40+ hand-picked curricula filtered by grade, style, worldview, and budget.</p>
+    <div class="cta-btns">
+      <a href="/" class="btn-primary">Browse Curricula →</a>
+      <a href="/blog.html" class="btn-secondary">Read Our Blog</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>My Homeschool <a href="/" style="color:var(--gold)">Curriculum</a> — Helping families find their perfect fit.</p>
+  <p style="font-size:.72rem;opacity:.6;margin-top:6px">© 2026 MyHomeschoolCurriculum. All rights reserved.</p>
+</footer>
+
+<script>
+function toggleMenu() {
+  document.querySelector('nav').classList.toggle('open');
+}
+</script>
+</body>
+</html>
