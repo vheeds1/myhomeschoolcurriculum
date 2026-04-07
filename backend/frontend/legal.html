@@ -158,13 +158,13 @@ footer a{color:var(--gold);text-decoration:none}
       <button class="diff-btn" id="btn-all" onclick="setDiff('all',this)">All States</button>
       <button class="diff-btn" id="btn-easy" onclick="setDiff('Easy',this)">🟢 Easy</button>
       <button class="diff-btn" id="btn-moderate" onclick="setDiff('Moderate',this)">🟡 Moderate</button>
-      <button class="diff-btn" id="btn-strict" onclick="setDiff('Strict',this)">🔴 Strict</button>
+      <button class="diff-btn" id="btn-strict" onclick="setDiff('High',this)">🔴 High</button>
     </div>
   </div>
   <div class="legend">
     <span><span class="dot dot-easy"></span> Easy — Low oversight, minimal requirements</span>
     <span><span class="dot dot-moderate"></span> Moderate — Annual notice and/or assessment</span>
-    <span><span class="dot dot-strict"></span> Strict — Approval, detailed documentation, testing</span>
+    <span><span class="dot dot-strict"></span> High — Approval, detailed documentation, testing</span>
   </div>
   <div class="results-bar" id="resultsBar">Loading…</div>
   <div class="states-grid" id="statesGrid" role="list" aria-label="State homeschool laws" aria-live="polite"><div style="text-align:center;padding:40px;color:var(--text-muted)">Loading state data…</div></div>
@@ -205,8 +205,9 @@ function renderStates(states) {
   const grid = document.getElementById('statesGrid');
   if (!states.length) { grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">No states match your filter.</div>'; return; }
   grid.innerHTML = states.map(s => {
-    const cls = s.difficulty === 'Strict' ? 'strict' : s.difficulty === 'Moderate' ? 'moderate' : 'easy';
-    const badgeCls = s.difficulty === 'Strict' ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
+    const isHigh = s.difficulty === 'Strict' || s.difficulty === 'High';
+    const cls = isHigh ? 'strict' : s.difficulty === 'Moderate' ? 'moderate' : 'easy';
+    const badgeCls = isHigh ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
     return `
       <div class="state-card ${cls}" onclick="openState('${encodeURIComponent(s.state)}')">
         <div class="state-name">
@@ -221,7 +222,10 @@ function renderStates(states) {
 function filterStates() {
   const q = document.getElementById('stateSearch').value.toLowerCase();
   let filtered = allStates;
-  if (currentDiff !== 'all') filtered = filtered.filter(s => s.difficulty === currentDiff);
+  if (currentDiff !== 'all') {
+    if (currentDiff === 'High') filtered = filtered.filter(s => s.difficulty === 'High' || s.difficulty === 'Strict');
+    else filtered = filtered.filter(s => s.difficulty === currentDiff);
+  }
   if (q) filtered = filtered.filter(s => s.state.toLowerCase().includes(q) || s.description.toLowerCase().includes(q));
   renderStates(filtered);
 }
@@ -231,7 +235,7 @@ function setDiff(diff, btn) {
   document.querySelectorAll('.diff-btn').forEach(b => b.className = 'diff-btn');
   if (diff === 'Easy') btn.className = 'diff-btn active-easy';
   else if (diff === 'Moderate') btn.className = 'diff-btn active-moderate';
-  else if (diff === 'Strict') btn.className = 'diff-btn active-strict';
+  else if (diff === 'High') btn.className = 'diff-btn active-strict';
   filterStates();
 }
 
@@ -239,25 +243,28 @@ async function openState(stateEncoded) {
   try {
     const res = await fetch(`${API}/legal/states/${stateEncoded}`);
     const s = await res.json();
-    const diffColor = s.difficulty === 'Strict' ? 'red' : s.difficulty === 'Moderate' ? 'orange' : 'green';
-    const badgeCls = s.difficulty === 'Strict' ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
+    const diffColor = (s.difficulty === 'Strict' || s.difficulty === 'High') ? 'red' : s.difficulty === 'Moderate' ? 'orange' : 'green';
+    const badgeCls = (s.difficulty === 'Strict' || s.difficulty === 'High') ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
+    const diffLabel = s.difficulty === 'High' ? 'High Oversight' : s.difficulty + ' Oversight';
     document.getElementById('stateDetail').innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
         <h2>🗺️ ${s.state}</h2>
-        <span class="diff-badge ${badgeCls}" style="padding:5px 14px;font-size:.78rem">${s.difficulty} Oversight</span>
+        <span class="diff-badge ${badgeCls}" style="padding:5px 14px;font-size:.78rem">${diffLabel}</span>
       </div>
-      <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:4px">${s.description}</p>
+      <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:16px">${s.description}</p>
       <div class="info-grid">
-        <div class="info-item"><div class="info-key">Withdrawal Notice</div><div class="info-val ${diffColor}">${s.withdrawalNotice}</div></div>
+        <div class="info-item"><div class="info-key">Withdrawal / Notice</div><div class="info-val">${s.withdrawalNotice}</div></div>
         <div class="info-item"><div class="info-key">Subject Requirements</div><div class="info-val">${s.subjectRequirements}</div></div>
         <div class="info-item"><div class="info-key">Testing Requirements</div><div class="info-val">${s.testingRequirements}</div></div>
-        <div class="info-item"><div class="info-key">Portfolio Requirements</div><div class="info-val">${s.portfolioRequirements}</div></div>
+        <div class="info-item"><div class="info-key">Portfolio / Records</div><div class="info-val">${s.portfolioRequirements}</div></div>
       </div>
       <div style="background:#FFF3CD;border-radius:10px;padding:12px 14px;font-size:.8rem;color:#856404;margin-bottom:16px">
-        ⚠️ This information may not reflect the most recent legislative changes. Always verify current requirements with your state's Department of Education.
+        ⚠️ General information only. Verify current requirements with your state's official source before making legal decisions.
+        ${s.lastReviewed ? `<br><span style="font-size:.72rem">Last reviewed: ${s.lastReviewed}</span>` : ''}
       </div>
-      <div class="modal-actions">
-        <a href="${s.moreInfo}" target="_blank" rel="noopener" class="btn-primary">Official HSLDA Guide →</a>
+      <div class="modal-actions" style="display:flex;gap:10px;flex-wrap:wrap">
+        ${s.officialLink ? `<a href="${s.officialLink}" target="_blank" rel="noopener" class="btn-primary">Official State Source →</a>` : ''}
+        <a href="${s.moreInfo}" target="_blank" rel="noopener" class="btn-secondary">HSLDA Guide →</a>
         <a href="/" class="btn-secondary">Find Curricula</a>
       </div>`;
     document.getElementById('stateOverlay').classList.add('open');
