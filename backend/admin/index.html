@@ -182,7 +182,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <button class="btn btn-green" onclick="openCurriculumModal()">+ Add New</button>
           </div>
         </div>
-        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Grades</th><th>Style</th><th>Price</th><th>Rating</th><th>Tier</th><th>Active</th><th>Actions</th></tr></thead><tbody id="curriculaTable"><tr class="empty-row"><td colspan="8">Loading…</td></tr></tbody></table></div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Grades</th><th>Style</th><th>Price</th><th>Rating</th><th>Type</th><th>Badges</th><th>Active</th><th>Actions</th></tr></thead><tbody id="curriculaTable"><tr class="empty-row"><td colspan="9">Loading…</td></tr></tbody></table></div>
       </div>
 
       <!-- REVIEWS TAB -->
@@ -305,13 +305,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="form-group"><label>Format</label><input id="cFormat" placeholder="Print,Digital,DVD"></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Sponsor Tier</label>
-        <select id="cTier"><option value="">Standard (free)</option><option value="silver">Silver ($49/mo)</option><option value="gold">Gold ($149/mo)</option><option value="platinum">Platinum ($299/mo)</option></select>
+      <div class="form-group"><label>Listing Type</label>
+        <select id="cType"><option value="standard">Standard</option><option value="affiliate">Affiliate</option><option value="sponsored">Sponsored (Ad)</option></select>
       </div>
-      <div class="form-group"><label>Affiliate Link</label><input id="cAffiliate" placeholder="https://…"></div>
+      <div class="form-group"><label>Sponsor Tier</label>
+        <select id="cTier"><option value="">None</option><option value="silver">Silver</option><option value="gold">Gold</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Affiliate Link</label><input id="cAffiliate" placeholder="https://…"></div>
+    <div class="form-group">
+      <label>Badges (select all that apply)</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px" id="cBadges">
+        <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;color:var(--text);cursor:pointer"><input type="checkbox" value="featured"> ★ Featured</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;color:var(--text);cursor:pointer"><input type="checkbox" value="top"> Top Rated</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;color:var(--text);cursor:pointer"><input type="checkbox" value="new"> New</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;color:var(--text);cursor:pointer"><input type="checkbox" value="free"> Free</label>
+      </div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Featured</label><select id="cFeatured"><option value="false">No</option><option value="true">Yes</option></select></div>
+      <div class="form-group"><label>Featured Placement</label><select id="cFeatured"><option value="false">No</option><option value="true">Yes</option></select></div>
       <div class="form-group"><label>Active</label><select id="cActive"><option value="true">Yes</option><option value="false">No</option></select></div>
     </div>
     <div class="modal-actions">
@@ -446,17 +458,23 @@ async function loadCurricula() {
     const data = await res.json();
     const curricula = Array.isArray(data) ? data : (data.curricula || []);
     document.getElementById('curriculaTable').innerHTML = curricula.length
-      ? curricula.map(c => `<tr>
+      ? curricula.map(c => {
+          const badgesHTML = (c.badges||[]).map(b => {
+            const cls = {featured:'badge-featured',top:'badge-active',new:'badge-new','free':'badge-new'}[b]||'';
+            return `<span class="badge ${cls}" style="margin-right:3px">${b}</span>`;
+          }).join('');
+          return `<tr>
           <td><strong>${c.name}</strong><br><span style="color:var(--muted);font-size:.75rem">${c.slug}</span></td>
           <td>${(c.grades||[]).join(', ')||'—'}</td>
           <td>${(c.style||[]).join(', ')||'—'}</td>
           <td>${c.priceMin ? '$'+c.priceMin+(c.priceMax?'–$'+c.priceMax:'') : 'Free'}</td>
           <td>${c.rating||'—'} (${c.reviewCount||0})</td>
-          <td><span class="badge badge-${c.sponsorTier||'none'}">${c.sponsorTier||'free'}</span></td>
+          <td><span class="badge badge-${c.type||'standard'}">${c.type||'standard'}</span></td>
+          <td>${badgesHTML||'—'}</td>
           <td>${c.active ? '✅' : '❌'}</td>
           <td><div class="action-btns"><button class="act-btn act-view" onclick="editCurriculum(${JSON.stringify(c).replace(/"/g,'&quot;')})">Edit</button><button class="act-btn act-delete" onclick="toggleActive(${c.id},${!c.active})">${c.active?'Deactivate':'Activate'}</button></div></td>
-        </tr>`).join('')
-      : '<tr class="empty-row"><td colspan="8">No curricula yet</td></tr>';
+        </tr>`;}).join('')
+      : '<tr class="empty-row"><td colspan="9">No curricula yet</td></tr>';
   } catch(e) {}
 }
 
@@ -750,9 +768,11 @@ function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
   ['cName','cSlug','cTagline','cDescription','cPriceMin','cPriceMax','cGrades','cStyle','cWorldview','cFormat','cAffiliate'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cType').value = 'standard';
   document.getElementById('cTier').value = '';
   document.getElementById('cFeatured').value = 'false';
   document.getElementById('cActive').value = 'true';
+  document.querySelectorAll('#cBadges input[type=checkbox]').forEach(cb => cb.checked = false);
   document.getElementById('curriculumModal').classList.add('open');
 }
 function editCurriculum(c) {
@@ -769,9 +789,15 @@ function editCurriculum(c) {
   document.getElementById('cWorldview').value = (c.worldview||[]).join(',');
   document.getElementById('cFormat').value = (c.format||[]).join(',');
   document.getElementById('cAffiliate').value = c.affiliateLink||'';
+  document.getElementById('cType').value = c.type||'standard';
   document.getElementById('cTier').value = c.sponsorTier||'';
   document.getElementById('cFeatured').value = c.featured ? 'true' : 'false';
   document.getElementById('cActive').value = c.active !== false ? 'true' : 'false';
+  // Set badge checkboxes
+  const badges = c.badges || [];
+  document.querySelectorAll('#cBadges input[type=checkbox]').forEach(cb => {
+    cb.checked = badges.includes(cb.value);
+  });
   document.getElementById('curriculumModal').classList.add('open');
 }
 function closeCurriculumModal() { document.getElementById('curriculumModal').classList.remove('open'); }
@@ -789,7 +815,9 @@ async function saveCurriculum() {
     worldview: document.getElementById('cWorldview').value.split(',').map(s=>s.trim()).filter(Boolean),
     format: document.getElementById('cFormat').value.split(',').map(s=>s.trim()).filter(Boolean),
     affiliateLink: document.getElementById('cAffiliate').value,
+    type: document.getElementById('cType').value||'standard',
     sponsorTier: document.getElementById('cTier').value||null,
+    badges: Array.from(document.querySelectorAll('#cBadges input:checked')).map(cb => cb.value),
     featured: document.getElementById('cFeatured').value === 'true',
     active: document.getElementById('cActive').value === 'true',
   };
