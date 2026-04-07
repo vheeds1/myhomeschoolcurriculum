@@ -687,7 +687,7 @@ function makeCard(c) {
         </label>
       </div>
       <div class="card-actions">
-        <div><div class="price-main">${c.price}</div><div class="price-sub">per year</div></div>
+        <div><div class="price-main">${c.price}</div></div>
         <a class="btn-primary" href="${c.affiliateLink||'#'}" target="_blank" onclick="trackClick(${c.id})" rel="noopener">Visit Site →</a>
         <button class="btn-secondary" onclick="openDetail('${c.slug}')">Full Review</button>
         <button class="btn-heart" id="heart-${c.id}" onclick="toggleFavorite(${c.id},this)" title="Save to favorites" style="background:none;border:1.5px solid #ddd;border-radius:8px;padding:7px 10px;cursor:pointer;font-size:1rem;transition:all .2s">🤍</button>
