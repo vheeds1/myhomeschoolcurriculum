@@ -659,7 +659,6 @@ function makeCard(c) {
   const stars = '★'.repeat(Math.round(c.rating||0)) + '☆'.repeat(5-Math.round(c.rating||0));
 
   const tags = [
-    ...(c.grades||[]).slice(0,2).map(g=>`<span class="tag tag-sage">${g}</span>`),
     ...(c.style||[]).slice(0,1).map(s=>`<span class="tag tag-gold">${s}</span>`),
     ...(c.worldview||[]).slice(0,1).map(w=>`<span class="tag tag-terra">${w}</span>`),
     ...(c.format||[]).slice(0,1).map(f=>`<span class="tag tag-blue">${f}</span>`),

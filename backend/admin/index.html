@@ -308,7 +308,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
     <div class="form-row">
       <div class="form-group"><label>Worldview</label><input id="cWorldview" placeholder="Christian,Secular"></div>
-      <div class="form-group"><label>Format</label><input id="cFormat" placeholder="Print,Digital,DVD"></div>
+      <div class="form-group"><label>Format</label><input id="cFormat" placeholder="Print,Online,Video,Hybrid"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Subject</label><input id="cSubject" placeholder="All-in-One,Math,Language Arts,Science,History,Writing"></div>
+      <div class="form-group"><label>Special Needs</label><input id="cSpecial" placeholder="Dyslexia,ADHD,Gifted,Special Needs"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Listing Type</label>
@@ -776,7 +780,7 @@ async function loadBlog() {
 function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
-  ['cName','cSlug','cTagline','cDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cAffiliate'].forEach(id => document.getElementById(id).value = '');
+  ['cName','cSlug','cTagline','cDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial','cAffiliate'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('cPricingType').value = 'annual';
   document.getElementById('cType').value = 'standard';
   document.getElementById('cTier').value = '';
@@ -800,6 +804,8 @@ function editCurriculum(c) {
   document.getElementById('cStyle').value = (c.style||[]).join(',');
   document.getElementById('cWorldview').value = (c.worldview||[]).join(',');
   document.getElementById('cFormat').value = (c.format||[]).join(',');
+  document.getElementById('cSubject').value = (c.subject||[]).join(',');
+  document.getElementById('cSpecial').value = (c.special||[]).join(',');
   document.getElementById('cAffiliate').value = c.affiliateLink||'';
   document.getElementById('cType').value = c.type||'standard';
   document.getElementById('cTier').value = c.sponsorTier||'';
@@ -828,6 +834,8 @@ async function saveCurriculum() {
     style: document.getElementById('cStyle').value.split(',').map(s=>s.trim()).filter(Boolean),
     worldview: document.getElementById('cWorldview').value.split(',').map(s=>s.trim()).filter(Boolean),
     format: document.getElementById('cFormat').value.split(',').map(s=>s.trim()).filter(Boolean),
+    subject: document.getElementById('cSubject').value.split(',').map(s=>s.trim()).filter(Boolean),
+    special: document.getElementById('cSpecial').value.split(',').map(s=>s.trim()).filter(Boolean),
     affiliateLink: document.getElementById('cAffiliate').value,
     type: document.getElementById('cType').value||'standard',
     sponsorTier: document.getElementById('cTier').value||null,
