@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>MyHomeschoolCurriculum — Find Your Perfect Homeschool Curriculum</title>
 <meta name="description" content="Compare 40+ homeschool curricula filtered by grade, teaching style, worldview, budget, and more. Find the perfect fit for your family.">
 <meta property="og:title" content="MyHomeschoolCurriculum — Find Your Perfect Homeschool Curriculum">
@@ -726,7 +727,7 @@ async function openDetail(slug, fromQuiz) {
             <div class="review-title">${r.title}</div>
             <div class="review-body">${r.body}</div>
           </div>`).join('') + `</div>`
-      : '<p style="color:var(--text-muted);font-size:.85rem">No reviews yet — be the first!</p>';
+      : '<div style="background:var(--light-sage);border-radius:12px;padding:20px;text-align:center"><p style="font-size:1.2rem;margin-bottom:8px">📝</p><p style="font-weight:600;color:var(--navy);margin-bottom:4px">No reviews yet!</p><p style="font-size:.85rem;color:var(--text-muted)">Have you used this curriculum? Your review helps other homeschool families make the right choice. Scroll down to share your experience!</p></div>';
 
     document.getElementById('detailBody').innerHTML = `
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
@@ -734,9 +735,9 @@ async function openDetail(slug, fromQuiz) {
         <div>
           <h2>${c.name}</h2>
           <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
-            <span style="color:var(--gold)">${stars}</span>
+            ${c.rating ? `<span style="color:var(--gold)">${stars}</span>
             <strong>${c.rating}</strong>
-            <span style="color:var(--text-muted);font-size:.78rem">(${(c.reviewCount||0).toLocaleString()} reviews)</span>
+            <span style="color:var(--text-muted);font-size:.78rem">(${(c.reviewCount||0).toLocaleString()} reviews)</span>` : '<span style="color:var(--text-muted);font-size:.82rem">No reviews yet — be the first!</span>'}
           </div>
         </div>
       </div>
@@ -856,7 +857,7 @@ async function openCompare() {
     ['Worldview', c => (c.worldview||[]).join(', ')],
     ['Format', c => (c.format||[]).join(', ')],
     ['Subjects', c => (c.subject||[]).join(', ')],
-    ['Rating', c => `${'★'.repeat(Math.round(c.rating))} ${c.rating} (${(c.reviewCount||0).toLocaleString()})`],
+    ['Rating', c => c.rating ? `${'★'.repeat(Math.round(c.rating))} ${c.rating} (${(c.reviewCount||0).toLocaleString()})` : 'No reviews yet'],
     ['Special Needs', c => (c.special||[]).join(', ')||'Not specified'],
   ];
 
