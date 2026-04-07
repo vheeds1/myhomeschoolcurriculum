@@ -293,8 +293,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="form-group"><label>Tagline</label><input id="cTagline" placeholder="Short tagline"></div>
     <div class="form-group"><label>Description</label><textarea id="cDescription"></textarea></div>
     <div class="form-row">
-      <div class="form-group"><label>Price Min ($)</label><input id="cPriceMin" type="number"></div>
-      <div class="form-group"><label>Price Max ($)</label><input id="cPriceMax" type="number"></div>
+      <div class="form-group"><label>Price Min ($/yr)</label><input id="cPriceMin" type="number" placeholder="0"></div>
+      <div class="form-group"><label>Price Max ($/yr)</label><input id="cPriceMax" type="number" placeholder="500"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Display Price (shown on site)</label><input id="cPrice" placeholder="$35–$55/mo or $0–$180/yr or Free"></div>
+      <div class="form-group"><label>Pricing Type</label>
+        <select id="cPricingType"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="one-time">One-Time</option><option value="free">Free</option><option value="varies">Varies</option></select>
+      </div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Grades (comma-sep)</label><input id="cGrades" placeholder="K,1,2,3,4,5"></div>
@@ -770,7 +776,8 @@ async function loadBlog() {
 function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
-  ['cName','cSlug','cTagline','cDescription','cPriceMin','cPriceMax','cGrades','cStyle','cWorldview','cFormat','cAffiliate'].forEach(id => document.getElementById(id).value = '');
+  ['cName','cSlug','cTagline','cDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cAffiliate'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cPricingType').value = 'annual';
   document.getElementById('cType').value = 'standard';
   document.getElementById('cTier').value = '';
   document.getElementById('cFeatured').value = 'false';
@@ -787,6 +794,8 @@ function editCurriculum(c) {
   document.getElementById('cDescription').value = c.description||'';
   document.getElementById('cPriceMin').value = c.priceMin||'';
   document.getElementById('cPriceMax').value = c.priceMax||'';
+  document.getElementById('cPrice').value = c.price||'';
+  document.getElementById('cPricingType').value = c.pricingType||'annual';
   document.getElementById('cGrades').value = (c.grades||[]).join(',');
   document.getElementById('cStyle').value = (c.style||[]).join(',');
   document.getElementById('cWorldview').value = (c.worldview||[]).join(',');
@@ -813,6 +822,8 @@ async function saveCurriculum() {
     description: document.getElementById('cDescription').value,
     priceMin: parseInt(document.getElementById('cPriceMin').value)||0,
     priceMax: parseInt(document.getElementById('cPriceMax').value)||0,
+    price: document.getElementById('cPrice').value.trim(),
+    pricingType: document.getElementById('cPricingType').value,
     grades: document.getElementById('cGrades').value.split(',').map(s=>s.trim()).filter(Boolean),
     style: document.getElementById('cStyle').value.split(',').map(s=>s.trim()).filter(Boolean),
     worldview: document.getElementById('cWorldview').value.split(',').map(s=>s.trim()).filter(Boolean),

@@ -753,7 +753,7 @@ async function openDetail(slug, fromQuiz) {
       <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:18px">${c.tagline}</p>
       <div class="modal-grid">
         <div class="modal-item"><div class="modal-item-key">Grade Range</div><div class="modal-item-val">${(c.grades||[]).join(', ')}</div></div>
-        <div class="modal-item"><div class="modal-item-key">Annual Cost</div><div class="modal-item-val">${c.price}</div></div>
+        <div class="modal-item"><div class="modal-item-key">Cost</div><div class="modal-item-val">${c.price}</div></div>
         <div class="modal-item"><div class="modal-item-key">Teaching Style</div><div class="modal-item-val">${(c.style||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Worldview</div><div class="modal-item-val">${(c.worldview||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Format</div><div class="modal-item-val">${(c.format||[]).join(', ')}</div></div>
@@ -860,7 +860,7 @@ async function openCompare() {
   const items = await Promise.all(slugs.map(s => fetch(`${API}/curricula/${s}`).then(r=>r.json())));
 
   const rows = [
-    ['Annual Cost', c => c.price],
+    ['Cost', c => c.price],
     ['Grade Range', c => (c.grades||[]).join(', ')],
     ['Teaching Style', c => (c.style||[]).join(', ')],
     ['Worldview', c => (c.worldview||[]).join(', ')],
