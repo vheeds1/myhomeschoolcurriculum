@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Unsubscribe — My Homeschool Curriculum</title>
+<meta name="description" content="Unsubscribe from the MyHomeschoolCurriculum newsletter.">
+<link rel="canonical" href="https://myhomeschoolcurriculum.com/unsubscribe.html">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--cream:#FDF6EC;--navy:#1E3A4C;--sage:#4A7550;--gold:#D4A84B;--charcoal:#2C3E3F;--text-muted:#7A7A6E}
@@ -24,15 +26,20 @@ p{color:var(--text-muted);font-size:.9rem;line-height:1.6;margin-bottom:20px}
 .msg-success{background:#EAF2EB;color:var(--sage)}
 .msg-error{background:#FDF0ED;color:#C8614A}
 #loading{color:var(--text-muted);font-size:.88rem}
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:0 0 8px 8px;font-size:.85rem;font-weight:600;text-decoration:none;z-index:9999;transition:top .2s}
+.skip-link:focus{top:0}
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<main id="main-content">
 <div class="card">
   <div class="logo">📚 My Homeschool <span>Curriculum</span></div>
   <div id="content">
     <div id="loading">Processing your request...</div>
   </div>
 </div>
+</main>
 
 <script>
 const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';

@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>My Account — MyHomeschoolCurriculum</title>
+<meta name="description" content="Sign in or create an account to save your favorite curricula, track reviews, and get personalized recommendations.">
+<meta property="og:title" content="My Account — MyHomeschoolCurriculum">
+<meta property="og:description" content="Sign in or create an account to save your favorite curricula, track reviews, and get personalized recommendations.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myhomeschoolcurriculum.com/account.html">
+<link rel="canonical" href="https://myhomeschoolcurriculum.com/account.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -112,8 +118,6 @@ footer a{color:var(--gold);text-decoration:none}
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
-
-  <a href="#main-content" class="skip-link">Skip to main content</a>
 <header>
   <a href="/" class="logo-text">My Homeschool <span>Curriculum</span></a>
   <nav aria-label="Main navigation">
@@ -127,7 +131,7 @@ footer a{color:var(--gold);text-decoration:none}
   <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
 </header>
 
-<div class="main">
+<main id="main-content" class="main">
   <!-- AUTH CARD (shown when logged out) -->
   <div class="card" id="authCard">
     <!-- LOGIN VIEW -->
@@ -206,7 +210,7 @@ footer a{color:var(--gold);text-decoration:none}
 
     <button class="logout-btn" onclick="logout()">Sign Out</button>
   </div>
-</div>
+</main>
 
 <div class="toast" id="toast"></div>
 
