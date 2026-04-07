@@ -872,6 +872,17 @@ app.get('/api/analytics', requireAdmin, (req, res) => {
 
 // ─── FULL ADMIN CRUD ─────────────────────────────────────────────────────────
 app.get('/api/admin/curricula', requireAdmin, (req, res) => res.json(readDB().curricula));
+
+// One-time: reset all ratings and demo reviews
+app.post('/api/admin/reset-reviews', requireAdmin, (req, res) => {
+  const db = readDB();
+  let count = 0;
+  (db.curricula||[]).forEach(c => { c.rating = 0; c.reviewCount = 0; count++; });
+  const reviewCount = (db.reviews||[]).length;
+  db.reviews = [];
+  writeDB(db);
+  res.json({ success: true, message: `Reset ${count} curricula ratings, removed ${reviewCount} reviews` });
+});
 app.put('/api/admin/curricula/:id', requireAdmin, (req, res) => {
   const db = readDB();
   const idx = db.curricula.findIndex(c => c.id === parseInt(req.params.id));

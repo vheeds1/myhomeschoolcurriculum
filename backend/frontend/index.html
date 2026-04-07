@@ -314,7 +314,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
     <p>Filter through 40+ hand-picked curricula by grade, style, budget, and worldview — so you spend less time searching and more time teaching.</p>
     <div class="hero-stats">
       <div class="stat"><span class="stat-num" id="statCurricula">40+</span><span class="stat-label">Curricula Reviewed</span></div>
-      <div class="stat"><span class="stat-num">12k+</span><span class="stat-label">Parent Ratings</span></div>
+      <div class="stat"><span class="stat-num">Parent</span><span class="stat-label">Driven Reviews</span></div>
       <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always Free To Use</span></div>
     </div>
   </div>
@@ -665,9 +665,9 @@ function makeCard(c) {
         </div>
         <div class="card-tagline">${c.tagline}</div>
         <div class="card-rating">
-          <span class="stars">${stars}</span>
+          ${c.rating ? `<span class="stars">${stars}</span>
           <span class="rating-num">${c.rating}</span>
-          <span class="rating-count">(${(c.reviewCount||0).toLocaleString()} reviews)</span>
+          <span class="rating-count">(${(c.reviewCount||0).toLocaleString()} reviews)</span>` : '<span class="rating-count" style="color:var(--text-muted)">No reviews yet</span>'}
         </div>
       </div>
     </div>
