@@ -873,6 +873,25 @@ app.get('/api/analytics', requireAdmin, (req, res) => {
 // ─── FULL ADMIN CRUD ─────────────────────────────────────────────────────────
 app.get('/api/admin/curricula', requireAdmin, (req, res) => res.json(readDB().curricula));
 
+// One-time: update curricula (add missing, remove test entries)
+app.post('/api/admin/update-curricula', requireAdmin, (req, res) => {
+  const db = readDB();
+  const testNames = ['Email Test', 'Port 465 Test', 'Resend Test', 'Test'];
+  const removedCount = db.curricula.filter(c => testNames.includes(c.name)).length;
+  db.curricula = db.curricula.filter(c => !testNames.includes(c.name));
+  const newCurricula = req.body.curricula || [];
+  const maxId = Math.max(0, ...db.curricula.map(c => c.id));
+  let added = 0;
+  newCurricula.forEach(c => {
+    if (!db.curricula.find(ex => ex.slug === c.slug)) {
+      db.curricula.push({ ...c, id: maxId + 1 + added, rating: 0, reviewCount: 0, active: true, featured: false, sponsored: false, longDescription: c.description, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      added++;
+    }
+  });
+  writeDB(db);
+  res.json({ success: true, message: `Added ${added}, removed ${removedCount} test entries. Total: ${db.curricula.length}` });
+});
+
 // One-time: reset all ratings and demo reviews
 app.post('/api/admin/reset-reviews', requireAdmin, (req, res) => {
   const db = readDB();

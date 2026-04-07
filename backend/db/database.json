@@ -2461,6 +2461,1158 @@
         "Workbook format — not hands-on",
         "Can be challenging for some learners"
       ]
+    },
+    {
+      "name": "Oak Meadow",
+      "slug": "oak-meadow",
+      "emoji": "🌿",
+      "tagline": "Nature-based, creative learning for the whole child",
+      "price": "$275–$625/year",
+      "priceMin": 275,
+      "priceMax": 625,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print",
+        "Online",
+        "Hybrid"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Oak Meadow is a secular, nature-centered curriculum emphasizing creativity, imagination, and experiential learning. It blends Charlotte Mason and Waldorf-inspired approaches with flexible pacing. An accredited distance learning option is also available for grades 7-12.",
+      "pros": [
+        "Strong emphasis on nature, art, and creativity",
+        "Flexible pacing suits varied learning styles",
+        "Accredited distance learning option for upper grades",
+        "Well-organized teacher guides with clear daily plans"
+      ],
+      "cons": [
+        "Higher price point than many alternatives",
+        "May feel too relaxed for families wanting rigorous academics",
+        "Limited advanced math and science at upper levels"
+      ],
+      "affiliateLink": "",
+      "id": 41,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Oak Meadow is a secular, nature-centered curriculum emphasizing creativity, imagination, and experiential learning. It blends Charlotte Mason and Waldorf-inspired approaches with flexible pacing. An accredited distance learning option is also available for grades 7-12.",
+      "createdAt": "2026-04-07T14:16:45.435Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Calvert Homeschool",
+      "slug": "calvert-homeschool",
+      "emoji": "📘",
+      "tagline": "Trusted traditional homeschool curriculum since 1906",
+      "price": "$375–$750/year",
+      "priceMin": 375,
+      "priceMax": 750,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print",
+        "Online",
+        "Hybrid"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Calvert Homeschool offers a structured, traditional curriculum with over a century of history. It provides complete grade-level packages with detailed lesson plans and optional online courses. Known for its rigorous academics and thorough teacher manuals.",
+      "pros": [
+        "Long-established reputation with proven academic results",
+        "Detailed lesson plans minimize parent prep time",
+        "Complete packages cover all core subjects",
+        "Optional advisory teaching services available"
+      ],
+      "cons": [
+        "Rigid structure may not suit all learners",
+        "Higher cost compared to some alternatives",
+        "Less flexibility for creative or interest-led learning"
+      ],
+      "affiliateLink": "",
+      "id": 42,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Calvert Homeschool offers a structured, traditional curriculum with over a century of history. It provides complete grade-level packages with detailed lesson plans and optional online courses. Known for its rigorous academics and thorough teacher manuals.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Bridgeway Academy",
+      "slug": "bridgeway-academy",
+      "emoji": "🌉",
+      "tagline": "Accredited personalized homeschool with dedicated academic advisors",
+      "price": "$2,000–$4,500/year",
+      "priceMin": 2000,
+      "priceMax": 4500,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular",
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Print",
+        "Online",
+        "Hybrid"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [
+        "Dyslexia",
+        "ADHD",
+        "Gifted",
+        "Special Needs"
+      ],
+      "badges": [],
+      "type": "standard",
+      "description": "Bridgeway Academy is a fully accredited homeschool academy that creates individualized learning plans for each student. They assign dedicated academic advisors and offer customized curriculum selections. They specialize in working with students who have diverse learning needs.",
+      "pros": [
+        "Fully accredited with personalized learning plans",
+        "Dedicated academic advisor for each family",
+        "Excellent support for special needs and gifted learners",
+        "Official transcripts and diploma provided"
+      ],
+      "cons": [
+        "Significantly more expensive than self-directed options",
+        "Less parent control over curriculum choices",
+        "Can feel more like a traditional school structure"
+      ],
+      "affiliateLink": "",
+      "id": 43,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Bridgeway Academy is a fully accredited homeschool academy that creates individualized learning plans for each student. They assign dedicated academic advisors and offer customized curriculum selections. They specialize in working with students who have diverse learning needs.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Schoolhouse Teachers",
+      "slug": "schoolhouse-teachers",
+      "emoji": "🏫",
+      "tagline": "Unlimited courses for the whole family, one low price",
+      "price": "$179–$229/year",
+      "priceMin": 179,
+      "priceMax": 229,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12",
+        "All Grades"
+      ],
+      "style": [
+        "Traditional",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Online"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [
+        "Special Needs"
+      ],
+      "badges": [],
+      "type": "standard",
+      "description": "SchoolhouseTeachers.com provides unlimited access to hundreds of courses across all subjects and grade levels for one annual family membership fee. Content is created by experienced educators and is taught from a Christian worldview. The platform includes worksheets, videos, and self-paced lessons.",
+      "pros": [
+        "Exceptional value with unlimited courses for the whole family",
+        "Huge variety of subjects including electives and extras",
+        "Self-paced format provides maximum flexibility",
+        "No per-child fees — one membership covers everyone"
+      ],
+      "cons": [
+        "Quality can be inconsistent across courses",
+        "No accreditation or formal grading",
+        "Can feel overwhelming due to sheer volume of options"
+      ],
+      "affiliateLink": "",
+      "id": 44,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "SchoolhouseTeachers.com provides unlimited access to hundreds of courses across all subjects and grade levels for one annual family membership fee. Content is created by experienced educators and is taught from a Christian worldview. The platform includes worksheets, videos, and self-paced lessons.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Stride K12",
+      "slug": "stride-k12",
+      "emoji": "💻",
+      "tagline": "Tuition-free online public school at home program",
+      "price": "$0 (public) / $5,000–$10,000 (private)",
+      "priceMin": 0,
+      "priceMax": 10000,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Online/Self-Paced",
+        "Traditional"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Online"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [
+        "Special Needs"
+      ],
+      "badges": [],
+      "type": "standard",
+      "description": "Stride K12 offers tuition-free online public school programs in most states, as well as tuition-based private school options. Students receive a full curriculum with certified teachers, live classes, and state-aligned coursework. A computer and materials are typically provided at no cost for public school enrollees.",
+      "pros": [
+        "Tuition-free public school option in most states",
+        "Certified teachers and live online classes",
+        "Materials and computer often provided",
+        "Accredited diploma and full transcript"
+      ],
+      "cons": [
+        "Must follow state standards and testing requirements",
+        "Less flexibility than independent homeschooling",
+        "Heavy screen time and rigid daily schedule"
+      ],
+      "affiliateLink": "",
+      "id": 45,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Stride K12 offers tuition-free online public school programs in most states, as well as tuition-based private school options. Students receive a full curriculum with certified teachers, live classes, and state-aligned coursework. A computer and materials are typically provided at no cost for public school enrollees.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Connections Academy",
+      "slug": "connections-academy",
+      "emoji": "🔗",
+      "tagline": "Free online public school with certified teacher support",
+      "price": "$0",
+      "priceMin": 0,
+      "priceMax": 0,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Online/Self-Paced",
+        "Traditional"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Online"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [
+        "Special Needs"
+      ],
+      "badges": [],
+      "type": "standard",
+      "description": "Connections Academy, operated by Pearson, is a tuition-free online public school program available in many states. Students work with certified teachers and follow state-aligned curriculum with live and recorded lessons. It provides a structured virtual school experience with clubs, field trips, and graduation ceremonies.",
+      "pros": [
+        "Completely tuition-free in participating states",
+        "Certified teachers and structured school experience",
+        "Social opportunities through clubs and virtual events",
+        "Materials and technology provided at no cost"
+      ],
+      "cons": [
+        "Must adhere to state attendance and testing requirements",
+        "Limited flexibility compared to independent homeschooling",
+        "Not available in all states"
+      ],
+      "affiliateLink": "",
+      "id": 46,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Connections Academy, operated by Pearson, is a tuition-free online public school program available in many states. Students work with certified teachers and follow state-aligned curriculum with live and recorded lessons. It provides a structured virtual school experience with clubs, field trips, and graduation ceremonies.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Saxon Math",
+      "slug": "saxon-math",
+      "emoji": "🔢",
+      "tagline": "Incremental mastery-based math with constant review and practice",
+      "price": "$55–$115/level",
+      "priceMin": 55,
+      "priceMax": 115,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print"
+      ],
+      "subject": [
+        "Math"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Saxon Math is a well-established math curriculum built on incremental development and continual review. Concepts are introduced gradually and revisited constantly through mixed problem sets. It is widely regarded as rigorous and thorough, producing strong math foundations.",
+      "pros": [
+        "Proven incremental approach builds deep mastery",
+        "Constant review prevents skill loss over time",
+        "Very thorough with minimal gaps in coverage",
+        "Strong preparation for standardized tests and college math"
+      ],
+      "cons": [
+        "Repetitive format can feel tedious for some students",
+        "Lessons can be dry with limited visual engagement",
+        "Not ideal for students who grasp concepts quickly"
+      ],
+      "affiliateLink": "",
+      "id": 47,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Saxon Math is a well-established math curriculum built on incremental development and continual review. Concepts are introduced gradually and revisited constantly through mixed problem sets. It is widely regarded as rigorous and thorough, producing strong math foundations.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Math Mammoth",
+      "slug": "math-mammoth",
+      "emoji": "🦣",
+      "tagline": "Affordable mastery-based math with clear visual instruction",
+      "price": "$39–$75/level",
+      "priceMin": 39,
+      "priceMax": 75,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print",
+        "Online"
+      ],
+      "subject": [
+        "Math"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Math Mammoth is a mastery-based math curriculum that teaches concepts thoroughly before moving on, using visual models and clear explanations. Written by Maria Miller, it is available as affordable PDF downloads or printed workbooks. It covers grades 1-7 and is known for building strong conceptual understanding.",
+      "pros": [
+        "Very affordable, especially as PDF downloads",
+        "Clear explanations allow students to work independently",
+        "Strong conceptual focus with visual models and diagrams",
+        "Minimal teacher prep required"
+      ],
+      "cons": [
+        "Text-heavy pages may not engage reluctant learners",
+        "Limited coverage beyond grade 7",
+        "No hands-on or manipulative-based activities included"
+      ],
+      "affiliateLink": "",
+      "id": 48,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Math Mammoth is a mastery-based math curriculum that teaches concepts thoroughly before moving on, using visual models and clear explanations. Written by Maria Miller, it is available as affordable PDF downloads or printed workbooks. It covers grades 1-7 and is known for building strong conceptual understanding.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Fix It! Grammar",
+      "slug": "fix-it-grammar",
+      "emoji": "✏️",
+      "tagline": "Learn grammar by editing real stories, one sentence daily",
+      "price": "$19–$25/level",
+      "priceMin": 19,
+      "priceMax": 25,
+      "grades": [
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Classical",
+        "Traditional"
+      ],
+      "worldview": [
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Print"
+      ],
+      "subject": [
+        "Language Arts",
+        "Writing"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Fix It! Grammar from the Institute for Excellence in Writing (IEW) teaches grammar and editing skills through daily practice correcting errors in engaging stories. Students work through one sentence per day, learning to identify and fix grammatical mistakes in context. The program spans six levels of increasing complexity.",
+      "pros": [
+        "Short daily lessons keep grammar practice manageable",
+        "Learning in context is more effective than isolated drills",
+        "Engaging stories make grammar interesting",
+        "Builds strong editing and proofreading skills"
+      ],
+      "cons": [
+        "Requires the teacher manual for answer keys",
+        "May not provide enough standalone grammar instruction for some",
+        "Narrow focus — only covers grammar and editing"
+      ],
+      "affiliateLink": "",
+      "id": 49,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Fix It! Grammar from the Institute for Excellence in Writing (IEW) teaches grammar and editing skills through daily practice correcting errors in engaging stories. Students work through one sentence per day, learning to identify and fix grammatical mistakes in context. The program spans six levels of increasing complexity.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Berean Builders",
+      "slug": "berean-builders",
+      "emoji": "🔬",
+      "tagline": "Rigorous Christian science by award-winning author Dr. Jay Wile",
+      "price": "$70–$90/course",
+      "priceMin": 70,
+      "priceMax": 90,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Print"
+      ],
+      "subject": [
+        "Science"
+      ],
+      "special": [
+        "Gifted"
+      ],
+      "badges": [],
+      "type": "standard",
+      "description": "Berean Builders, authored by Dr. Jay Wile, offers rigorous science curricula from elementary through high school from a Christian perspective. The high school courses are known for thorough college-prep content with hands-on experiments. The elementary series explores science through the days of creation.",
+      "pros": [
+        "Exceptionally rigorous and thorough science content",
+        "Written by a PhD scientist with clear explanations",
+        "Strong lab component with at-home experiments",
+        "Well-respected for college preparation"
+      ],
+      "cons": [
+        "Young-earth creationist perspective may not suit all families",
+        "Text-heavy format can be challenging for younger students",
+        "Limited multimedia or digital resources"
+      ],
+      "affiliateLink": "",
+      "id": 50,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Berean Builders, authored by Dr. Jay Wile, offers rigorous science curricula from elementary through high school from a Christian perspective. The high school courses are known for thorough college-prep content with hands-on experiments. The elementary series explores science through the days of creation.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Tapestry of Grace",
+      "slug": "tapestry-of-grace",
+      "emoji": "🧵",
+      "tagline": "Classical Christian humanities woven across all grade levels together",
+      "price": "$295–$370/year-plan",
+      "priceMin": 295,
+      "priceMax": 370,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12",
+        "All Grades"
+      ],
+      "style": [
+        "Classical",
+        "Unit Study"
+      ],
+      "worldview": [
+        "Classical Christian"
+      ],
+      "format": [
+        "Print",
+        "Online",
+        "Hybrid"
+      ],
+      "subject": [
+        "History",
+        "Language Arts",
+        "Writing"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Tapestry of Grace is a classical Christian humanities curriculum that integrates history, literature, writing, philosophy, and fine arts across four year-long plans covering all of world history. It is designed for multi-level teaching, allowing all children in the family to study the same historical period at their own level.",
+      "pros": [
+        "Excellent for teaching multiple ages together",
+        "Deep integration of history, literature, and writing",
+        "Follows a thorough four-year history cycle",
+        "Rich discussion guides and worldview analysis"
+      ],
+      "cons": [
+        "Significant parent preparation time required",
+        "Requires purchasing many additional books",
+        "Can feel overwhelming for new homeschool families"
+      ],
+      "affiliateLink": "",
+      "id": 51,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Tapestry of Grace is a classical Christian humanities curriculum that integrates history, literature, writing, philosophy, and fine arts across four year-long plans covering all of world history. It is designed for multi-level teaching, allowing all children in the family to study the same historical period at their own level.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Beautiful Feet Books",
+      "slug": "beautiful-feet-books",
+      "emoji": "📚",
+      "tagline": "Literature-based history using real books and living narratives",
+      "price": "$55–$135/guide",
+      "priceMin": 55,
+      "priceMax": 135,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason"
+      ],
+      "worldview": [
+        "Christian",
+        "Faith-Neutral"
+      ],
+      "format": [
+        "Print"
+      ],
+      "subject": [
+        "History"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Beautiful Feet Books offers literature-based history study guides that use carefully selected living books to bring history to life. Each guide provides a reading schedule and discussion questions organized around a historical period or theme.",
+      "pros": [
+        "Engaging literature-based approach to history",
+        "Simple open-and-go teacher guides",
+        "High-quality book selections that children love",
+        "Available in both Christian and secular editions"
+      ],
+      "cons": [
+        "Must purchase the listed books separately",
+        "History only — need to source other subjects elsewhere",
+        "Limited assessment or review activities"
+      ],
+      "affiliateLink": "",
+      "id": 52,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Beautiful Feet Books offers literature-based history study guides that use carefully selected living books to bring history to life. Each guide provides a reading schedule and discussion questions organized around a historical period or theme.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Compass Classroom",
+      "slug": "compass-classroom",
+      "emoji": "🧭",
+      "tagline": "Engaging video-based classical Christian courses for all ages",
+      "price": "$25–$50/mo",
+      "priceMin": 300,
+      "priceMax": 600,
+      "grades": [
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Classical",
+        "Online/Self-Paced"
+      ],
+      "worldview": [
+        "Classical Christian"
+      ],
+      "format": [
+        "Online",
+        "Video"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Compass Classroom offers video-based courses from a classical Christian perspective, covering subjects like Latin, logic, economics, history, and writing. Courses are taught by engaging instructors and can be accessed through a streaming membership.",
+      "pros": [
+        "Highly engaging and often humorous video instruction",
+        "Strong classical content including Latin and logic",
+        "Streaming membership provides access to full course library",
+        "Students can work independently with video lessons"
+      ],
+      "cons": [
+        "Subscription cost adds up over time",
+        "Does not cover all core subjects for a full curriculum",
+        "Screen-based learning may not suit all families"
+      ],
+      "affiliateLink": "",
+      "id": 53,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Compass Classroom offers video-based courses from a classical Christian perspective, covering subjects like Latin, logic, economics, history, and writing. Courses are taught by engaging instructors and can be accessed through a streaming membership.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Gather Round Homeschool",
+      "slug": "gather-round-homeschool",
+      "emoji": "🪵",
+      "tagline": "Faith-based family unit studies for all ages together",
+      "price": "$230–$290/unit",
+      "priceMin": 230,
+      "priceMax": 290,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12",
+        "All Grades"
+      ],
+      "style": [
+        "Unit Study"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Print",
+        "Online",
+        "Hybrid"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Gather Round Homeschool provides thematic unit studies designed so the entire family can learn together across all ages. Each unit integrates Bible, science, social studies, language arts, and art around a central topic. The curriculum emphasizes family togetherness and is designed to be open-and-go with minimal prep.",
+      "pros": [
+        "Excellent for teaching multiple ages simultaneously",
+        "Minimal preparation with open-and-go lessons",
+        "Beautifully designed and visually engaging materials",
+        "Strong community and support for families"
+      ],
+      "cons": [
+        "Math and phonics must be purchased separately",
+        "Heavily faith-integrated may not suit all families",
+        "Units must be purchased individually, costs add up"
+      ],
+      "affiliateLink": "",
+      "id": 54,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Gather Round Homeschool provides thematic unit studies designed so the entire family can learn together across all ages. Each unit integrates Bible, science, social studies, language arts, and art around a central topic. The curriculum emphasizes family togetherness and is designed to be open-and-go with minimal prep.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Torchlight",
+      "slug": "torchlight",
+      "emoji": "🔦",
+      "tagline": "Secular literature-rich curriculum celebrating diverse global perspectives",
+      "price": "$200–$275/level",
+      "priceMin": 200,
+      "priceMax": 275,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Charlotte Mason",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print",
+        "Online",
+        "Hybrid"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Torchlight Curriculum is a secular, literature-based homeschool program that emphasizes diverse perspectives and global awareness. It integrates history, science, geography, art, and read-alouds through carefully curated book lists.",
+      "pros": [
+        "Diverse and inclusive book selections",
+        "Strong literature-based approach with excellent book lists",
+        "Well-organized weekly schedules with flexibility",
+        "Secular option for families wanting literature-rich learning"
+      ],
+      "cons": [
+        "Must purchase many books separately",
+        "Math and language arts not included",
+        "Relatively newer curriculum with smaller community"
+      ],
+      "affiliateLink": "",
+      "id": 55,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Torchlight Curriculum is a secular, literature-based homeschool program that emphasizes diverse perspectives and global awareness. It integrates history, science, geography, art, and read-alouds through carefully curated book lists.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Build Your Library",
+      "slug": "build-your-library",
+      "emoji": "📖",
+      "tagline": "Secular Charlotte Mason-inspired curriculum built on living books",
+      "price": "$178–$268/level",
+      "priceMin": 178,
+      "priceMax": 268,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print",
+        "Online"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Build Your Library is a secular, literature-based curriculum inspired by Charlotte Mason methods. It provides detailed weekly lesson plans integrating history, science, literature, and art through living books.",
+      "pros": [
+        "Thoroughly planned weekly schedules reduce parent prep",
+        "Excellent secular alternative for literature-based learning",
+        "Integrates multiple subjects around great books",
+        "Science and history are thoughtfully sequenced"
+      ],
+      "cons": [
+        "Significant book purchases required on top of curriculum cost",
+        "Math and formal grammar must be sourced separately",
+        "Heavy reading load may not suit reluctant readers"
+      ],
+      "affiliateLink": "",
+      "id": 56,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Build Your Library is a secular, literature-based curriculum inspired by Charlotte Mason methods. It provides detailed weekly lesson plans integrating history, science, literature, and art through living books.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Moving Beyond the Page",
+      "slug": "moving-beyond-the-page",
+      "emoji": "📄",
+      "tagline": "Concept-based integrated curriculum designed for gifted learners",
+      "price": "$300–$550/year",
+      "priceMin": 300,
+      "priceMax": 550,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Unit Study",
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print",
+        "Online",
+        "Hybrid"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [
+        "Gifted"
+      ],
+      "badges": [],
+      "type": "standard",
+      "description": "Moving Beyond the Page is a concept-based, integrated curriculum designed with gifted and advanced learners in mind. It weaves together language arts, science, and social studies through thematic units centered on great literature.",
+      "pros": [
+        "Specifically designed for gifted and advanced learners",
+        "Strong integration of subjects through conceptual themes",
+        "Develops higher-order thinking and creativity",
+        "Flexible online and print options"
+      ],
+      "cons": [
+        "May be too challenging for grade-level learners",
+        "Requires additional book purchases for many units",
+        "Math is not included in the core packages"
+      ],
+      "affiliateLink": "",
+      "id": 57,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Moving Beyond the Page is a concept-based, integrated curriculum designed with gifted and advanced learners in mind. It weaves together language arts, science, and social studies through thematic units centered on great literature.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Horizons",
+      "slug": "horizons-alpha-omega",
+      "emoji": "🌅",
+      "tagline": "Colorful Christian workbook curriculum with structured daily lessons",
+      "price": "$80–$110/subject",
+      "priceMin": 80,
+      "priceMax": 110,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Print"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Horizons by Alpha Omega Publications is a bright, colorful workbook-based curriculum with a Christian worldview. It uses a spiral learning approach, revisiting concepts with increasing depth throughout the year.",
+      "pros": [
+        "Colorful and visually engaging workbooks",
+        "Spiral approach reinforces concepts throughout the year",
+        "Structured daily lessons are easy to follow",
+        "Affordable per-subject pricing"
+      ],
+      "cons": [
+        "Workbook-heavy format may not suit all learners",
+        "Moves at a fast pace that can overwhelm some students",
+        "Limited coverage beyond 8th grade"
+      ],
+      "affiliateLink": "",
+      "id": 58,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Horizons by Alpha Omega Publications is a bright, colorful workbook-based curriculum with a Christian worldview. It uses a spiral learning approach, revisiting concepts with increasing depth throughout the year.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Rod and Staff",
+      "slug": "rod-and-staff",
+      "emoji": "🌾",
+      "tagline": "Simple, affordable Mennonite curriculum focused on strong fundamentals",
+      "price": "$30–$75/subject",
+      "priceMin": 30,
+      "priceMax": 75,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Traditional"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Print"
+      ],
+      "subject": [
+        "All-in-One"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Rod and Staff is a traditional, no-frills curriculum published by a Mennonite publisher. It emphasizes strong academics with a focus on fundamentals in reading, math, English, and penmanship.",
+      "pros": [
+        "Extremely affordable compared to most curricula",
+        "Exceptionally strong English and grammar program",
+        "No-frills approach keeps students focused on content",
+        "Thorough and rigorous academic instruction"
+      ],
+      "cons": [
+        "Plain black-and-white format with minimal illustrations",
+        "Conservative Mennonite content in stories and examples",
+        "Science coverage is limited at upper levels"
+      ],
+      "affiliateLink": "",
+      "id": 59,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Rod and Staff is a traditional, no-frills curriculum published by a Mennonite publisher. It emphasizes strong academics with a focus on fundamentals in reading, math, English, and penmanship.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "ShillerLearning",
+      "slug": "shiller-learning",
+      "emoji": "🧮",
+      "tagline": "Montessori-based math and reading with hands-on manipulatives",
+      "price": "$379–$549/kit",
+      "priceMin": 379,
+      "priceMax": 549,
+      "grades": [
+        "Pre-K",
+        "K-2",
+        "3-5",
+        "6-8"
+      ],
+      "style": [
+        "Eclectic"
+      ],
+      "worldview": [
+        "Secular"
+      ],
+      "format": [
+        "Print",
+        "Hybrid"
+      ],
+      "subject": [
+        "Math",
+        "Language Arts"
+      ],
+      "special": [
+        "Dyslexia",
+        "ADHD",
+        "Special Needs"
+      ],
+      "badges": [],
+      "type": "standard",
+      "description": "ShillerLearning offers Montessori-based math and language arts kits that use hands-on manipulatives, songs, and lessons on disc to guide students through concepts. Designed for ages 4-13, the program emphasizes concrete-to-abstract learning.",
+      "pros": [
+        "Montessori-based hands-on approach aids comprehension",
+        "Audio-guided lessons allow independent learning",
+        "Effective for kinesthetic and struggling learners",
+        "Covers multiple years of content in each kit"
+      ],
+      "cons": [
+        "Higher upfront cost for complete kits",
+        "Limited to math and language arts",
+        "Manipulative-heavy approach requires space and organization"
+      ],
+      "affiliateLink": "",
+      "id": 60,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "ShillerLearning offers Montessori-based math and language arts kits that use hands-on manipulatives, songs, and lessons on disc to guide students through concepts. Designed for ages 4-13, the program emphasizes concrete-to-abstract learning.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
+    },
+    {
+      "name": "Sonlight Science",
+      "slug": "sonlight-science",
+      "emoji": "🧪",
+      "tagline": "Hands-on Christian science with literature and real experiments",
+      "price": "$105–$215/level",
+      "priceMin": 105,
+      "priceMax": 215,
+      "grades": [
+        "K-2",
+        "3-5",
+        "6-8",
+        "9-12"
+      ],
+      "style": [
+        "Charlotte Mason",
+        "Traditional"
+      ],
+      "worldview": [
+        "Christian"
+      ],
+      "format": [
+        "Print"
+      ],
+      "subject": [
+        "Science"
+      ],
+      "special": [],
+      "badges": [],
+      "type": "standard",
+      "description": "Sonlight Science provides hands-on, literature-rich science instruction from a Christian perspective. Each level includes science readers, experiment supplies, and an instructor guide with scheduled lessons.",
+      "pros": [
+        "Combines living books with hands-on experiments",
+        "Well-organized instructor guides with daily scheduling",
+        "Experiment kits included for convenience",
+        "Encourages curiosity and inquiry-based learning"
+      ],
+      "cons": [
+        "Pricier than standalone science textbooks",
+        "Some levels lean heavily on reading over experiments",
+        "Christian perspective may not align with all families"
+      ],
+      "affiliateLink": "",
+      "id": 61,
+      "rating": 0,
+      "reviewCount": 0,
+      "active": true,
+      "featured": false,
+      "sponsored": false,
+      "longDescription": "Sonlight Science provides hands-on, literature-rich science instruction from a Christian perspective. Each level includes science readers, experiment supplies, and an instructor guide with scheduled lessons.",
+      "createdAt": "2026-04-07T14:16:45.441Z",
+      "updatedAt": "2026-04-07T14:16:45.441Z"
     }
   ],
   "reviews": [],
