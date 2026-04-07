@@ -918,7 +918,23 @@ app.put('/api/admin/reviews/:id/approve', requireAdmin, (req, res) => {
 app.delete('/api/admin/reviews/:id', requireAdmin, (req, res) => {
   const db = readDB();
   db.reviews = (db.reviews||[]).filter(r => r.id !== parseInt(req.params.id));
+  // Recalculate rating for affected curriculum
+  const affectedCurricula = new Set(db.reviews.map(r => r.curriculumId));
+  db.curricula.forEach(c => {
+    const approved = db.reviews.filter(r => r.curriculumId === c.id && r.approved);
+    c.rating = approved.length ? Math.round(approved.reduce((s,r) => s + r.rating, 0) / approved.length * 10) / 10 : 0;
+    c.reviewCount = approved.length;
+  });
   writeDB(db); res.json({ success: true });
+});
+// Admin: get all reviews
+app.get('/api/admin/reviews', requireAdmin, (req, res) => {
+  const db = readDB();
+  const reviews = (db.reviews||[]).slice().reverse().map(r => {
+    const c = (db.curricula||[]).find(c => c.id === r.curriculumId);
+    return { ...r, curriculumName: c?.name || r.curriculumSlug || 'Unknown' };
+  });
+  res.json({ reviews });
 });
 app.get('/api/admin/inquiries', requireAdmin, (req, res) => {
   const db = readDB(); res.json({ inquiries: (db.listingInquiries||[]).slice().reverse() });

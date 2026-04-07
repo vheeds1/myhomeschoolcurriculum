@@ -481,24 +481,27 @@ async function loadCurricula() {
 // ── REVIEWS ──────────────────────────────────────────────────────────────────
 async function loadReviews() {
   try {
-    // Get from analytics (has pending) + public API
-    const [ar, pr] = await Promise.all([
-      fetch(`${API}/curricula`, { headers: authHeaders() }).then(r => r.json()),
-      fetch(`${API}/analytics`, { headers: authHeaders() }).then(r => r.json())
-    ]);
-    // Build from pending + the analytics data we already have
-    const pending = pr.pendingReviews || [];
-    document.getElementById('reviewsTable').innerHTML = pending.length
-      ? pending.map(r => `<tr>
-          <td>${r.curriculumSlug||r.curriculumId}</td>
+    const res = await fetch(`${API}/admin/reviews`, { headers: authHeaders() });
+    const data = await res.json();
+    const reviews = data.reviews || [];
+    const pendingCount = reviews.filter(r => !r.approved).length;
+    const badge = document.getElementById('reviewsBadge');
+    if (pendingCount > 0) { badge.textContent = pendingCount; badge.style.display = 'inline'; }
+    else { badge.style.display = 'none'; }
+    document.getElementById('reviewsTable').innerHTML = reviews.length
+      ? reviews.map(r => `<tr>
+          <td>${r.curriculumName}</td>
           <td>${r.name}<br><span style="color:var(--muted);font-size:.73rem">${r.location||''}</span></td>
           <td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td>
-          <td>${r.title}<br><span style="color:var(--muted);font-size:.73rem">${(r.body||'').substring(0,80)}…</span></td>
-          <td><span class="badge badge-pending">Pending</span></td>
+          <td>${r.title}<br><span style="color:var(--muted);font-size:.73rem">${(r.body||'').substring(0,80)}${r.body?.length>80?'…':''}</span></td>
+          <td><span class="badge ${r.approved?'badge-active':'badge-pending'}">${r.approved?'Approved':'Pending'}</span></td>
           <td>${fmt(r.createdAt)}</td>
-          <td><div class="action-btns"><button class="act-btn act-approve" onclick="approveReview(${r.id})">Approve</button><button class="act-btn act-delete" onclick="deleteReview(${r.id})">Delete</button></div></td>
+          <td><div class="action-btns">
+            ${!r.approved ? `<button class="act-btn act-approve" onclick="approveReview(${r.id})">Approve</button>` : ''}
+            <button class="act-btn act-delete" onclick="deleteReview(${r.id})">Delete</button>
+          </div></td>
         </tr>`).join('')
-      : '<tr class="empty-row"><td colspan="7">No pending reviews 🎉</td></tr>';
+      : '<tr class="empty-row"><td colspan="7">No reviews yet</td></tr>';
   } catch(e) {}
 }
 
