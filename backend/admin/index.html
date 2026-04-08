@@ -290,8 +290,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="form-group"><label>Name*</label><input id="cName" placeholder="The Good and the Beautiful"></div>
       <div class="form-group"><label>Slug*</label><input id="cSlug" placeholder="good-and-the-beautiful"></div>
     </div>
-    <div class="form-group"><label>Tagline</label><input id="cTagline" placeholder="Short tagline"></div>
-    <div class="form-group"><label>Description</label><textarea id="cDescription"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Emoji</label><input id="cEmoji" placeholder="📚" style="max-width:60px"></div>
+      <div class="form-group" style="flex:3"><label>Tagline</label><input id="cTagline" placeholder="Short tagline"></div>
+    </div>
+    <div class="form-group"><label>Website URL</label><input id="cWebsite" placeholder="https://www.curriculum-site.com"></div>
+    <div class="form-group"><label>Short Description</label><textarea id="cDescription" rows="2"></textarea></div>
+    <div class="form-group"><label>Long Description (Full Review)</label><textarea id="cLongDescription" rows="4"></textarea></div>
     <div class="form-row">
       <div class="form-group"><label>Price Min ($/yr)</label><input id="cPriceMin" type="number" placeholder="0"></div>
       <div class="form-group"><label>Price Max ($/yr)</label><input id="cPriceMax" type="number" placeholder="500"></div>
@@ -332,6 +337,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;color:var(--text);cursor:pointer"><input type="checkbox" value="free"> Free</label>
       </div>
     </div>
+    <div class="form-group"><label>Pros (one per line)</label><textarea id="cPros" rows="3" placeholder="Affordable&#10;Great for beginners&#10;Strong math program"></textarea></div>
+    <div class="form-group"><label>Cons (one per line)</label><textarea id="cCons" rows="3" placeholder="Limited science coverage&#10;No video lessons"></textarea></div>
     <div class="form-row">
       <div class="form-group"><label>Featured Placement</label><select id="cFeatured"><option value="false">No</option><option value="true">Yes</option></select></div>
       <div class="form-group"><label>Active</label><select id="cActive"><option value="true">Yes</option><option value="false">No</option></select></div>
@@ -780,7 +787,7 @@ async function loadBlog() {
 function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
-  ['cName','cSlug','cTagline','cDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial','cAffiliate'].forEach(id => document.getElementById(id).value = '');
+  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial','cAffiliate','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('cPricingType').value = 'annual';
   document.getElementById('cType').value = 'standard';
   document.getElementById('cTier').value = '';
@@ -794,12 +801,17 @@ function editCurriculum(c) {
   document.getElementById('currModalId').value = c.id;
   document.getElementById('cName').value = c.name||'';
   document.getElementById('cSlug').value = c.slug||'';
+  document.getElementById('cEmoji').value = c.emoji||'';
   document.getElementById('cTagline').value = c.tagline||'';
+  document.getElementById('cWebsite').value = c.website||'';
   document.getElementById('cDescription').value = c.description||'';
+  document.getElementById('cLongDescription').value = c.longDescription||'';
   document.getElementById('cPriceMin').value = c.priceMin||'';
   document.getElementById('cPriceMax').value = c.priceMax||'';
   document.getElementById('cPrice').value = c.price||'';
   document.getElementById('cPricingType').value = c.pricingType||'annual';
+  document.getElementById('cPros').value = (c.pros||[]).join('\n');
+  document.getElementById('cCons').value = (c.cons||[]).join('\n');
   document.getElementById('cGrades').value = (c.grades||[]).join(',');
   document.getElementById('cStyle').value = (c.style||[]).join(',');
   document.getElementById('cWorldview').value = (c.worldview||[]).join(',');
@@ -824,8 +836,13 @@ async function saveCurriculum() {
   const payload = {
     name: document.getElementById('cName').value,
     slug: document.getElementById('cSlug').value,
+    emoji: document.getElementById('cEmoji').value.trim() || '📘',
     tagline: document.getElementById('cTagline').value,
+    website: document.getElementById('cWebsite').value.trim(),
     description: document.getElementById('cDescription').value,
+    longDescription: document.getElementById('cLongDescription').value,
+    pros: document.getElementById('cPros').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    cons: document.getElementById('cCons').value.split('\n').map(s=>s.trim()).filter(Boolean),
     priceMin: parseInt(document.getElementById('cPriceMin').value)||0,
     priceMax: parseInt(document.getElementById('cPriceMax').value)||0,
     price: document.getElementById('cPrice').value.trim(),
