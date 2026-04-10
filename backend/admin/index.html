@@ -340,6 +340,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
     <div class="form-group"><label>Pros (one per line)</label><textarea id="cPros" rows="3" placeholder="Affordable&#10;Great for beginners&#10;Strong math program"></textarea></div>
     <div class="form-group"><label>Cons (one per line)</label><textarea id="cCons" rows="3" placeholder="Limited science coverage&#10;No video lessons"></textarea></div>
+    <div style="border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0">
+      <h4 style="font-size:.85rem;color:var(--text);margin-bottom:12px">📊 External Ratings (from around the web)</h4>
+      <div id="extRatingsContainer"></div>
+      <button type="button" onclick="addExtRating()" style="background:transparent;border:1px dashed var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;margin-top:8px">+ Add Rating Source</button>
+    </div>
     <div class="form-row">
       <div class="form-group"><label>Featured Placement</label><select id="cFeatured"><option value="false">No</option><option value="true">Yes</option></select></div>
       <div class="form-group"><label>Active</label><select id="cActive"><option value="true">Yes</option><option value="false">No</option></select></div>
@@ -790,6 +795,7 @@ function openCurriculumModal() {
   document.getElementById('currModalId').value = '';
   ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial','cAffiliate','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('cPricingType').value = 'annual';
+  document.getElementById('extRatingsContainer').innerHTML = '';
   document.getElementById('cType').value = 'standard';
   document.getElementById('cTier').value = '';
   document.getElementById('cFeatured').value = 'false';
@@ -829,9 +835,58 @@ function editCurriculum(c) {
   document.querySelectorAll('#cBadges input[type=checkbox]').forEach(cb => {
     cb.checked = badges.includes(cb.value);
   });
+  // Load external ratings
+  loadExtRatings(c.externalRatings || []);
   document.getElementById('curriculumModal').classList.add('open');
 }
 function closeCurriculumModal() { document.getElementById('curriculumModal').classList.remove('open'); }
+
+// External ratings helpers
+function loadExtRatings(ratings) {
+  const container = document.getElementById('extRatingsContainer');
+  container.innerHTML = '';
+  if (ratings.length) {
+    ratings.forEach((r, i) => addExtRatingRow(r, i));
+  }
+}
+function addExtRating() {
+  addExtRatingRow({}, document.querySelectorAll('.ext-rating-row').length);
+}
+function addExtRatingRow(data, idx) {
+  const container = document.getElementById('extRatingsContainer');
+  const row = document.createElement('div');
+  row.className = 'ext-rating-row';
+  row.style.cssText = 'display:grid;grid-template-columns:1fr .5fr .5fr auto;gap:8px;align-items:end;margin-bottom:8px';
+  row.innerHTML = `
+    <div><label style="font-size:.7rem;color:var(--muted)">Source</label>
+      <select class="ext-source" style="width:100%;padding:6px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem">
+        <option value="Google" ${data.source==='Google'?'selected':''}>Google</option>
+        <option value="Trustpilot" ${data.source==='Trustpilot'?'selected':''}>Trustpilot</option>
+        <option value="Facebook" ${data.source==='Facebook'?'selected':''}>Facebook</option>
+        <option value="BBB" ${data.source==='BBB'?'selected':''}>BBB</option>
+        <option value="App Store" ${data.source==='App Store'?'selected':''}>App Store</option>
+        <option value="Other" ${data.source==='Other'?'selected':''}>Other</option>
+      </select>
+    </div>
+    <div><label style="font-size:.7rem;color:var(--muted)">Rating</label><input class="ext-rating" type="number" step="0.1" min="0" max="5" value="${data.rating||''}" placeholder="4.7" style="width:100%;padding:6px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem"></div>
+    <div><label style="font-size:.7rem;color:var(--muted)">Reviews</label><input class="ext-count" type="number" value="${data.reviewCount||''}" placeholder="1243" style="width:100%;padding:6px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem"></div>
+    <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--red);font-size:1rem;cursor:pointer;padding:6px">✕</button>
+  `;
+  // Add URL row below
+  const urlRow = document.createElement('div');
+  urlRow.style.cssText = 'margin-bottom:12px;margin-top:-4px';
+  urlRow.innerHTML = `<input class="ext-url" value="${data.url||''}" placeholder="https://link-to-reviews-page" style="width:100%;padding:6px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem">`;
+  row.appendChild(urlRow);
+  container.appendChild(row);
+}
+function getExtRatings() {
+  return Array.from(document.querySelectorAll('.ext-rating-row')).map(row => ({
+    source: row.querySelector('.ext-source')?.value || 'Google',
+    rating: parseFloat(row.querySelector('.ext-rating')?.value) || 0,
+    reviewCount: parseInt(row.querySelector('.ext-count')?.value) || 0,
+    url: row.querySelector('.ext-url')?.value || ''
+  })).filter(r => r.rating > 0);
+}
 async function saveCurriculum() {
   const id = document.getElementById('currModalId').value;
   const payload = {
@@ -844,6 +899,7 @@ async function saveCurriculum() {
     longDescription: document.getElementById('cLongDescription').value,
     pros: document.getElementById('cPros').value.split('\n').map(s=>s.trim()).filter(Boolean),
     cons: document.getElementById('cCons').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    externalRatings: getExtRatings(),
     priceMin: parseInt(document.getElementById('cPriceMin').value)||0,
     priceMax: parseInt(document.getElementById('cPriceMax').value)||0,
     price: document.getElementById('cPrice').value.trim(),

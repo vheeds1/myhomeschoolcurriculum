@@ -676,7 +676,11 @@ function makeCard(c) {
         <div class="card-rating">
           ${c.rating ? `<span class="stars">${stars}</span>
           <span class="rating-num">${c.rating}</span>
-          <span class="rating-count">(${(c.reviewCount||0).toLocaleString()} reviews)</span>` : '<span class="rating-count" style="color:var(--text-muted)">No reviews yet</span>'}
+          <span class="rating-count">(${(c.reviewCount||0).toLocaleString()} parent reviews)</span>` :
+          (c.externalRatings?.length ? c.externalRatings.slice(0,2).map(r =>
+            `<span style="font-size:.78rem;color:var(--text-muted);margin-right:10px">⭐ ${r.rating} ${r.source}${r.reviewCount ? ` (${r.reviewCount.toLocaleString()})` : ''}</span>`
+          ).join('') :
+          '<span class="rating-count" style="color:var(--text-muted)">No reviews yet</span>')}
         </div>
       </div>
     </div>
@@ -763,6 +767,22 @@ async function openDetail(slug, fromQuiz) {
         <div class="pros"><h4>✅ Strengths</h4><ul>${(c.pros||[]).map(p=>`<li>${p}</li>`).join('')}</ul></div>
         <div class="cons"><h4>⚠️ Considerations</h4><ul>${(c.cons||[]).map(p=>`<li>${p}</li>`).join('')}</ul></div>
       </div>
+      ${(c.externalRatings?.length) ? `
+      <div style="background:var(--cream);border-radius:12px;padding:18px;margin-bottom:18px">
+        <h4 style="font-size:.85rem;color:var(--navy);margin-bottom:12px">📊 Ratings Across the Web</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          ${c.externalRatings.map(r => `
+            <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px">
+              <span style="font-size:1.1rem">⭐</span>
+              <div>
+                <div style="font-weight:600;font-size:.88rem;color:var(--navy)">${r.rating}/5 <span style="font-weight:400;color:var(--text-muted);font-size:.78rem">${r.source}</span></div>
+                ${r.reviewCount ? `<div style="font-size:.72rem;color:var(--text-muted)">${r.reviewCount.toLocaleString()} reviews</div>` : ''}
+              </div>
+              ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener" style="font-size:.72rem;color:var(--sage);margin-left:4px">View →</a>` : ''}
+            </div>`).join('')}
+        </div>
+        <p style="font-size:.68rem;color:var(--text-muted);margin-top:10px">Ratings from third-party sources. We are not affiliated with these platforms.</p>
+      </div>` : ''}
       ${c.type!=='standard'?`<p style="font-size:.7rem;color:var(--text-muted);margin-bottom:14px">${c.type==='sponsored'?'⚠️ Sponsored listing — this curriculum paid for featured placement. Our written review is independent.':'⚠️ Affiliate link — we earn a small commission if you purchase through our link, at no cost to you.'}</p>`:''}
       <div class="modal-cta" style="margin-bottom:24px">
         <a class="btn-primary" href="${c.affiliateLink}" target="_blank" rel="noopener" onclick="trackClick(${c.id})">Visit Official Website →</a>
