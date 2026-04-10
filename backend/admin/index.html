@@ -178,8 +178,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="tab-content" id="tab-curricula">
         <div class="section-header">
           <div class="section-title">📚 Curricula</div>
-          <div style="display:flex;gap:8px">
+          <div style="display:flex;gap:8px;align-items:center">
             <input class="search-input" placeholder="Search…" oninput="filterTable('curriculaTable',this.value)">
+            <select id="curriculaSort" onchange="loadCurricula()" style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.78rem">
+              <option value="name-asc">Name A–Z</option>
+              <option value="name-desc">Name Z–A</option>
+              <option value="rating-desc">Highest Rated</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="type">By Type</option>
+              <option value="active">Active First</option>
+              <option value="newest">Newest First</option>
+            </select>
             <button class="btn btn-green" onclick="openCurriculumModal()">+ Add New</button>
           </div>
         </div>
@@ -480,6 +490,20 @@ async function loadCurricula() {
     const res = await fetch(`${API}/admin/curricula`, { headers: authHeaders() });
     const data = await res.json();
     const curricula = Array.isArray(data) ? data : (data.curricula || []);
+    const sort = document.getElementById('curriculaSort')?.value || 'name-asc';
+    curricula.sort((a, b) => {
+      switch(sort) {
+        case 'name-asc': return (a.name||'').localeCompare(b.name||'');
+        case 'name-desc': return (b.name||'').localeCompare(a.name||'');
+        case 'rating-desc': return (b.rating||0) - (a.rating||0);
+        case 'price-asc': return (a.priceMin||0) - (b.priceMin||0);
+        case 'price-desc': return (b.priceMax||0) - (a.priceMax||0);
+        case 'type': return (a.type||'standard').localeCompare(b.type||'standard');
+        case 'active': return (b.active?1:0) - (a.active?1:0);
+        case 'newest': return new Date(b.createdAt||0) - new Date(a.createdAt||0);
+        default: return 0;
+      }
+    });
     document.getElementById('curriculaTable').innerHTML = curricula.length
       ? curricula.map(c => {
           const badgesHTML = (c.badges||[]).map(b => {
