@@ -922,6 +922,11 @@ app.put('/api/admin/curricula/bulk-update', requireAdmin, (req, res) => {
       if (u.format) db.curricula[idx].format = u.format;
       if (u.subject) db.curricula[idx].subject = u.subject;
       if (u.special !== undefined) db.curricula[idx].special = u.special;
+      if (u.price) db.curricula[idx].price = u.price;
+      if (u.priceMin !== undefined) db.curricula[idx].priceMin = u.priceMin;
+      if (u.priceMax !== undefined) db.curricula[idx].priceMax = u.priceMax;
+      if (u.pricingNote !== undefined) db.curricula[idx].pricingNote = u.pricingNote;
+      if (u.grades) db.curricula[idx].grades = u.grades;
       db.curricula[idx].updatedAt = new Date().toISOString();
       updated++;
     }

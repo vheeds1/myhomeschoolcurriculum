@@ -94,9 +94,9 @@
       "tagline": "Affordable, self-paced online learning for grades PreK–12",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$25–$40/mo",
-      "priceMin": 300,
-      "priceMax": 480,
+      "price": "$29.95–$39.95/mo",
+      "priceMin": 359,
+      "priceMax": 479,
       "grades": [
         "Pre-K",
         "K-2",
@@ -155,7 +155,7 @@
       "sponsorTier": null,
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-02-10T00:00:00Z",
+      "updatedAt": "2026-04-14T23:52:17.866Z",
       "externalRatings": [
         {
           "source": "Google",
@@ -169,7 +169,8 @@
           "reviewCount": 12400,
           "url": "https://apps.apple.com"
         }
-      ]
+      ],
+      "pricingNote": "PreK–5th: $29.95/mo; 6th–12th: $39.95/mo. Additional students $15.95/mo each."
     },
     {
       "id": 3,
@@ -183,6 +184,7 @@
       "priceMin": 900,
       "priceMax": 1200,
       "grades": [
+        "Pre-K",
         "K-2",
         "3-5",
         "6-8",
@@ -239,7 +241,7 @@
       "sponsorTier": null,
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-01-20T00:00:00Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 4,
@@ -366,7 +368,7 @@
       "sponsorTier": null,
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-02-01T00:00:00Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 6,
@@ -441,9 +443,9 @@
       "tagline": "Mastery-based math & ELA practice for all grade levels",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$79–$159/yr",
-      "priceMin": 79,
-      "priceMax": 159,
+      "price": "$9.95–$15.95/mo",
+      "priceMin": 119,
+      "priceMax": 191,
       "grades": [
         "K-2",
         "3-5",
@@ -499,7 +501,8 @@
       "sponsorTier": null,
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-02-20T00:00:00Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Single subject $9.95/mo; combo membership $15.95/mo. Family plans available."
     },
     {
       "id": 8,
@@ -570,7 +573,7 @@
       "sponsorTier": null,
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-01-05T00:00:00Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 9,
@@ -641,9 +644,9 @@
       "tagline": "Mastery-based math with hands-on manipulatives",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$90–$130/level",
-      "priceMin": 90,
-      "priceMax": 130,
+      "price": "$100–$170/level",
+      "priceMin": 100,
+      "priceMax": 170,
       "grades": [
         "Pre-K",
         "K-2",
@@ -696,7 +699,8 @@
       "sponsorTier": null,
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-02-05T00:00:00Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Instruction Pack $70–$90 + Student Pack ~$30. Manipulator set ~$80 (one-time purchase)."
     },
     {
       "id": 11,
@@ -706,9 +710,9 @@
       "tagline": "Accredited, all-in-one with electives & neurodivergent support",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$35–$55/mo",
-      "priceMin": 420,
-      "priceMax": 660,
+      "price": "$29.95–$48/mo",
+      "priceMin": 359,
+      "priceMax": 576,
       "grades": [
         "K-2",
         "3-5",
@@ -764,7 +768,8 @@
       "sponsorTier": "gold",
       "active": true,
       "createdAt": "2024-06-01T00:00:00Z",
-      "updatedAt": "2025-03-10T00:00:00Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Multiple tiers available. Lifetime access option at $668."
     },
     {
       "id": 12,
@@ -895,7 +900,8 @@
         "Expensive for full curriculum",
         "Less flexibility for different learning styles",
         "Heavy workload"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 14,
@@ -913,7 +919,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Classical"
@@ -963,7 +970,8 @@
         "Christian/faith-based only",
         "Can be expensive with tuition + materials",
         "Memory-heavy approach not for every child"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 15,
@@ -981,7 +989,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Charlotte Mason",
@@ -1027,7 +1036,8 @@
         "Requires parent involvement",
         "Some supplementing needed for high school",
         "Charlotte Mason approach not for every family"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 16,
@@ -1037,9 +1047,9 @@
       "tagline": "Hands-on math curriculum using the AL Abacus for deep understanding",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$150–$200/year",
-      "priceMin": 150,
-      "priceMax": 200,
+      "price": "$218–$350+",
+      "priceMin": 218,
+      "priceMax": 350,
       "grades": [
         "Pre-K",
         "K-2",
@@ -1087,7 +1097,9 @@
         "Expensive initial manipulative set",
         "Slower pacing than some programs",
         "Requires daily commitment"
-      ]
+      ],
+      "pricingNote": "Manipulative set $218 (one-time purchase). Books and lesson guides additional.",
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 17,
@@ -1097,9 +1109,9 @@
       "tagline": "Self-teaching math with video lessons and automatic grading",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$67/year per level",
-      "priceMin": 67,
-      "priceMax": 134,
+      "price": "$43–$67/course",
+      "priceMin": 43,
+      "priceMax": 67,
       "grades": [
         "3-5",
         "6-8",
@@ -1144,7 +1156,9 @@
         "Less rigorous than some programs",
         "Subscription required (not one-time purchase)",
         "Limited to math only"
-      ]
+      ],
+      "pricingNote": "Per-course pricing varies by level. Family plan available at $199.08/yr.",
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 18,
@@ -1154,9 +1168,9 @@
       "tagline": "Multisensory reading program that works for struggling readers",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$100–$120/level",
-      "priceMin": 100,
-      "priceMax": 120,
+      "price": "$119.95–$159.95/level",
+      "priceMin": 120,
+      "priceMax": 160,
       "grades": [
         "Pre-K",
         "K-2",
@@ -1203,7 +1217,9 @@
         "4 levels needed for complete program",
         "Requires parent-led instruction",
         "Slower pacing by design"
-      ]
+      ],
+      "pricingNote": "Pre-Reading $119.95; Levels 1–4 are $159.95 each. Manipulatives sold separately.",
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 19,
@@ -1258,7 +1274,9 @@
         "Requires separate purchase from AAR",
         "Parent-led instruction required",
         "Multiple levels needed for full program"
-      ]
+      ],
+      "pricingNote": "$69.95 per level for teacher + student pack.",
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 20,
@@ -1327,7 +1345,8 @@
         "History and writing less comprehensive than math",
         "No physical materials",
         "Self-motivation required"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 21,
@@ -1337,7 +1356,7 @@
       "tagline": "Inquiry-based elementary science built around fascinating questions",
       "rating": 0,
       "reviewCount": 0,
-      "price": "Free for home educators",
+      "price": "Free",
       "priceMin": 0,
       "priceMax": 0,
       "grades": [
@@ -1385,7 +1404,9 @@
         "Only covers elementary (K-5)",
         "Not comprehensive enough as sole science program for older grades",
         "Secular content"
-      ]
+      ],
+      "pricingNote": "Free for home educators through June 2027. Availability may change after trial period.",
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 22,
@@ -1518,7 +1539,9 @@
         "Pre-K",
         "K-2",
         "3-5",
-        "6-8"
+        "6-8",
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Eclectic"
@@ -1563,7 +1586,8 @@
         "Can't customize individual components easily",
         "Not a complete curriculum — math sold separately",
         "Shipping costs for physical materials"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 25,
@@ -1580,7 +1604,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Classical"
@@ -1628,7 +1653,8 @@
         "Expensive",
         "Heavy reading load",
         "Requires motivated, independent learner for self-paced"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 26,
@@ -1703,7 +1729,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Interest-Led"
@@ -1742,7 +1769,8 @@
         "Works better as supplement than sole math program for many students",
         "Unconventional — may not satisfy standardized test prep needs",
         "Less practice/drill than traditional programs"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 28,
@@ -1928,10 +1956,12 @@
       "priceMin": 30,
       "priceMax": 400,
       "grades": [
+        "Pre-K",
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Traditional",
@@ -1976,7 +2006,8 @@
         "Young-earth creation science throughout",
         "Less rigorous than some classical programs",
         "Writing instruction weaker than dedicated programs"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 32,
@@ -1993,8 +2024,7 @@
         "Pre-K",
         "K-2",
         "3-5",
-        "6-8",
-        "9-12"
+        "6-8"
       ],
       "style": [
         "Charlotte Mason"
@@ -2036,7 +2066,8 @@
         "Less structure than traditional curricula",
         "Math sold separately",
         "Heavy reading load"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 33,
@@ -2053,7 +2084,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Charlotte Mason",
@@ -2093,7 +2125,8 @@
         "Less structured than IEW or other programs",
         "May not satisfy standardized testing requirements without supplements",
         "Philosophy-heavy — requires parent buy-in"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 34,
@@ -2103,7 +2136,7 @@
       "tagline": "Project-based STEM curriculum for curious, hands-on learners",
       "rating": 0,
       "reviewCount": 0,
-      "price": "$150–$300/year",
+      "price": "$150–$300/yr",
       "priceMin": 150,
       "priceMax": 300,
       "grades": [
@@ -2154,7 +2187,9 @@
         "Requires gathering materials for projects",
         "Not a complete curriculum",
         "Less comprehensive for language arts or history"
-      ]
+      ],
+      "pricingNote": "Limited pricing info publicly available. Contact publisher for current rates.",
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 35,
@@ -2282,7 +2317,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Charlotte Mason"
@@ -2330,7 +2366,8 @@
         "Less structured than packaged curricula",
         "Progress harder to measure",
         "Very reading-intensive"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 38,
@@ -2348,7 +2385,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Charlotte Mason"
@@ -2392,7 +2430,8 @@
         "Not as comprehensive as all-in-one packages",
         "Still requires sourcing many books separately",
         "Math not included"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "id": 39,
@@ -2476,7 +2515,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Traditional"
@@ -2521,7 +2561,8 @@
         "Supplement only — not a complete curriculum",
         "Workbook format — not hands-on",
         "Can be challenging for some learners"
-      ]
+      ],
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Oak Meadow",
@@ -2535,7 +2576,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Eclectic"
@@ -2581,7 +2623,7 @@
       "sponsored": false,
       "longDescription": "Oak Meadow is a secular, nature-centered curriculum emphasizing creativity, imagination, and experiential learning. It blends Charlotte Mason and Waldorf-inspired approaches with flexible pacing. An accredited distance learning option is also available for grades 7-12.",
       "createdAt": "2026-04-07T14:16:45.435Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Calvert Homeschool",
@@ -2592,8 +2634,6 @@
       "priceMin": 375,
       "priceMax": 750,
       "grades": [
-        "Pre-K",
-        "K-2",
         "3-5",
         "6-8",
         "9-12"
@@ -2640,7 +2680,7 @@
       "sponsored": false,
       "longDescription": "Calvert Homeschool offers a structured, traditional curriculum with over a century of history. It provides complete grade-level packages with detailed lesson plans and optional online courses. Known for its rigorous academics and thorough teacher manuals.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Bridgeway Academy",
@@ -2701,7 +2741,8 @@
       "sponsored": false,
       "longDescription": "Bridgeway Academy is a fully accredited homeschool academy that creates individualized learning plans for each student. They assign dedicated academic advisors and offer customized curriculum selections. They specialize in working with students who have diverse learning needs.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Accredited academy service with 1:1 advisors and live classes. Pricing varies by plan."
     },
     {
       "name": "Schoolhouse Teachers",
@@ -2766,16 +2807,16 @@
       "sponsored": false,
       "longDescription": "SchoolhouseTeachers.com provides unlimited access to hundreds of courses across all subjects and grade levels for one annual family membership fee. Content is created by experienced educators and is taught from a Christian worldview. The platform includes worksheets, videos, and self-paced lessons.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Stride K12",
       "slug": "stride-k12",
       "emoji": "💻",
       "tagline": "Tuition-free online public school at home program",
-      "price": "$0 (public) / $5,000–$10,000 (private)",
+      "price": "$0–$6,995/yr",
       "priceMin": 0,
-      "priceMax": 10000,
+      "priceMax": 6995,
       "grades": [
         "K-2",
         "3-5",
@@ -2827,7 +2868,8 @@
       "sponsored": false,
       "longDescription": "Stride K12 offers tuition-free online public school programs in most states, as well as tuition-based private school options. Students receive a full curriculum with certified teachers, live classes, and state-aligned coursework. A computer and materials are typically provided at no cost for public school enrollees.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Free through public school partnerships (tuition-free). Private school option $3,995–$6,995/yr."
     },
     {
       "name": "Connections Academy",
@@ -2841,7 +2883,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Traditional",
@@ -2887,7 +2930,7 @@
       "sponsored": false,
       "longDescription": "Connections Academy, operated by Pearson, is a tuition-free online public school program available in many states. Students work with certified teachers and follow state-aligned curriculum with live and recorded lessons. It provides a structured virtual school experience with clubs, field trips, and graduation ceremonies.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Saxon Math",
@@ -2901,7 +2944,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Traditional"
@@ -2939,7 +2983,7 @@
       "sponsored": false,
       "longDescription": "Saxon Math is a well-established math curriculum built on incremental development and continual review. Concepts are introduced gradually and revisited constantly through mixed problem sets. It is widely regarded as rigorous and thorough, producing strong math foundations.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Math Mammoth",
@@ -2999,9 +3043,9 @@
       "slug": "fix-it-grammar",
       "emoji": "✏️",
       "tagline": "Learn grammar by editing real stories, one sentence daily",
-      "price": "$19–$25/level",
-      "priceMin": 19,
-      "priceMax": 25,
+      "price": "$31.95–$39.95/level",
+      "priceMin": 32,
+      "priceMax": 40,
       "grades": [
         "3-5",
         "6-8",
@@ -3044,7 +3088,8 @@
       "sponsored": false,
       "longDescription": "Fix It! Grammar from the Institute for Excellence in Writing (IEW) teaches grammar and editing skills through daily practice correcting errors in engaging stories. Students work through one sentence per day, learning to identify and fix grammatical mistakes in context. The program spans six levels of increasing complexity.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Teacher manual and student book sold separately."
     },
     {
       "name": "Berean Builders",
@@ -3104,9 +3149,9 @@
       "slug": "tapestry-of-grace",
       "emoji": "🧵",
       "tagline": "Classical Christian humanities woven across all grade levels together",
-      "price": "$295–$370/year-plan",
-      "priceMin": 295,
-      "priceMax": 370,
+      "price": "$300–$700/yr",
+      "priceMin": 300,
+      "priceMax": 700,
       "grades": [
         "K-2",
         "3-5",
@@ -3158,7 +3203,8 @@
       "sponsored": false,
       "longDescription": "Tapestry of Grace is a classical Christian humanities curriculum that integrates history, literature, writing, philosophy, and fine arts across four year-long plans covering all of world history. It is designed for multi-level teaching, allowing all children in the family to study the same historical period at their own level.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Year plans ~$300 for guides. Budget an additional ~$400 for required living books."
     },
     {
       "name": "Beautiful Feet Books",
@@ -3172,7 +3218,8 @@
         "K-2",
         "3-5",
         "6-8",
-        "9-12"
+        "9-12",
+        "All Grades"
       ],
       "style": [
         "Charlotte Mason"
@@ -3213,16 +3260,16 @@
       "sponsored": false,
       "longDescription": "Beautiful Feet Books offers literature-based history study guides that use carefully selected living books to bring history to life. Each guide provides a reading schedule and discussion questions organized around a historical period or theme.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Compass Classroom",
       "slug": "compass-classroom",
       "emoji": "🧭",
       "tagline": "Engaging video-based classical Christian courses for all ages",
-      "price": "$25–$50/mo",
-      "priceMin": 300,
-      "priceMax": 600,
+      "price": "$39–$99/mo",
+      "priceMin": 468,
+      "priceMax": 1188,
       "grades": [
         "3-5",
         "6-8",
@@ -3271,7 +3318,8 @@
       "sponsored": false,
       "longDescription": "Compass Classroom offers video-based courses from a classical Christian perspective, covering subjects like Latin, logic, economics, history, and writing. Courses are taught by engaging instructors and can be accessed through a streaming membership.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Bronze Plan $39/mo; Silver and Gold tiers available up to $99/mo."
     },
     {
       "name": "Gather Round Homeschool",
@@ -3336,7 +3384,7 @@
       "sponsored": false,
       "longDescription": "Gather Round Homeschool provides thematic unit studies designed so the entire family can learn together across all ages. Each unit integrates Bible, science, social studies, language arts, and art around a central topic. The curriculum emphasizes family togetherness and is designed to be open-and-go with minimal prep.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z"
     },
     {
       "name": "Torchlight",
@@ -3400,8 +3448,8 @@
       "slug": "build-your-library",
       "emoji": "📖",
       "tagline": "Secular Charlotte Mason-inspired curriculum built on living books",
-      "price": "$178–$268/level",
-      "priceMin": 178,
+      "price": "$30–$268/level",
+      "priceMin": 30,
       "priceMax": 268,
       "grades": [
         "Pre-K",
@@ -3449,16 +3497,17 @@
       "sponsored": false,
       "longDescription": "Build Your Library is a secular, literature-based curriculum inspired by Charlotte Mason methods. It provides detailed weekly lesson plans integrating history, science, literature, and art through living books.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "PDF curriculum guides $30–$60 per grade. Full packages with books $178–$268."
     },
     {
       "name": "Moving Beyond the Page",
       "slug": "moving-beyond-the-page",
       "emoji": "📄",
       "tagline": "Concept-based integrated curriculum designed for gifted learners",
-      "price": "$300–$550/year",
-      "priceMin": 300,
-      "priceMax": 550,
+      "price": "$475–$1,100/yr",
+      "priceMin": 475,
+      "priceMax": 1100,
       "grades": [
         "K-2",
         "3-5",
@@ -3509,16 +3558,17 @@
       "sponsored": false,
       "longDescription": "Moving Beyond the Page is a concept-based, integrated curriculum designed with gifted and advanced learners in mind. It weaves together language arts, science, and social studies through thematic units centered on great literature.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Pricing varies significantly by age level and package selected."
     },
     {
       "name": "Horizons",
       "slug": "horizons-alpha-omega",
       "emoji": "🌅",
       "tagline": "Colorful Christian workbook curriculum with structured daily lessons",
-      "price": "$80–$110/subject",
-      "priceMin": 80,
-      "priceMax": 110,
+      "price": "$375–$425/yr",
+      "priceMin": 375,
+      "priceMax": 425,
       "grades": [
         "Pre-K",
         "K-2",
@@ -3562,7 +3612,8 @@
       "sponsored": false,
       "longDescription": "Horizons by Alpha Omega Publications is a bright, colorful workbook-based curriculum with a Christian worldview. It uses a spiral learning approach, revisiting concepts with increasing depth throughout the year.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Core subject bundles $375–$425. Individual subjects $80–$110 each."
     },
     {
       "name": "Rod and Staff",
@@ -3626,9 +3677,9 @@
       "slug": "shiller-learning",
       "emoji": "🧮",
       "tagline": "Montessori-based math and reading with hands-on manipulatives",
-      "price": "$379–$549/kit",
-      "priceMin": 379,
-      "priceMax": 549,
+      "price": "$229–$399/kit",
+      "priceMin": 229,
+      "priceMax": 399,
       "grades": [
         "Pre-K",
         "K-2",
@@ -3674,7 +3725,8 @@
       "sponsored": false,
       "longDescription": "ShillerLearning offers Montessori-based math and language arts kits that use hands-on manipulatives, songs, and lessons on disc to guide students through concepts. Designed for ages 4-13, the program emphasizes concrete-to-abstract learning.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Math Kits $299–$399; Language Arts Kits $229–$249. Montessori-based."
     },
     {
       "name": "Sonlight Science",
@@ -3727,7 +3779,8 @@
       "sponsored": false,
       "longDescription": "Sonlight Science provides hands-on, literature-rich science instruction from a Christian perspective. Each level includes science readers, experiment supplies, and an instructor guide with scheduled lessons.",
       "createdAt": "2026-04-07T14:16:45.441Z",
-      "updatedAt": "2026-04-07T14:16:45.441Z"
+      "updatedAt": "2026-04-14T23:52:17.880Z",
+      "pricingNote": "Part of the broader Sonlight curriculum. Standalone science pricing may vary."
     }
   ],
   "reviews": [],

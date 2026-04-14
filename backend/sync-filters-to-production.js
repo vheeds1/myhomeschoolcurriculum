@@ -23,7 +23,12 @@ async function main() {
     worldview: c.worldview,
     format: c.format,
     subject: c.subject,
-    special: c.special
+    special: c.special,
+    price: c.price,
+    priceMin: c.priceMin,
+    priceMax: c.priceMax,
+    pricingNote: c.pricingNote || '',
+    grades: c.grades
   }));
 
   console.log(`Pushing filter updates for ${updates.length} curricula to ${SITE_URL}...`);

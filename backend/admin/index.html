@@ -322,6 +322,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <select id="cPricingType"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="one-time">One-Time</option><option value="free">Free</option><option value="varies">Varies</option></select>
       </div>
     </div>
+    <div class="form-group"><label>Pricing Note (shown with * on site)</label><input id="cPricingNote" placeholder="e.g. PreK–5th: $29.95/mo; 6th–12th: $39.95/mo"></div>
     <div class="form-group"><label>Grade Levels</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="cGrades">
       <label class="cb-tag"><input type="checkbox" value="Pre-K"> Pre-K</label>
       <label class="cb-tag"><input type="checkbox" value="K-2"> K–2</label>
@@ -875,7 +876,7 @@ async function loadBlog() {
 function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
-  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cAffiliate','cDiscountCode','cDiscountDesc','cDiscountLink','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
+  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cPricingNote','cAffiliate','cDiscountCode','cDiscountDesc','cDiscountLink','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
   ['cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial'].forEach(id => clearCheckboxGroup(id));
   document.getElementById('cPricingType').value = 'annual';
   document.getElementById('extRatingsContainer').innerHTML = '';
@@ -899,6 +900,7 @@ function editCurriculum(c) {
   document.getElementById('cPriceMin').value = c.priceMin||'';
   document.getElementById('cPriceMax').value = c.priceMax||'';
   document.getElementById('cPrice').value = c.price||'';
+  document.getElementById('cPricingNote').value = c.pricingNote||'';
   document.getElementById('cPricingType').value = c.pricingType||'annual';
   document.getElementById('cPros').value = (c.pros||[]).join('\n');
   document.getElementById('cCons').value = (c.cons||[]).join('\n');
@@ -1002,6 +1004,7 @@ async function saveCurriculum() {
     priceMin: parseInt(document.getElementById('cPriceMin').value)||0,
     priceMax: parseInt(document.getElementById('cPriceMax').value)||0,
     price: document.getElementById('cPrice').value.trim(),
+    pricingNote: document.getElementById('cPricingNote').value.trim(),
     pricingType: document.getElementById('cPricingType').value,
     grades: getCheckboxGroup('cGrades'),
     style: getCheckboxGroup('cStyle'),

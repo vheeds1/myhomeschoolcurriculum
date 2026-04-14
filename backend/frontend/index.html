@@ -771,7 +771,7 @@ function makeCard(c) {
         </label>
       </div>
       <div class="card-actions">
-        <div><div class="price-main">${c.price}</div></div>
+        <div><div class="price-main">${c.price}${c.pricingNote ? ' *' : ''}</div>${c.pricingNote ? `<div style="font-size:.65rem;color:var(--text-muted);margin-top:2px">* see details</div>` : ''}</div>
         ${c.discountCode ? `<div style="background:#FEF6E4;border:1px dashed var(--gold);border-radius:8px;padding:6px 10px;text-align:center">
           <div style="font-size:.72rem;color:var(--text-muted)">🏷️ ${c.discountDesc||'Special Discount'}</div>
           <div style="font-weight:700;font-size:.82rem;color:var(--navy);letter-spacing:.5px">${c.discountCode}</div>
@@ -832,13 +832,16 @@ async function openDetail(slug, fromQuiz) {
       <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:18px">${c.tagline}</p>
       <div class="modal-grid">
         <div class="modal-item"><div class="modal-item-key">Grade Range</div><div class="modal-item-val">${(c.grades||[]).join(', ')}</div></div>
-        <div class="modal-item"><div class="modal-item-key">Cost</div><div class="modal-item-val">${c.price}</div></div>
+        <div class="modal-item"><div class="modal-item-key">Cost</div><div class="modal-item-val">${c.price}${c.pricingNote ? ' *' : ''}</div></div>
         <div class="modal-item"><div class="modal-item-key">Teaching Style</div><div class="modal-item-val">${(c.style||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Worldview</div><div class="modal-item-val">${(c.worldview||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Format</div><div class="modal-item-val">${(c.format||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Subject Coverage</div><div class="modal-item-val">${(c.subject||[]).join(', ')}</div></div>
         ${(c.special||[]).length ? `<div class="modal-item"><div class="modal-item-key">Special Needs</div><div class="modal-item-val">${(c.special||[]).join(', ')}</div></div>` : ''}
       </div>
+      ${c.pricingNote ? `<div style="background:#FEF9EF;border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:18px;font-size:.82rem;color:var(--charcoal);line-height:1.6">
+        <strong style="color:var(--navy)">💰 Pricing Note:</strong> ${c.pricingNote}
+      </div>` : ''}
       <p style="font-size:.86rem;color:#555;line-height:1.7;margin-bottom:18px">${c.longDescription||c.description}</p>
       <div class="pros-cons">
         <div class="pros"><h4>✅ Strengths</h4><ul>${(c.pros||[]).map(p=>`<li>${p}</li>`).join('')}</ul></div>
