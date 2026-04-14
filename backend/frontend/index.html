@@ -412,14 +412,36 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
       <div class="range-labels"><span>Free</span><span id="priceLabel">Any price</span></div>
     </div>
     <div class="filter-section">
-      <div class="filter-label">📚 Subject Coverage</div>
+      <div class="filter-label">📚 Subject Coverage <button class="info-btn" onclick="toggleDefs('subject')" title="What do these mean?">ℹ️</button></div>
       <div class="filter-chips">
-        <button class="chip" data-filter="subject" data-val="All-in-One">All-in-One</button>
+        <button class="chip" data-filter="subject" data-val="Full Curriculum">Full Curriculum</button>
         <button class="chip" data-filter="subject" data-val="Math">Math</button>
         <button class="chip" data-filter="subject" data-val="Language Arts">Language Arts</button>
-        <button class="chip" data-filter="subject" data-val="Science">Science</button>
         <button class="chip" data-filter="subject" data-val="History">History</button>
-        <button class="chip" data-filter="subject" data-val="Writing">Writing</button>
+        <button class="chip" data-filter="subject" data-val="Science">Science</button>
+        <button class="chip" data-filter="subject" data-val="Bible / Theology">Bible / Theology</button>
+        <button class="chip" data-filter="subject" data-val="Latin / Classical Languages">Latin / Classical Languages</button>
+        <button class="chip" data-filter="subject" data-val="Foreign Language">Foreign Language</button>
+        <button class="chip" data-filter="subject" data-val="Logic">Logic</button>
+        <button class="chip" data-filter="subject" data-val="Fine Arts">Fine Arts</button>
+        <button class="chip" data-filter="subject" data-val="Electives">Electives</button>
+        <button class="chip" data-filter="subject" data-val="STEM">STEM</button>
+        <button class="chip" data-filter="subject" data-val="Test Prep">Test Prep</button>
+      </div>
+      <div class="filter-defs" id="defs-subject" style="display:none">
+        <div class="def-item"><strong>Full Curriculum</strong> — Covers all core subjects in one program (math, language arts, history, science, and more).</div>
+        <div class="def-item"><strong>Math</strong> — Dedicated math instruction, from arithmetic through calculus.</div>
+        <div class="def-item"><strong>Language Arts</strong> — Reading, writing, grammar, spelling, vocabulary, and/or composition.</div>
+        <div class="def-item"><strong>History</strong> — World history, American history, ancient history, or geography.</div>
+        <div class="def-item"><strong>Science</strong> — General science, biology, chemistry, physics, or earth science.</div>
+        <div class="def-item"><strong>Bible / Theology</strong> — Scripture study, Christian worldview, apologetics, or theology.</div>
+        <div class="def-item"><strong>Latin / Classical Languages</strong> — Latin, Greek, or other classical languages.</div>
+        <div class="def-item"><strong>Foreign Language</strong> — Modern foreign languages such as Spanish, French, or Mandarin.</div>
+        <div class="def-item"><strong>Logic</strong> — Formal logic, critical thinking, and argumentation.</div>
+        <div class="def-item"><strong>Fine Arts</strong> — Visual art, music appreciation, drama, or art history.</div>
+        <div class="def-item"><strong>Electives</strong> — Specialized topics such as economics, psychology, career exploration, or life skills.</div>
+        <div class="def-item"><strong>STEM</strong> — Science, technology, engineering, and math in an integrated format.</div>
+        <div class="def-item"><strong>Test Prep</strong> — SAT, ACT, PSAT, or other standardized test preparation.</div>
       </div>
     </div>
     <div class="filter-section">
@@ -741,7 +763,7 @@ function makeCard(c) {
         <div class="card-tags">${tags}</div>
         <div class="card-meta">
           <div><span class="meta-key">Grades</span><span class="meta-val">${(c.grades||[]).join(', ')}</span></div>
-          <div><span class="meta-key">Subject Coverage</span><span class="meta-val">${(c.subject||[]).join(', ')||'Not specified'}</span></div>
+          <div><span class="meta-key">Subject Coverage</span><span class="meta-val">${((s)=>{const core=['Math','Language Arts','History','Science'];return s.includes('Full Curriculum')?s.filter(x=>!core.includes(x)).join(', '):s.join(', ')})(c.subject||[])||'Not specified'}</span></div>
         </div>
         <label class="compare-check">
           <input type="checkbox" onchange="toggleCompare('${c.id}','${c.name}',this.checked)" ${compareList.find(x=>x.id==c.id)?'checked':''}>

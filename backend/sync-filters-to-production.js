@@ -22,6 +22,7 @@ async function main() {
     style: c.style,
     worldview: c.worldview,
     format: c.format,
+    subject: c.subject,
     special: c.special
   }));
 

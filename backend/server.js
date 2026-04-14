@@ -253,7 +253,11 @@ app.get('/api/curricula', (req, res) => {
   if (style)     { const v = style.split(',');     results = results.filter(c => v.some(x => c.style?.includes(x))); }
   if (worldview) { const v = worldview.split(','); results = results.filter(c => v.some(x => c.worldview?.includes(x))); }
   if (format)    { const v = format.split(',');    results = results.filter(c => v.some(x => c.format?.includes(x))); }
-  if (subject)   { const v = subject.split(',');   results = results.filter(c => v.some(x => c.subject?.includes(x))); }
+  if (subject)   {
+    const v = subject.split(',');
+    const coreSubjects = ['Math','Language Arts','History','Science'];
+    results = results.filter(c => v.some(x => c.subject?.includes(x) || (coreSubjects.includes(x) && c.subject?.includes('Full Curriculum'))));
+  }
   if (special)   { const v = special.split(',');   results = results.filter(c => v.some(x => c.special?.includes(x))); }
   if (priceMax)  { results = results.filter(c => (c.priceMin || 0) <= parseInt(priceMax)); }
   const tierScore = { platinum: 3, gold: 2, silver: 1 };
@@ -906,7 +910,7 @@ app.post('/api/admin/reset-reviews', requireAdmin, (req, res) => {
 });
 // Bulk update curricula filters
 app.put('/api/admin/curricula/bulk-update', requireAdmin, (req, res) => {
-  const { updates } = req.body; // Array of { id, style, worldview, format, special }
+  const { updates } = req.body; // Array of { id, style, worldview, format, special, subject }
   if (!Array.isArray(updates)) return res.status(400).json({ error: 'updates array required' });
   const db = readDB();
   let updated = 0;
@@ -916,6 +920,7 @@ app.put('/api/admin/curricula/bulk-update', requireAdmin, (req, res) => {
       if (u.style) db.curricula[idx].style = u.style;
       if (u.worldview) db.curricula[idx].worldview = u.worldview;
       if (u.format) db.curricula[idx].format = u.format;
+      if (u.subject) db.curricula[idx].subject = u.subject;
       if (u.special !== undefined) db.curricula[idx].special = u.special;
       db.curricula[idx].updatedAt = new Date().toISOString();
       updated++;

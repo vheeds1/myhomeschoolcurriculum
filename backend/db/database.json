@@ -29,8 +29,11 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One",
-        "Language Arts"
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [
@@ -113,7 +116,12 @@
         "Online Platform"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Foreign Language"
       ],
       "special": [
         "ADHD",
@@ -193,7 +201,14 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Bible / Theology",
+        "Foreign Language",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [
@@ -253,9 +268,11 @@
         "Physical Books"
       ],
       "subject": [
-        "All-in-One",
+        "Full Curriculum",
+        "Language Arts",
         "History",
-        "Language Arts"
+        "Science",
+        "Bible / Theology"
       ],
       "special": [],
       "badges": [],
@@ -315,7 +332,12 @@
         "Online Platform"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -373,9 +395,14 @@
         "Physical Books"
       ],
       "subject": [
-        "All-in-One",
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
         "History",
-        "Language Arts"
+        "Science",
+        "Latin / Classical Languages",
+        "Logic",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -437,6 +464,7 @@
       "subject": [
         "Math",
         "Language Arts",
+        "History",
         "Science"
       ],
       "special": [
@@ -503,7 +531,15 @@
         "Online Platform"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Bible / Theology",
+        "Foreign Language",
+        "Logic",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [
@@ -691,7 +727,12 @@
         "Online Platform"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Foreign Language"
       ],
       "special": [],
       "badges": [
@@ -753,8 +794,10 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One",
-        "Science"
+        "Language Arts",
+        "History",
+        "Science",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -817,10 +860,14 @@
       ],
       "subject": [
         "Full Curriculum",
-        "Language Arts",
         "Math",
+        "Language Arts",
+        "History",
         "Science",
-        "History"
+        "Bible / Theology",
+        "Foreign Language",
+        "Fine Arts",
+        "Electives"
       ],
       "special": [],
       "badges": [
@@ -880,11 +927,13 @@
       ],
       "subject": [
         "Full Curriculum",
+        "Math",
+        "Language Arts",
         "History",
         "Science",
-        "Language Arts",
-        "Math",
-        "Latin"
+        "Latin / Classical Languages",
+        "Logic",
+        "Fine Arts"
       ],
       "special": [
         "Multiple Ages"
@@ -949,9 +998,9 @@
       "subject": [
         "Full Curriculum",
         "History",
-        "Language Arts",
         "Science",
-        "Bible"
+        "Bible / Theology",
+        "Fine Arts"
       ],
       "special": [
         "Multiple Ages"
@@ -1243,9 +1292,11 @@
       ],
       "subject": [
         "Math",
-        "Science",
         "Language Arts",
-        "History"
+        "History",
+        "Science",
+        "Electives",
+        "Test Prep"
       ],
       "special": [
         "Gifted"
@@ -1423,7 +1474,7 @@
         "Language Arts",
         "History",
         "Science",
-        "Art"
+        "Fine Arts"
       ],
       "special": [
         "Multiple Ages"
@@ -1481,7 +1532,13 @@
         "Hybrid"
       ],
       "subject": [
-        "Full Curriculum"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Logic",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -1539,10 +1596,13 @@
       ],
       "subject": [
         "Full Curriculum",
-        "History",
+        "Math",
         "Language Arts",
-        "Bible",
-        "Latin"
+        "History",
+        "Science",
+        "Bible / Theology",
+        "Latin / Classical Languages",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -1598,9 +1658,10 @@
         "Digital"
       ],
       "subject": [
-        "History",
         "Language Arts",
-        "Bible"
+        "History",
+        "Bible / Theology",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -1885,10 +1946,12 @@
       ],
       "subject": [
         "Full Curriculum",
-        "Science",
-        "History",
+        "Math",
         "Language Arts",
-        "Math"
+        "History",
+        "Science",
+        "Bible / Theology",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -1944,8 +2007,9 @@
       ],
       "subject": [
         "Full Curriculum",
-        "History",
+        "Math",
         "Language Arts",
+        "History",
         "Science"
       ],
       "special": [],
@@ -2060,8 +2124,9 @@
         "Hybrid"
       ],
       "subject": [
+        "History",
         "Science",
-        "Math"
+        "Fine Arts"
       ],
       "special": [
         "ADHD"
@@ -2175,7 +2240,8 @@
         "Video"
       ],
       "subject": [
-        "Language Arts"
+        "Language Arts",
+        "Latin / Classical Languages"
       ],
       "special": [],
       "badges": [],
@@ -2229,10 +2295,12 @@
       ],
       "subject": [
         "Full Curriculum",
-        "History",
+        "Math",
         "Language Arts",
+        "History",
         "Science",
-        "Art"
+        "Bible / Theology",
+        "Fine Arts"
       ],
       "special": [
         "Multiple Ages"
@@ -2294,9 +2362,12 @@
       ],
       "subject": [
         "Full Curriculum",
+        "Math",
         "Language Arts",
         "History",
-        "Science"
+        "Science",
+        "Bible / Theology",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -2355,9 +2426,11 @@
         "Full Curriculum",
         "Math",
         "Language Arts",
-        "Science",
         "History",
-        "Bible"
+        "Science",
+        "Bible / Theology",
+        "Foreign Language",
+        "Electives"
       ],
       "special": [
         "Learning Differences"
@@ -2419,7 +2492,7 @@
         "Math",
         "Language Arts",
         "Science",
-        "History"
+        "Logic"
       ],
       "special": [
         "Gifted"
@@ -2477,7 +2550,12 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -2532,7 +2610,11 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science"
       ],
       "special": [],
       "badges": [],
@@ -2587,7 +2669,13 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Fine Arts",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -2644,7 +2732,15 @@
         "Online Platform"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Bible / Theology",
+        "Foreign Language",
+        "Fine Arts",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -2698,7 +2794,14 @@
         "Online Platform"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Foreign Language",
+        "Fine Arts",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -2752,7 +2855,13 @@
         "Online Platform"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Foreign Language",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -2909,8 +3018,7 @@
         "Digital"
       ],
       "subject": [
-        "Language Arts",
-        "Writing"
+        "Language Arts"
       ],
       "special": [],
       "badges": [],
@@ -3018,9 +3126,11 @@
         "Hybrid"
       ],
       "subject": [
-        "History",
+        "Full Curriculum",
         "Language Arts",
-        "Writing"
+        "History",
+        "Bible / Theology",
+        "Fine Arts"
       ],
       "special": [
         "Multiple Ages"
@@ -3074,6 +3184,7 @@
         "Physical Books"
       ],
       "subject": [
+        "Language Arts",
         "History"
       ],
       "special": [
@@ -3130,7 +3241,11 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Language Arts",
+        "History",
+        "Bible / Theology",
+        "Latin / Classical Languages",
+        "Electives"
       ],
       "special": [],
       "badges": [],
@@ -3187,7 +3302,13 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Bible / Theology",
+        "Fine Arts"
       ],
       "special": [
         "Multiple Ages"
@@ -3243,7 +3364,10 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Language Arts",
+        "History",
+        "Science",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -3296,7 +3420,10 @@
         "Digital"
       ],
       "subject": [
-        "All-in-One"
+        "Language Arts",
+        "History",
+        "Science",
+        "Fine Arts"
       ],
       "special": [],
       "badges": [],
@@ -3351,7 +3478,10 @@
         "Hybrid"
       ],
       "subject": [
-        "All-in-One"
+        "Language Arts",
+        "History",
+        "Science",
+        "Fine Arts"
       ],
       "special": [
         "Gifted"
@@ -3405,7 +3535,8 @@
         "Physical Books"
       ],
       "subject": [
-        "All-in-One"
+        "Math",
+        "Language Arts"
       ],
       "special": [],
       "badges": [],
@@ -3457,7 +3588,12 @@
         "Physical Books"
       ],
       "subject": [
-        "All-in-One"
+        "Full Curriculum",
+        "Math",
+        "Language Arts",
+        "History",
+        "Science",
+        "Bible / Theology"
       ],
       "special": [],
       "badges": [],
