@@ -116,9 +116,8 @@
         "All-in-One"
       ],
       "special": [
-        "ADHD Friendly",
-        "Learning Differences",
-        "Special Needs"
+        "ADHD",
+        "Learning Differences"
       ],
       "badges": [
         "top"
@@ -441,7 +440,7 @@
         "Science"
       ],
       "special": [
-        "ADHD Friendly",
+        "ADHD",
         "Learning Differences"
       ],
       "badges": [
@@ -694,9 +693,7 @@
       "subject": [
         "All-in-One"
       ],
-      "special": [
-        "Special Needs"
-      ],
+      "special": [],
       "badges": [
         "featured",
         "new"
@@ -1130,7 +1127,7 @@
         "Language Arts"
       ],
       "special": [
-        "Dyslexia Friendly"
+        "Dyslexia"
       ],
       "badges": [
         "Top Rated"
@@ -1189,7 +1186,7 @@
         "Language Arts"
       ],
       "special": [
-        "Dyslexia Friendly"
+        "Dyslexia"
       ],
       "badges": [],
       "type": "standard",
@@ -1716,7 +1713,7 @@
         "Language Arts"
       ],
       "special": [
-        "Dyslexia Friendly"
+        "Dyslexia"
       ],
       "badges": [],
       "type": "standard",
@@ -2067,7 +2064,7 @@
         "Math"
       ],
       "special": [
-        "ADHD Friendly"
+        "ADHD"
       ],
       "badges": [
         "New"

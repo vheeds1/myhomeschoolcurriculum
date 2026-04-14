@@ -448,20 +448,20 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
     <div class="filter-section">
       <div class="filter-label">🌟 Special Needs <button class="info-btn" onclick="toggleDefs('special')" title="What do these mean?">ℹ️</button></div>
       <div class="filter-chips">
-        <button class="chip" data-filter="special" data-val="Dyslexia Friendly">Dyslexia Friendly</button>
-        <button class="chip" data-filter="special" data-val="ADHD Friendly">ADHD Friendly</button>
+        <button class="chip" data-filter="special" data-val="Dyslexia">Dyslexia</button>
+        <button class="chip" data-filter="special" data-val="ADHD">ADHD</button>
+        <button class="chip" data-filter="special" data-val="Autism">Autism</button>
         <button class="chip" data-filter="special" data-val="Gifted">Gifted</button>
         <button class="chip" data-filter="special" data-val="Learning Differences">Learning Differences</button>
         <button class="chip" data-filter="special" data-val="Multiple Ages">Multiple Ages</button>
-        <button class="chip" data-filter="special" data-val="Special Needs">Special Needs</button>
       </div>
       <div class="filter-defs" id="defs-special" style="display:none">
-        <div class="def-item"><strong>Dyslexia Friendly</strong> — Multisensory, structured literacy techniques effective for reading struggles.</div>
-        <div class="def-item"><strong>ADHD Friendly</strong> — Short lessons, minimal busywork, and engaging formats.</div>
+        <div class="def-item"><strong>Dyslexia</strong> — Multisensory, structured literacy techniques effective for reading struggles.</div>
+        <div class="def-item"><strong>ADHD</strong> — Short lessons, minimal busywork, and engaging formats.</div>
+        <div class="def-item"><strong>Autism</strong> — Predictable structure, visual supports, and sensory-friendly design for autistic learners.</div>
         <div class="def-item"><strong>Gifted</strong> — Advanced content, accelerated pacing, or deeper exploration.</div>
         <div class="def-item"><strong>Learning Differences</strong> — Designed for students with auditory processing, dyscalculia, or other challenges.</div>
         <div class="def-item"><strong>Multiple Ages</strong> — Can be used simultaneously with children of varying ages and grades.</div>
-        <div class="def-item"><strong>Special Needs</strong> — Broad accommodations for physical, developmental, or cognitive differences.</div>
       </div>
     </div>
   </aside>
@@ -712,7 +712,7 @@ function makeCard(c) {
     ...(c.style||[]).slice(0,1).map(s=>`<span class="tag tag-gold">${s}</span>`),
     ...(c.worldview||[]).slice(0,1).map(w=>`<span class="tag tag-terra">${w}</span>`),
     ...(c.format||[]).slice(0,1).map(f=>`<span class="tag tag-blue">${f}</span>`),
-    ...(c.special||[]).map(s=>`<span class="tag tag-purple">${s}</span>`),
+    ...((c.special||[]).length ? [`<span class="tag tag-purple">Special Needs</span>`] : []),
   ].join('');
 
   el.innerHTML = `
@@ -740,9 +740,8 @@ function makeCard(c) {
         <p class="card-description">${(c.description||'').substring(0,185)}…</p>
         <div class="card-tags">${tags}</div>
         <div class="card-meta">
-          <div><span class="meta-key">Grades</span><span class="meta-val">${(c.grades||[]).slice(0,3).join(', ')}</span></div>
-          <div><span class="meta-key">Format</span><span class="meta-val">${(c.format||[]).join(' / ')}</span></div>
-          <div><span class="meta-key">Cost</span><span class="meta-val">${c.price}</span></div>
+          <div><span class="meta-key">Grades</span><span class="meta-val">${(c.grades||[]).join(', ')}</span></div>
+          <div><span class="meta-key">Subject Coverage</span><span class="meta-val">${(c.subject||[]).join(', ')||'Not specified'}</span></div>
         </div>
         <label class="compare-check">
           <input type="checkbox" onchange="toggleCompare('${c.id}','${c.name}',this.checked)" ${compareList.find(x=>x.id==c.id)?'checked':''}>
@@ -816,7 +815,7 @@ async function openDetail(slug, fromQuiz) {
         <div class="modal-item"><div class="modal-item-key">Worldview</div><div class="modal-item-val">${(c.worldview||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Format</div><div class="modal-item-val">${(c.format||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Subject Coverage</div><div class="modal-item-val">${(c.subject||[]).join(', ')}</div></div>
-        ${(c.special||[]).length ? `<div class="modal-item"><div class="modal-item-key">Special Needs</div><div class="modal-item-val">${(c.special||[]).map(s=>`<span class="tag tag-purple" style="margin-right:4px">${s}</span>`).join('')}</div></div>` : ''}
+        ${(c.special||[]).length ? `<div class="modal-item"><div class="modal-item-key">Special Needs</div><div class="modal-item-val">${(c.special||[]).join(', ')}</div></div>` : ''}
       </div>
       <p style="font-size:.86rem;color:#555;line-height:1.7;margin-bottom:18px">${c.longDescription||c.description}</p>
       <div class="pros-cons">
