@@ -904,6 +904,27 @@ app.post('/api/admin/reset-reviews', requireAdmin, (req, res) => {
   writeDB(db);
   res.json({ success: true, message: `Reset ${count} curricula ratings, removed ${reviewCount} reviews` });
 });
+// Bulk update curricula filters
+app.put('/api/admin/curricula/bulk-update', requireAdmin, (req, res) => {
+  const { updates } = req.body; // Array of { id, style, worldview, format, special }
+  if (!Array.isArray(updates)) return res.status(400).json({ error: 'updates array required' });
+  const db = readDB();
+  let updated = 0;
+  for (const u of updates) {
+    const idx = db.curricula.findIndex(c => c.id === u.id);
+    if (idx !== -1) {
+      if (u.style) db.curricula[idx].style = u.style;
+      if (u.worldview) db.curricula[idx].worldview = u.worldview;
+      if (u.format) db.curricula[idx].format = u.format;
+      if (u.special !== undefined) db.curricula[idx].special = u.special;
+      db.curricula[idx].updatedAt = new Date().toISOString();
+      updated++;
+    }
+  }
+  writeDB(db);
+  res.json({ success: true, updated });
+});
+
 app.put('/api/admin/curricula/:id', requireAdmin, (req, res) => {
   const db = readDB();
   const idx = db.curricula.findIndex(c => c.id === parseInt(req.params.id));

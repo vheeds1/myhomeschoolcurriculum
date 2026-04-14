@@ -18,14 +18,14 @@
         "All Grades"
       ],
       "style": [
-        "Charlotte Mason",
-        "Eclectic"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Print",
+        "Physical Books",
+        "Digital",
         "Hybrid"
       ],
       "subject": [
@@ -61,7 +61,27 @@
       "sponsorTier": "platinum",
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-03-01T00:00:00Z"
+      "updatedAt": "2025-03-01T00:00:00Z",
+      "externalRatings": [
+        {
+          "source": "Google",
+          "rating": 4.8,
+          "reviewCount": 2341,
+          "url": "https://google.com"
+        },
+        {
+          "source": "Trustpilot",
+          "rating": 4.6,
+          "reviewCount": 876,
+          "url": "https://trustpilot.com"
+        },
+        {
+          "source": "Facebook",
+          "rating": 4.9,
+          "reviewCount": 5200,
+          "url": "https://facebook.com"
+        }
+      ]
     },
     {
       "id": 2,
@@ -83,21 +103,22 @@
         "All Grades"
       ],
       "style": [
-        "Online/Self-Paced",
-        "Traditional"
+        "Online"
       ],
       "worldview": [
-        "Secular",
-        "Faith-Neutral"
+        "Secular"
       ],
       "format": [
-        "Online"
+        "Video",
+        "Online Platform"
       ],
       "subject": [
         "All-in-One"
       ],
       "special": [
-        "ADHD"
+        "ADHD Friendly",
+        "Learning Differences",
+        "Special Needs"
       ],
       "badges": [
         "top"
@@ -127,7 +148,21 @@
       "sponsorTier": null,
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
-      "updatedAt": "2025-02-10T00:00:00Z"
+      "updatedAt": "2025-02-10T00:00:00Z",
+      "externalRatings": [
+        {
+          "source": "Google",
+          "rating": 4.5,
+          "reviewCount": 1890,
+          "url": "https://google.com"
+        },
+        {
+          "source": "App Store",
+          "rating": 4.3,
+          "reviewCount": 12400,
+          "url": "https://apps.apple.com"
+        }
+      ]
     },
     {
       "id": 3,
@@ -148,22 +183,20 @@
         "All Grades"
       ],
       "style": [
-        "Traditional",
-        "Video"
+        "Traditional"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
+        "Physical Books",
         "Video",
         "Hybrid"
       ],
       "subject": [
         "All-in-One"
       ],
-      "special": [
-        "Gifted"
-      ],
+      "special": [],
       "badges": [
         "top"
       ],
@@ -212,23 +245,20 @@
         "9-12"
       ],
       "style": [
-        "Charlotte Mason",
-        "Classical"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Print"
+        "Physical Books"
       ],
       "subject": [
         "All-in-One",
         "History",
         "Language Arts"
       ],
-      "special": [
-        "Gifted"
-      ],
+      "special": [],
       "badges": [],
       "type": "affiliate",
       "description": "Sonlight's literature-based approach uses 'living books' — real, engaging texts instead of dry textbooks. Each package is built around a history spine with carefully curated book lists.",
@@ -276,23 +306,19 @@
         "All Grades"
       ],
       "style": [
-        "Online/Self-Paced"
+        "Online"
       ],
       "worldview": [
-        "Secular",
-        "Faith-Neutral"
+        "Secular"
       ],
       "format": [
-        "Online",
-        "Video"
+        "Video",
+        "Online Platform"
       ],
       "subject": [
         "All-in-One"
       ],
-      "special": [
-        "ADHD",
-        "Special Needs"
-      ],
+      "special": [],
       "badges": [],
       "type": "affiliate",
       "description": "Power Homeschool delivers all core subjects through pre-recorded video lessons with automatic grading. Designed for maximum independence — great for working parents.",
@@ -342,20 +368,17 @@
         "Classical"
       ],
       "worldview": [
-        "Classical Christian",
         "Christian"
       ],
       "format": [
-        "Print"
+        "Physical Books"
       ],
       "subject": [
         "All-in-One",
         "History",
         "Language Arts"
       ],
-      "special": [
-        "Gifted"
-      ],
+      "special": [],
       "badges": [],
       "type": "affiliate",
       "description": "Memoria Press offers a rich, well-ordered classical education steeped in the liberal arts. Subjects include Latin, logic, classical studies, and composition.",
@@ -403,15 +426,14 @@
         "All Grades"
       ],
       "style": [
-        "Online/Self-Paced",
-        "Traditional"
+        "Online"
       ],
       "worldview": [
-        "Secular",
-        "Faith-Neutral"
+        "Secular"
       ],
       "format": [
-        "Online"
+        "App",
+        "Online Platform"
       ],
       "subject": [
         "Math",
@@ -419,10 +441,8 @@
         "Science"
       ],
       "special": [
-        "Dyslexia",
-        "ADHD",
-        "Special Needs",
-        "Gifted"
+        "ADHD Friendly",
+        "Learning Differences"
       ],
       "badges": [
         "top"
@@ -474,16 +494,14 @@
         "All Grades"
       ],
       "style": [
-        "Online/Self-Paced",
-        "Traditional",
+        "Online",
         "Eclectic"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Online",
-        "Print"
+        "Online Platform"
       ],
       "subject": [
         "All-in-One"
@@ -537,14 +555,14 @@
       ],
       "style": [
         "Traditional",
-        "Classical"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Print",
-        "Hybrid"
+        "Physical Books",
+        "Hands-On"
       ],
       "subject": [
         "Science"
@@ -600,24 +618,22 @@
         "All Grades"
       ],
       "style": [
-        "Traditional",
-        "Eclectic"
+        "Traditional"
       ],
       "worldview": [
-        "Faith-Neutral",
-        "Secular"
+        "Faith-Neutral"
       ],
       "format": [
-        "Print",
-        "Video"
+        "Physical Books",
+        "Video",
+        "Hands-On",
+        "Hybrid"
       ],
       "subject": [
         "Math"
       ],
       "special": [
-        "Dyslexia",
-        "ADHD",
-        "Special Needs"
+        "Learning Differences"
       ],
       "badges": [],
       "type": "affiliate",
@@ -666,23 +682,20 @@
         "All Grades"
       ],
       "style": [
-        "Online/Self-Paced",
-        "Eclectic"
+        "Online"
       ],
       "worldview": [
-        "Secular",
-        "Faith-Neutral"
+        "Secular"
       ],
       "format": [
-        "Online"
+        "Video",
+        "Online Platform"
       ],
       "subject": [
         "All-in-One"
       ],
       "special": [
-        "ADHD",
-        "Special Needs",
-        "Dyslexia"
+        "Special Needs"
       ],
       "badges": [
         "featured",
@@ -732,15 +745,14 @@
         "3-5"
       ],
       "style": [
-        "Charlotte Mason",
-        "Eclectic",
-        "Unschooling"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Print",
+        "Digital",
+        "Hands-On",
         "Hybrid"
       ],
       "subject": [
@@ -803,8 +815,8 @@
       ],
       "format": [
         "Physical Books",
-        "Video/DVD",
-        "Digital"
+        "Video",
+        "Hybrid"
       ],
       "subject": [
         "Full Curriculum",
@@ -867,7 +879,7 @@
       ],
       "format": [
         "Physical Books",
-        "In-Person Co-op"
+        "Hands-On"
       ],
       "subject": [
         "Full Curriculum",
@@ -877,7 +889,9 @@
         "Math",
         "Latin"
       ],
-      "special": [],
+      "special": [
+        "Multiple Ages"
+      ],
       "badges": [
         "Top Rated"
       ],
@@ -926,14 +940,14 @@
       "style": [
         "Charlotte Mason",
         "Classical",
-        "Eclectic"
+        "Unit Study"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
         "Physical Books",
-        "Digital"
+        "Hybrid"
       ],
       "subject": [
         "Full Curriculum",
@@ -987,23 +1001,20 @@
         "6-8"
       ],
       "style": [
-        "Traditional",
-        "Eclectic"
+        "Traditional"
       ],
       "worldview": [
-        "Secular",
         "Faith-Neutral"
       ],
       "format": [
         "Physical Books",
-        "Hands-On Manipulatives"
+        "Hands-On"
       ],
       "subject": [
         "Math"
       ],
       "special": [
-        "Special Needs",
-        "Dyslexia Friendly"
+        "Learning Differences"
       ],
       "badges": [
         "Top Rated"
@@ -1049,22 +1060,19 @@
         "9-12"
       ],
       "style": [
-        "Online/Self-Paced"
+        "Online"
       ],
       "worldview": [
         "Faith-Neutral"
       ],
       "format": [
-        "Digital",
-        "App"
+        "App",
+        "Online Platform"
       ],
       "subject": [
         "Math"
       ],
-      "special": [
-        "Learning Differences",
-        "Gifted"
-      ],
+      "special": [],
       "badges": [
         "Top Rated"
       ],
@@ -1109,23 +1117,20 @@
         "3-5"
       ],
       "style": [
-        "Traditional",
-        "Eclectic"
+        "Traditional"
       ],
       "worldview": [
         "Faith-Neutral"
       ],
       "format": [
         "Physical Books",
-        "Hands-On Manipulatives"
+        "Hands-On"
       ],
       "subject": [
         "Language Arts"
       ],
       "special": [
-        "Dyslexia Friendly",
-        "Special Needs",
-        "Learning Differences"
+        "Dyslexia Friendly"
       ],
       "badges": [
         "Top Rated"
@@ -1178,14 +1183,13 @@
       ],
       "format": [
         "Physical Books",
-        "Hands-On Manipulatives"
+        "Hands-On"
       ],
       "subject": [
         "Language Arts"
       ],
       "special": [
-        "Dyslexia Friendly",
-        "Special Needs"
+        "Dyslexia Friendly"
       ],
       "badges": [],
       "type": "standard",
@@ -1230,14 +1234,15 @@
         "All Grades"
       ],
       "style": [
-        "Online/Self-Paced"
+        "Online"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Digital",
-        "App"
+        "Video",
+        "App",
+        "Online Platform"
       ],
       "subject": [
         "Math",
@@ -1246,8 +1251,7 @@
         "History"
       ],
       "special": [
-        "Gifted",
-        "Learning Differences"
+        "Gifted"
       ],
       "badges": [
         "Free",
@@ -1294,14 +1298,14 @@
         "3-5"
       ],
       "style": [
-        "Eclectic",
-        "Charlotte Mason"
+        "Online"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Digital",
+        "Video",
+        "Online Platform",
         "Hands-On"
       ],
       "subject": [
@@ -1352,8 +1356,7 @@
         "6-8"
       ],
       "style": [
-        "Classical",
-        "Charlotte Mason"
+        "Classical"
       ],
       "worldview": [
         "Faith-Neutral"
@@ -1365,9 +1368,7 @@
       "subject": [
         "History"
       ],
-      "special": [
-        "Multiple Ages"
-      ],
+      "special": [],
       "badges": [
         "Top Rated"
       ],
@@ -1411,8 +1412,8 @@
         "3-5"
       ],
       "style": [
-        "Unit Studies",
-        "Charlotte Mason"
+        "Charlotte Mason",
+        "Unit Study"
       ],
       "worldview": [
         "Faith-Neutral"
@@ -1472,16 +1473,15 @@
         "6-8"
       ],
       "style": [
-        "Eclectic",
-        "Charlotte Mason"
+        "Eclectic"
       ],
       "worldview": [
         "Faith-Neutral"
       ],
       "format": [
         "Physical Books",
-        "Hands-On Manipulatives",
-        "Digital"
+        "Hands-On",
+        "Hybrid"
       ],
       "subject": [
         "Full Curriculum"
@@ -1536,8 +1536,9 @@
       ],
       "format": [
         "Physical Books",
-        "Digital",
-        "Video/DVD"
+        "Video",
+        "Online Platform",
+        "Hybrid"
       ],
       "subject": [
         "Full Curriculum",
@@ -1590,22 +1591,21 @@
       ],
       "style": [
         "Traditional",
-        "Charlotte Mason"
+        "Unit Study"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Physical Books"
+        "Physical Books",
+        "Digital"
       ],
       "subject": [
         "History",
         "Language Arts",
         "Bible"
       ],
-      "special": [
-        "Multiple Ages"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "website": "https://www.notgrass.com",
@@ -1648,8 +1648,7 @@
         "9-12"
       ],
       "style": [
-        "Eclectic",
-        "Charlotte Mason"
+        "Interest-Led"
       ],
       "worldview": [
         "Faith-Neutral"
@@ -1760,16 +1759,16 @@
         "9-12"
       ],
       "style": [
-        "Traditional",
-        "Classical"
+        "Traditional"
       ],
       "worldview": [
         "Faith-Neutral"
       ],
       "format": [
         "Physical Books",
-        "Video/DVD",
-        "Digital"
+        "Video",
+        "Online Platform",
+        "Hybrid"
       ],
       "subject": [
         "Language Arts"
@@ -1817,16 +1816,14 @@
         "9-12"
       ],
       "style": [
-        "Traditional",
-        "Online/Self-Paced"
+        "Traditional"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
         "Physical Books",
-        "Digital",
-        "Online Classes"
+        "Online Platform"
       ],
       "subject": [
         "Math"
@@ -1880,7 +1877,7 @@
       ],
       "style": [
         "Traditional",
-        "Eclectic"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Christian"
@@ -1940,8 +1937,7 @@
         "9-12"
       ],
       "style": [
-        "Charlotte Mason",
-        "Eclectic"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Secular"
@@ -1955,9 +1951,7 @@
         "Language Arts",
         "Science"
       ],
-      "special": [
-        "Multiple Ages"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "website": "https://www.bookshark.com",
@@ -2002,16 +1996,15 @@
       ],
       "style": [
         "Charlotte Mason",
-        "Unschooling/Interest-Led"
+        "Eclectic"
       ],
       "worldview": [
-        "Secular",
         "Faith-Neutral"
       ],
       "format": [
         "Physical Books",
         "Digital",
-        "Online Classes"
+        "Online Platform"
       ],
       "subject": [
         "Language Arts"
@@ -2058,21 +2051,24 @@
         "6-8"
       ],
       "style": [
-        "Unschooling/Interest-Led",
-        "Eclectic"
+        "Unit Study",
+        "Interest-Led"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
         "Digital",
-        "Hands-On"
+        "Hands-On",
+        "Hybrid"
       ],
       "subject": [
         "Science",
         "Math"
       ],
-      "special": [],
+      "special": [
+        "ADHD Friendly"
+      ],
       "badges": [
         "New"
       ],
@@ -2118,11 +2114,11 @@
         "Traditional"
       ],
       "worldview": [
-        "Secular",
-        "Faith-Neutral"
+        "Secular"
       ],
       "format": [
-        "Physical Books"
+        "Physical Books",
+        "Digital"
       ],
       "subject": [
         "Math"
@@ -2179,7 +2175,7 @@
       ],
       "format": [
         "Physical Books",
-        "Video/DVD"
+        "Video"
       ],
       "subject": [
         "Language Arts"
@@ -2229,12 +2225,10 @@
         "Charlotte Mason"
       ],
       "worldview": [
-        "Christian",
-        "Faith-Neutral"
+        "Christian"
       ],
       "format": [
-        "Digital",
-        "Physical Books"
+        "Digital"
       ],
       "subject": [
         "Full Curriculum",
@@ -2307,9 +2301,7 @@
         "History",
         "Science"
       ],
-      "special": [
-        "Multiple Ages"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "website": "https://www.simplycharlottemason.com",
@@ -2351,14 +2343,16 @@
         "9-12"
       ],
       "style": [
-        "Online/Self-Paced",
-        "Traditional"
+        "Traditional",
+        "Online"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Digital"
+        "Digital",
+        "Video",
+        "Online Platform"
       ],
       "subject": [
         "Full Curriculum",
@@ -2415,12 +2409,10 @@
         "9-12"
       ],
       "style": [
-        "Eclectic",
         "Traditional"
       ],
       "worldview": [
-        "Secular",
-        "Faith-Neutral"
+        "Secular"
       ],
       "format": [
         "Physical Books",
@@ -2433,8 +2425,7 @@
         "History"
       ],
       "special": [
-        "Gifted",
-        "Learning Differences"
+        "Gifted"
       ],
       "badges": [
         "Top Rated"
@@ -2477,15 +2468,15 @@
         "9-12"
       ],
       "style": [
-        "Charlotte Mason",
         "Eclectic"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Print",
-        "Online",
+        "Physical Books",
+        "Digital",
+        "Hands-On",
         "Hybrid"
       ],
       "subject": [
@@ -2539,8 +2530,8 @@
         "Secular"
       ],
       "format": [
-        "Print",
-        "Online",
+        "Physical Books",
+        "Online Platform",
         "Hybrid"
       ],
       "subject": [
@@ -2589,26 +2580,19 @@
       ],
       "style": [
         "Traditional",
-        "Eclectic"
+        "Online"
       ],
       "worldview": [
-        "Secular",
         "Faith-Neutral"
       ],
       "format": [
-        "Print",
-        "Online",
+        "Online Platform",
         "Hybrid"
       ],
       "subject": [
         "All-in-One"
       ],
-      "special": [
-        "Dyslexia",
-        "ADHD",
-        "Gifted",
-        "Special Needs"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "description": "Bridgeway Academy is a fully accredited homeschool academy that creates individualized learning plans for each student. They assign dedicated academic advisors and offer customized curriculum selections. They specialize in working with students who have diverse learning needs.",
@@ -2651,21 +2635,21 @@
         "All Grades"
       ],
       "style": [
-        "Traditional",
+        "Online",
         "Eclectic"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Online"
+        "Digital",
+        "Video",
+        "Online Platform"
       ],
       "subject": [
         "All-in-One"
       ],
-      "special": [
-        "Special Needs"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "description": "SchoolhouseTeachers.com provides unlimited access to hundreds of courses across all subjects and grade levels for one annual family membership fee. Content is created by experienced educators and is taught from a Christian worldview. The platform includes worksheets, videos, and self-paced lessons.",
@@ -2706,21 +2690,20 @@
         "9-12"
       ],
       "style": [
-        "Online/Self-Paced",
-        "Traditional"
+        "Traditional",
+        "Online"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Online"
+        "Video",
+        "Online Platform"
       ],
       "subject": [
         "All-in-One"
       ],
-      "special": [
-        "Special Needs"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "description": "Stride K12 offers tuition-free online public school programs in most states, as well as tuition-based private school options. Students receive a full curriculum with certified teachers, live classes, and state-aligned coursework. A computer and materials are typically provided at no cost for public school enrollees.",
@@ -2761,21 +2744,20 @@
         "9-12"
       ],
       "style": [
-        "Online/Self-Paced",
-        "Traditional"
+        "Traditional",
+        "Online"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Online"
+        "Video",
+        "Online Platform"
       ],
       "subject": [
         "All-in-One"
       ],
-      "special": [
-        "Special Needs"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "description": "Connections Academy, operated by Pearson, is a tuition-free online public school program available in many states. Students work with certified teachers and follow state-aligned curriculum with live and recorded lessons. It provides a structured virtual school experience with clubs, field trips, and graduation ceremonies.",
@@ -2819,10 +2801,10 @@
         "Traditional"
       ],
       "worldview": [
-        "Secular"
+        "Faith-Neutral"
       ],
       "format": [
-        "Print"
+        "Physical Books"
       ],
       "subject": [
         "Math"
@@ -2873,8 +2855,9 @@
         "Secular"
       ],
       "format": [
-        "Print",
-        "Online"
+        "Physical Books",
+        "Digital",
+        "Hybrid"
       ],
       "subject": [
         "Math"
@@ -2919,14 +2902,14 @@
         "9-12"
       ],
       "style": [
-        "Classical",
-        "Traditional"
+        "Classical"
       ],
       "worldview": [
         "Faith-Neutral"
       ],
       "format": [
-        "Print"
+        "Physical Books",
+        "Digital"
       ],
       "subject": [
         "Language Arts",
@@ -2979,14 +2962,13 @@
         "Christian"
       ],
       "format": [
-        "Print"
+        "Physical Books",
+        "Hands-On"
       ],
       "subject": [
         "Science"
       ],
-      "special": [
-        "Gifted"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "description": "Berean Builders, authored by Dr. Jay Wile, offers rigorous science curricula from elementary through high school from a Christian perspective. The high school courses are known for thorough college-prep content with hands-on experiments. The elementary series explores science through the days of creation.",
@@ -3032,11 +3014,10 @@
         "Unit Study"
       ],
       "worldview": [
-        "Classical Christian"
+        "Christian"
       ],
       "format": [
-        "Print",
-        "Online",
+        "Digital",
         "Hybrid"
       ],
       "subject": [
@@ -3044,7 +3025,9 @@
         "Language Arts",
         "Writing"
       ],
-      "special": [],
+      "special": [
+        "Multiple Ages"
+      ],
       "badges": [],
       "type": "standard",
       "description": "Tapestry of Grace is a classical Christian humanities curriculum that integrates history, literature, writing, philosophy, and fine arts across four year-long plans covering all of world history. It is designed for multi-level teaching, allowing all children in the family to study the same historical period at their own level.",
@@ -3088,16 +3071,17 @@
         "Charlotte Mason"
       ],
       "worldview": [
-        "Christian",
-        "Faith-Neutral"
+        "Christian"
       ],
       "format": [
-        "Print"
+        "Physical Books"
       ],
       "subject": [
         "History"
       ],
-      "special": [],
+      "special": [
+        "Multiple Ages"
+      ],
       "badges": [],
       "type": "standard",
       "description": "Beautiful Feet Books offers literature-based history study guides that use carefully selected living books to bring history to life. Each guide provides a reading schedule and discussion questions organized around a historical period or theme.",
@@ -3138,14 +3122,15 @@
       ],
       "style": [
         "Classical",
-        "Online/Self-Paced"
+        "Online"
       ],
       "worldview": [
-        "Classical Christian"
+        "Christian"
       ],
       "format": [
-        "Online",
-        "Video"
+        "Video",
+        "Online Platform",
+        "Hybrid"
       ],
       "subject": [
         "All-in-One"
@@ -3193,20 +3178,23 @@
         "All Grades"
       ],
       "style": [
+        "Charlotte Mason",
         "Unit Study"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Print",
-        "Online",
+        "Digital",
+        "Hands-On",
         "Hybrid"
       ],
       "subject": [
         "All-in-One"
       ],
-      "special": [],
+      "special": [
+        "Multiple Ages"
+      ],
       "badges": [],
       "type": "standard",
       "description": "Gather Round Homeschool provides thematic unit studies designed so the entire family can learn together across all ages. Each unit integrates Bible, science, social studies, language arts, and art around a central topic. The curriculum emphasizes family togetherness and is designed to be open-and-go with minimal prep.",
@@ -3254,8 +3242,7 @@
         "Secular"
       ],
       "format": [
-        "Print",
-        "Online",
+        "Digital",
         "Hybrid"
       ],
       "subject": [
@@ -3303,15 +3290,13 @@
         "9-12"
       ],
       "style": [
-        "Charlotte Mason",
-        "Eclectic"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Print",
-        "Online"
+        "Digital"
       ],
       "subject": [
         "All-in-One"
@@ -3358,14 +3343,14 @@
       ],
       "style": [
         "Unit Study",
-        "Eclectic"
+        "Interest-Led"
       ],
       "worldview": [
         "Secular"
       ],
       "format": [
-        "Print",
-        "Online",
+        "Digital",
+        "Hands-On",
         "Hybrid"
       ],
       "subject": [
@@ -3420,7 +3405,7 @@
         "Christian"
       ],
       "format": [
-        "Print"
+        "Physical Books"
       ],
       "subject": [
         "All-in-One"
@@ -3472,7 +3457,7 @@
         "Christian"
       ],
       "format": [
-        "Print"
+        "Physical Books"
       ],
       "subject": [
         "All-in-One"
@@ -3518,24 +3503,21 @@
         "6-8"
       ],
       "style": [
-        "Eclectic"
+        "Montessori"
       ],
       "worldview": [
-        "Secular"
+        "Faith-Neutral"
       ],
       "format": [
-        "Print",
+        "Physical Books",
+        "Hands-On",
         "Hybrid"
       ],
       "subject": [
         "Math",
         "Language Arts"
       ],
-      "special": [
-        "Dyslexia",
-        "ADHD",
-        "Special Needs"
-      ],
+      "special": [],
       "badges": [],
       "type": "standard",
       "description": "ShillerLearning offers Montessori-based math and language arts kits that use hands-on manipulatives, songs, and lessons on disc to guide students through concepts. Designed for ages 4-13, the program emphasizes concrete-to-abstract learning.",
@@ -3576,14 +3558,14 @@
         "9-12"
       ],
       "style": [
-        "Charlotte Mason",
-        "Traditional"
+        "Charlotte Mason"
       ],
       "worldview": [
         "Christian"
       ],
       "format": [
-        "Print"
+        "Physical Books",
+        "Hands-On"
       ],
       "subject": [
         "Science"
