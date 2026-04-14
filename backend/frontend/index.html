@@ -129,6 +129,7 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .tag-terra{background:var(--light-terra);color:var(--terracotta)}
 .tag-gold{background:#FEF6E4;color:#9A6F1F}
 .tag-blue{background:#EBF4FF;color:#2563EB}
+.tag-purple{background:#F3EAFF;color:#7C3AED}
 .card-meta{display:flex;gap:18px;flex-wrap:wrap}
 .meta-key{font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);font-weight:600;display:block}
 .meta-val{font-size:.82rem;font-weight:600}
@@ -711,6 +712,7 @@ function makeCard(c) {
     ...(c.style||[]).slice(0,1).map(s=>`<span class="tag tag-gold">${s}</span>`),
     ...(c.worldview||[]).slice(0,1).map(w=>`<span class="tag tag-terra">${w}</span>`),
     ...(c.format||[]).slice(0,1).map(f=>`<span class="tag tag-blue">${f}</span>`),
+    ...(c.special||[]).map(s=>`<span class="tag tag-purple">${s}</span>`),
   ].join('');
 
   el.innerHTML = `
@@ -814,6 +816,7 @@ async function openDetail(slug, fromQuiz) {
         <div class="modal-item"><div class="modal-item-key">Worldview</div><div class="modal-item-val">${(c.worldview||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Format</div><div class="modal-item-val">${(c.format||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Subject Coverage</div><div class="modal-item-val">${(c.subject||[]).join(', ')}</div></div>
+        ${(c.special||[]).length ? `<div class="modal-item"><div class="modal-item-key">Special Needs</div><div class="modal-item-val">${(c.special||[]).map(s=>`<span class="tag tag-purple" style="margin-right:4px">${s}</span>`).join('')}</div></div>` : ''}
       </div>
       <p style="font-size:.86rem;color:#555;line-height:1.7;margin-bottom:18px">${c.longDescription||c.description}</p>
       <div class="pros-cons">
