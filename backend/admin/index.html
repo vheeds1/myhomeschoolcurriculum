@@ -108,6 +108,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .form-group textarea{min-height:80px;resize:vertical}
 .modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.cb-tag{display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--text);cursor:pointer;padding:3px 8px;border:1px solid var(--border);border-radius:6px;transition:all .15s}
+.cb-tag:hover{border-color:var(--accent)}
+.cb-tag:has(input:checked){background:rgba(74,154,84,.15);border-color:var(--accent)}
+.cb-tag input{accent-color:var(--accent);cursor:pointer}
 @media(max-width:768px){.sidebar{display:none}.stats-grid{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}}
 </style>
 </head>
@@ -318,18 +322,57 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <select id="cPricingType"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="one-time">One-Time</option><option value="free">Free</option><option value="varies">Varies</option></select>
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label>Grades (comma-sep)</label><input id="cGrades" placeholder="K,1,2,3,4,5"></div>
-      <div class="form-group"><label>Style (comma-sep)</label><input id="cStyle" placeholder="Classical,Charlotte Mason"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Worldview</label><input id="cWorldview" placeholder="Christian,Secular"></div>
-      <div class="form-group"><label>Format</label><input id="cFormat" placeholder="Print,Online,Video,Hybrid"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Subject</label><input id="cSubject" placeholder="All-in-One,Math,Language Arts,Science,History,Writing"></div>
-      <div class="form-group"><label>Special Needs</label><input id="cSpecial" placeholder="Dyslexia,ADHD,Gifted,Special Needs"></div>
-    </div>
+    <div class="form-group"><label>Grade Levels</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="cGrades">
+      <label class="cb-tag"><input type="checkbox" value="Pre-K"> Pre-K</label>
+      <label class="cb-tag"><input type="checkbox" value="K-2"> K–2</label>
+      <label class="cb-tag"><input type="checkbox" value="3-5"> 3–5</label>
+      <label class="cb-tag"><input type="checkbox" value="6-8"> 6–8</label>
+      <label class="cb-tag"><input type="checkbox" value="9-12"> 9–12</label>
+      <label class="cb-tag"><input type="checkbox" value="All Grades"> All Grades</label>
+    </div></div>
+    <div class="form-group"><label>Teaching Style</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="cStyle">
+      <label class="cb-tag"><input type="checkbox" value="Traditional"> Traditional</label>
+      <label class="cb-tag"><input type="checkbox" value="Charlotte Mason"> Charlotte Mason</label>
+      <label class="cb-tag"><input type="checkbox" value="Classical"> Classical</label>
+      <label class="cb-tag"><input type="checkbox" value="Unit Study"> Unit Study</label>
+      <label class="cb-tag"><input type="checkbox" value="Interest-Led"> Interest-Led</label>
+      <label class="cb-tag"><input type="checkbox" value="Online"> Online</label>
+      <label class="cb-tag"><input type="checkbox" value="Eclectic"> Eclectic</label>
+      <label class="cb-tag"><input type="checkbox" value="Montessori"> Montessori</label>
+    </div></div>
+    <div class="form-group"><label>Worldview</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="cWorldview">
+      <label class="cb-tag"><input type="checkbox" value="Christian"> Christian</label>
+      <label class="cb-tag"><input type="checkbox" value="Catholic"> Catholic</label>
+      <label class="cb-tag"><input type="checkbox" value="Jewish"> Jewish</label>
+      <label class="cb-tag"><input type="checkbox" value="Faith-Neutral"> Faith-Neutral</label>
+      <label class="cb-tag"><input type="checkbox" value="Secular"> Secular</label>
+    </div></div>
+    <div class="form-group"><label>Format</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="cFormat">
+      <label class="cb-tag"><input type="checkbox" value="Physical Books"> Physical Books</label>
+      <label class="cb-tag"><input type="checkbox" value="Digital"> Digital</label>
+      <label class="cb-tag"><input type="checkbox" value="Video"> Video</label>
+      <label class="cb-tag"><input type="checkbox" value="App"> App</label>
+      <label class="cb-tag"><input type="checkbox" value="Online Platform"> Online Platform</label>
+      <label class="cb-tag"><input type="checkbox" value="Hands-On"> Hands-On</label>
+      <label class="cb-tag"><input type="checkbox" value="Audio"> Audio</label>
+      <label class="cb-tag"><input type="checkbox" value="Hybrid"> Hybrid</label>
+    </div></div>
+    <div class="form-group"><label>Subject Coverage</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="cSubject">
+      <label class="cb-tag"><input type="checkbox" value="All-in-One"> All-in-One</label>
+      <label class="cb-tag"><input type="checkbox" value="Math"> Math</label>
+      <label class="cb-tag"><input type="checkbox" value="Language Arts"> Language Arts</label>
+      <label class="cb-tag"><input type="checkbox" value="Science"> Science</label>
+      <label class="cb-tag"><input type="checkbox" value="History"> History</label>
+      <label class="cb-tag"><input type="checkbox" value="Writing"> Writing</label>
+    </div></div>
+    <div class="form-group"><label>Special Needs</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="cSpecial">
+      <label class="cb-tag"><input type="checkbox" value="Dyslexia Friendly"> Dyslexia Friendly</label>
+      <label class="cb-tag"><input type="checkbox" value="ADHD Friendly"> ADHD Friendly</label>
+      <label class="cb-tag"><input type="checkbox" value="Gifted"> Gifted</label>
+      <label class="cb-tag"><input type="checkbox" value="Learning Differences"> Learning Differences</label>
+      <label class="cb-tag"><input type="checkbox" value="Multiple Ages"> Multiple Ages</label>
+      <label class="cb-tag"><input type="checkbox" value="Special Needs"> Special Needs</label>
+    </div></div>
     <div class="form-row">
       <div class="form-group"><label>Listing Type</label>
         <select id="cType"><option value="standard">Standard</option><option value="affiliate">Affiliate</option><option value="sponsored">Sponsored (Ad)</option></select>
@@ -825,7 +868,8 @@ async function loadBlog() {
 function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
-  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial','cAffiliate','cDiscountCode','cDiscountDesc','cDiscountLink','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
+  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cAffiliate','cDiscountCode','cDiscountDesc','cDiscountLink','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
+  ['cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial'].forEach(id => clearCheckboxGroup(id));
   document.getElementById('cPricingType').value = 'annual';
   document.getElementById('extRatingsContainer').innerHTML = '';
   document.getElementById('cType').value = 'standard';
@@ -851,12 +895,12 @@ function editCurriculum(c) {
   document.getElementById('cPricingType').value = c.pricingType||'annual';
   document.getElementById('cPros').value = (c.pros||[]).join('\n');
   document.getElementById('cCons').value = (c.cons||[]).join('\n');
-  document.getElementById('cGrades').value = (c.grades||[]).join(',');
-  document.getElementById('cStyle').value = (c.style||[]).join(',');
-  document.getElementById('cWorldview').value = (c.worldview||[]).join(',');
-  document.getElementById('cFormat').value = (c.format||[]).join(',');
-  document.getElementById('cSubject').value = (c.subject||[]).join(',');
-  document.getElementById('cSpecial').value = (c.special||[]).join(',');
+  setCheckboxGroup('cGrades', c.grades||[]);
+  setCheckboxGroup('cStyle', c.style||[]);
+  setCheckboxGroup('cWorldview', c.worldview||[]);
+  setCheckboxGroup('cFormat', c.format||[]);
+  setCheckboxGroup('cSubject', c.subject||[]);
+  setCheckboxGroup('cSpecial', c.special||[]);
   document.getElementById('cAffiliate').value = c.affiliateLink||'';
   document.getElementById('cDiscountCode').value = c.discountCode||'';
   document.getElementById('cDiscountDesc').value = c.discountDesc||'';
@@ -875,6 +919,19 @@ function editCurriculum(c) {
   document.getElementById('curriculumModal').classList.add('open');
 }
 function closeCurriculumModal() { document.getElementById('curriculumModal').classList.remove('open'); }
+
+// Checkbox group helpers
+function setCheckboxGroup(containerId, values) {
+  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => {
+    cb.checked = values.includes(cb.value);
+  });
+}
+function getCheckboxGroup(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} input[type=checkbox]:checked`)).map(cb => cb.value);
+}
+function clearCheckboxGroup(containerId) {
+  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => cb.checked = false);
+}
 
 // External ratings helpers
 function loadExtRatings(ratings) {
@@ -939,12 +996,12 @@ async function saveCurriculum() {
     priceMax: parseInt(document.getElementById('cPriceMax').value)||0,
     price: document.getElementById('cPrice').value.trim(),
     pricingType: document.getElementById('cPricingType').value,
-    grades: document.getElementById('cGrades').value.split(',').map(s=>s.trim()).filter(Boolean),
-    style: document.getElementById('cStyle').value.split(',').map(s=>s.trim()).filter(Boolean),
-    worldview: document.getElementById('cWorldview').value.split(',').map(s=>s.trim()).filter(Boolean),
-    format: document.getElementById('cFormat').value.split(',').map(s=>s.trim()).filter(Boolean),
-    subject: document.getElementById('cSubject').value.split(',').map(s=>s.trim()).filter(Boolean),
-    special: document.getElementById('cSpecial').value.split(',').map(s=>s.trim()).filter(Boolean),
+    grades: getCheckboxGroup('cGrades'),
+    style: getCheckboxGroup('cStyle'),
+    worldview: getCheckboxGroup('cWorldview'),
+    format: getCheckboxGroup('cFormat'),
+    subject: getCheckboxGroup('cSubject'),
+    special: getCheckboxGroup('cSpecial'),
     affiliateLink: document.getElementById('cAffiliate').value,
     discountCode: document.getElementById('cDiscountCode').value.trim(),
     discountDesc: document.getElementById('cDiscountDesc').value.trim(),

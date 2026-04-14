@@ -76,7 +76,12 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .clear-btn:hover{background:rgba(255,255,255,.1);color:#fff}
 .filter-section{padding:16px 20px;border-bottom:1px solid var(--border)}
 .filter-section:last-child{border-bottom:none}
-.filter-label{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--charcoal);margin-bottom:10px}
+.filter-label{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--charcoal);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.info-btn{background:none;border:none;cursor:pointer;font-size:.72rem;padding:0;line-height:1;opacity:.6;transition:opacity .2s}
+.info-btn:hover{opacity:1}
+.filter-defs{margin-top:8px;padding:10px 12px;background:var(--cream);border-radius:8px;border:1px solid var(--border)}
+.def-item{font-size:.73rem;color:var(--text-muted);line-height:1.5;padding:3px 0}
+.def-item strong{color:var(--charcoal);font-weight:600}
 .filter-chips{display:flex;flex-wrap:wrap;gap:5px}
 .chip{padding:5px 11px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--charcoal);font-size:.76rem;font-weight:500;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
 .chip:hover{border-color:var(--sage);color:var(--deep-sage)}
@@ -361,24 +366,43 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
       </div>
     </div>
     <div class="filter-section">
-      <div class="filter-label">📖 Teaching Style</div>
+      <div class="filter-label">📖 Teaching Style <button class="info-btn" onclick="toggleDefs('style')" title="What do these mean?">ℹ️</button></div>
       <div class="filter-chips">
+        <button class="chip" data-filter="style" data-val="Traditional">Traditional</button>
         <button class="chip" data-filter="style" data-val="Charlotte Mason">Charlotte Mason</button>
         <button class="chip" data-filter="style" data-val="Classical">Classical</button>
-        <button class="chip" data-filter="style" data-val="Traditional">Traditional</button>
-        <button class="chip" data-filter="style" data-val="Eclectic">Eclectic</button>
         <button class="chip" data-filter="style" data-val="Unit Study">Unit Study</button>
-        <button class="chip" data-filter="style" data-val="Online/Self-Paced">Online/Self-Paced</button>
+        <button class="chip" data-filter="style" data-val="Interest-Led">Interest-Led</button>
+        <button class="chip" data-filter="style" data-val="Online">Online</button>
+        <button class="chip" data-filter="style" data-val="Eclectic">Eclectic</button>
+        <button class="chip" data-filter="style" data-val="Montessori">Montessori</button>
+      </div>
+      <div class="filter-defs" id="defs-style" style="display:none">
+        <div class="def-item"><strong>Traditional</strong> — Structured lessons, textbooks, and tests mirroring a conventional school environment.</div>
+        <div class="def-item"><strong>Charlotte Mason</strong> — Living books, narration, nature study, and short lessons emphasizing real literature.</div>
+        <div class="def-item"><strong>Classical</strong> — Three-stage trivium: Grammar, Logic, and Rhetoric. Often includes Latin and great books.</div>
+        <div class="def-item"><strong>Unit Study</strong> — Multiple subjects taught through a single theme or topic simultaneously.</div>
+        <div class="def-item"><strong>Interest-Led</strong> — Child-directed learning driven by the student's natural curiosity and interests.</div>
+        <div class="def-item"><strong>Online</strong> — Lessons via computer with video instruction, exercises, and auto-grading.</div>
+        <div class="def-item"><strong>Eclectic</strong> — Mix-and-match approach drawing from multiple teaching styles.</div>
+        <div class="def-item"><strong>Montessori</strong> — Hands-on, child-led learning with independence and manipulative materials.</div>
       </div>
     </div>
     <div class="filter-section">
-      <div class="filter-label">✝️ Worldview</div>
+      <div class="filter-label">✝️ Worldview <button class="info-btn" onclick="toggleDefs('worldview')" title="What do these mean?">ℹ️</button></div>
       <div class="filter-chips">
-        <button class="chip" data-filter="worldview" data-val="Secular">Secular</button>
         <button class="chip" data-filter="worldview" data-val="Christian">Christian</button>
         <button class="chip" data-filter="worldview" data-val="Catholic">Catholic</button>
-        <button class="chip" data-filter="worldview" data-val="Classical Christian">Classical Christian</button>
+        <button class="chip" data-filter="worldview" data-val="Jewish">Jewish</button>
         <button class="chip" data-filter="worldview" data-val="Faith-Neutral">Faith-Neutral</button>
+        <button class="chip" data-filter="worldview" data-val="Secular">Secular</button>
+      </div>
+      <div class="filter-defs" id="defs-worldview" style="display:none">
+        <div class="def-item"><strong>Christian</strong> — Faith integrated throughout lessons with scripture and Biblical principles.</div>
+        <div class="def-item"><strong>Catholic</strong> — Aligned with Catholic teaching, theology, and traditions.</div>
+        <div class="def-item"><strong>Jewish</strong> — Incorporates Jewish faith, history, and traditions as a foundational worldview.</div>
+        <div class="def-item"><strong>Faith-Neutral</strong> — Does not promote or oppose any religious worldview. Comfortable for all families.</div>
+        <div class="def-item"><strong>Secular</strong> — Written without religious content. Science follows mainstream academic consensus.</div>
       </div>
     </div>
     <div class="filter-section">
@@ -394,24 +418,49 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
         <button class="chip" data-filter="subject" data-val="Language Arts">Language Arts</button>
         <button class="chip" data-filter="subject" data-val="Science">Science</button>
         <button class="chip" data-filter="subject" data-val="History">History</button>
+        <button class="chip" data-filter="subject" data-val="Writing">Writing</button>
       </div>
     </div>
     <div class="filter-section">
-      <div class="filter-label">🖥️ Format</div>
+      <div class="filter-label">🖥️ Format <button class="info-btn" onclick="toggleDefs('format')" title="What do these mean?">ℹ️</button></div>
       <div class="filter-chips">
-        <button class="chip" data-filter="format" data-val="Print">Print</button>
-        <button class="chip" data-filter="format" data-val="Online">Online</button>
-        <button class="chip" data-filter="format" data-val="Video">Video-Led</button>
+        <button class="chip" data-filter="format" data-val="Physical Books">Physical Books</button>
+        <button class="chip" data-filter="format" data-val="Digital">Digital</button>
+        <button class="chip" data-filter="format" data-val="Video">Video</button>
+        <button class="chip" data-filter="format" data-val="App">App</button>
+        <button class="chip" data-filter="format" data-val="Online Platform">Online Platform</button>
+        <button class="chip" data-filter="format" data-val="Hands-On">Hands-On</button>
+        <button class="chip" data-filter="format" data-val="Audio">Audio</button>
         <button class="chip" data-filter="format" data-val="Hybrid">Hybrid</button>
       </div>
+      <div class="filter-defs" id="defs-format" style="display:none">
+        <div class="def-item"><strong>Physical Books</strong> — Printed textbooks, workbooks, and teacher manuals shipped to your home.</div>
+        <div class="def-item"><strong>Digital</strong> — Downloadable files viewed on screen or printed at home.</div>
+        <div class="def-item"><strong>Video</strong> — Lessons through recorded video instruction, streamed or on disc.</div>
+        <div class="def-item"><strong>App</strong> — Lessons accessed through a dedicated mobile or tablet application.</div>
+        <div class="def-item"><strong>Online Platform</strong> — Browser-based portal with interactive lessons and progress tracking.</div>
+        <div class="def-item"><strong>Hands-On</strong> — Physical materials like tiles, blocks, games, and science kits.</div>
+        <div class="def-item"><strong>Audio</strong> — Content delivered through recorded audio like audiobooks or read-alouds.</div>
+        <div class="def-item"><strong>Hybrid</strong> — Combines physical materials with an online or digital component.</div>
+      </div>
     </div>
     <div class="filter-section">
-      <div class="filter-label">🌟 Special Needs</div>
+      <div class="filter-label">🌟 Special Needs <button class="info-btn" onclick="toggleDefs('special')" title="What do these mean?">ℹ️</button></div>
       <div class="filter-chips">
-        <button class="chip" data-filter="special" data-val="Dyslexia">Dyslexia</button>
-        <button class="chip" data-filter="special" data-val="ADHD">ADHD</button>
+        <button class="chip" data-filter="special" data-val="Dyslexia Friendly">Dyslexia Friendly</button>
+        <button class="chip" data-filter="special" data-val="ADHD Friendly">ADHD Friendly</button>
         <button class="chip" data-filter="special" data-val="Gifted">Gifted</button>
+        <button class="chip" data-filter="special" data-val="Learning Differences">Learning Differences</button>
+        <button class="chip" data-filter="special" data-val="Multiple Ages">Multiple Ages</button>
         <button class="chip" data-filter="special" data-val="Special Needs">Special Needs</button>
+      </div>
+      <div class="filter-defs" id="defs-special" style="display:none">
+        <div class="def-item"><strong>Dyslexia Friendly</strong> — Multisensory, structured literacy techniques effective for reading struggles.</div>
+        <div class="def-item"><strong>ADHD Friendly</strong> — Short lessons, minimal busywork, and engaging formats.</div>
+        <div class="def-item"><strong>Gifted</strong> — Advanced content, accelerated pacing, or deeper exploration.</div>
+        <div class="def-item"><strong>Learning Differences</strong> — Designed for students with auditory processing, dyscalculia, or other challenges.</div>
+        <div class="def-item"><strong>Multiple Ages</strong> — Can be used simultaneously with children of varying ages and grades.</div>
+        <div class="def-item"><strong>Special Needs</strong> — Broad accommodations for physical, developmental, or cognitive differences.</div>
       </div>
     </div>
   </aside>
@@ -1132,6 +1181,12 @@ function toggleFilters() {
   const btn = document.querySelector('.mobile-filter-btn');
   sidebar.classList.toggle('open');
   btn.textContent = sidebar.classList.contains('open') ? '✕ Hide Filters' : '⚙️ Show Filters';
+}
+
+// ── FILTER DEFINITIONS ────────────────────────────────────────────────────────
+function toggleDefs(category) {
+  const el = document.getElementById('defs-' + category);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
 // ── BACK TO TOP ──────────────────────────────────────────────────────────────
