@@ -700,7 +700,11 @@ function makeCard(c) {
       </div>
       <div class="card-actions">
         <div><div class="price-main">${c.price}</div></div>
-        <a class="btn-primary" href="${c.affiliateLink||'#'}" target="_blank" onclick="trackClick(${c.id})" rel="noopener">Visit Site →</a>
+        ${c.discountCode ? `<div style="background:#FEF6E4;border:1px dashed var(--gold);border-radius:8px;padding:6px 10px;text-align:center">
+          <div style="font-size:.72rem;color:var(--text-muted)">🏷️ ${c.discountDesc||'Special Discount'}</div>
+          <div style="font-weight:700;font-size:.82rem;color:var(--navy);letter-spacing:.5px">${c.discountCode}</div>
+        </div>` : ''}
+        <a class="btn-primary" href="${c.discountLink||c.affiliateLink||'#'}" target="_blank" onclick="trackClick(${c.id})" rel="noopener">Visit Site →</a>
         <button class="btn-secondary" onclick="openDetail('${c.slug}')">Full Review</button>
         <button class="btn-heart" id="heart-${c.id}" onclick="toggleFavorite(${c.id},this)" title="Save to favorites" style="background:none;border:1.5px solid #ddd;border-radius:8px;padding:7px 10px;cursor:pointer;font-size:1rem;transition:all .2s">🤍</button>
         <div class="affiliate-note">${c.type==='affiliate'?'* affiliate link':c.type==='sponsored'?'Sponsored':''}
@@ -785,7 +789,15 @@ async function openDetail(slug, fromQuiz) {
       </div>` : ''}
       ${c.type!=='standard'?`<p style="font-size:.7rem;color:var(--text-muted);margin-bottom:14px">${c.type==='sponsored'?'⚠️ Sponsored listing — this curriculum paid for featured placement. Our written review is independent.':'⚠️ Affiliate link — we earn a small commission if you purchase through our link, at no cost to you.'}</p>`:''}
       <div class="modal-cta" style="margin-bottom:24px">
-        <a class="btn-primary" href="${c.affiliateLink}" target="_blank" rel="noopener" onclick="trackClick(${c.id})">Visit Official Website →</a>
+        ${c.discountCode ? `<div style="background:#FEF6E4;border:1px dashed var(--gold);border-radius:10px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <div style="font-size:1.4rem">🏷️</div>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:.9rem;color:var(--navy)">${c.discountDesc||'Special Discount'}</div>
+            <div style="font-size:.78rem;color:var(--text-muted)">Use code <strong style="color:var(--navy);letter-spacing:.5px;font-size:.88rem">${c.discountCode}</strong> at checkout</div>
+          </div>
+          <a href="${c.discountLink||c.affiliateLink||'#'}" target="_blank" rel="noopener" onclick="trackClick(${c.id})" style="background:var(--gold);color:var(--navy);padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;white-space:nowrap">Redeem Offer →</a>
+        </div>` : ''}
+        <a class="btn-primary" href="${c.discountLink||c.affiliateLink||'#'}" target="_blank" rel="noopener" onclick="trackClick(${c.id})">Visit Official Website →</a>
         ${openedFromQuiz
           ? '<button class="btn-secondary" onclick="closeOverlay(\'detailOverlay\')">← Back to Quiz Results</button>'
           : '<button class="btn-secondary" onclick="closeOverlay(\'detailOverlay\')">Close</button>'}

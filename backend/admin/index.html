@@ -339,6 +339,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
     <div class="form-group"><label>Affiliate Link</label><input id="cAffiliate" placeholder="https://…"></div>
+    <div style="border:1px solid var(--border);border-radius:10px;padding:16px;margin:12px 0">
+      <h4 style="font-size:.85rem;color:var(--text);margin-bottom:10px">🏷️ Discount / Promo Code (optional)</h4>
+      <div class="form-row">
+        <div class="form-group"><label>Discount Code</label><input id="cDiscountCode" placeholder="HOMESCHOOL10"></div>
+        <div class="form-group"><label>Discount Description</label><input id="cDiscountDesc" placeholder="10% off your first order of $99+"></div>
+      </div>
+      <div class="form-group"><label>Discount Link (if different from affiliate link)</label><input id="cDiscountLink" placeholder="https://… (leave blank to use affiliate link)"></div>
+    </div>
     <div class="form-group">
       <label>Badges (select all that apply)</label>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px" id="cBadges">
@@ -817,7 +825,7 @@ async function loadBlog() {
 function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
-  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial','cAffiliate','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
+  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial','cAffiliate','cDiscountCode','cDiscountDesc','cDiscountLink','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('cPricingType').value = 'annual';
   document.getElementById('extRatingsContainer').innerHTML = '';
   document.getElementById('cType').value = 'standard';
@@ -850,6 +858,9 @@ function editCurriculum(c) {
   document.getElementById('cSubject').value = (c.subject||[]).join(',');
   document.getElementById('cSpecial').value = (c.special||[]).join(',');
   document.getElementById('cAffiliate').value = c.affiliateLink||'';
+  document.getElementById('cDiscountCode').value = c.discountCode||'';
+  document.getElementById('cDiscountDesc').value = c.discountDesc||'';
+  document.getElementById('cDiscountLink').value = c.discountLink||'';
   document.getElementById('cType').value = c.type||'standard';
   document.getElementById('cTier').value = c.sponsorTier||'';
   document.getElementById('cFeatured').value = c.featured ? 'true' : 'false';
@@ -935,6 +946,9 @@ async function saveCurriculum() {
     subject: document.getElementById('cSubject').value.split(',').map(s=>s.trim()).filter(Boolean),
     special: document.getElementById('cSpecial').value.split(',').map(s=>s.trim()).filter(Boolean),
     affiliateLink: document.getElementById('cAffiliate').value,
+    discountCode: document.getElementById('cDiscountCode').value.trim(),
+    discountDesc: document.getElementById('cDiscountDesc').value.trim(),
+    discountLink: document.getElementById('cDiscountLink').value.trim(),
     type: document.getElementById('cType').value||'standard',
     sponsorTier: document.getElementById('cTier').value||null,
     badges: Array.from(document.querySelectorAll('#cBadges input:checked')).map(cb => cb.value),
