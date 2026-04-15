@@ -86,6 +86,8 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .chip{padding:5px 11px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--charcoal);font-size:.76rem;font-weight:500;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
 .chip:hover{border-color:var(--sage);color:var(--deep-sage)}
 .chip.active{background:var(--deep-sage);border-color:var(--deep-sage);color:#fff}
+.range-input{width:100%;accent-color:var(--deep-sage);margin:6px 0}
+.range-labels{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-muted)}
 .search-bar{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:8px 14px;transition:border-color .2s}
 .search-bar:focus-within{border-color:var(--sage)}
 .search-bar input{flex:1;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:.85rem;background:transparent}
@@ -406,13 +408,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
     </div>
     <div class="filter-section">
       <div class="filter-label">💰 Annual Budget</div>
-      <div class="filter-chips">
-        <button class="chip" data-filter="budget" data-val="free">Free</button>
-        <button class="chip" data-filter="budget" data-val="budget">Under $100/yr</button>
-        <button class="chip" data-filter="budget" data-val="moderate">$100–$300/yr</button>
-        <button class="chip" data-filter="budget" data-val="premium">$300–$600/yr</button>
-        <button class="chip" data-filter="budget" data-val="high">$600+/yr</button>
-      </div>
+      <input type="range" class="range-input" id="priceRange" min="0" max="1500" step="50" value="1500" oninput="updatePriceLabel(this);debounceFilter()">
+      <div class="range-labels"><span>Free</span><span id="priceLabel">Any price</span></div>
     </div>
     <div class="filter-section">
       <div class="filter-label">📚 Subject Coverage <button class="info-btn" onclick="toggleDefs('subject')" title="What do these mean?">ℹ️</button></div>
@@ -572,32 +569,34 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
     <div class="quiz-step" id="qs2">
       <div class="quiz-q">2. What's your preferred teaching style?</div>
       <div class="quiz-options">
-        <div class="quiz-option" onclick="selectQuiz(this,'style','Charlotte Mason')">🌿 Gentle & Literature-Rich (Charlotte Mason)</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'style','Classical')">🏛️ Rigorous & Classical (Trivium)</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'style','Online/Self-Paced')">🖥️ Self-Paced Online with Videos</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'style','Traditional')">📋 Traditional Structured Workbooks</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'style','Eclectic')">🎨 I like to mix and match</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'style','Traditional')">📋 Traditional — Structured textbooks & workbooks</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'style','Charlotte Mason')">🌿 Charlotte Mason — Literature-rich & nature-based</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'style','Classical')">🏛️ Classical — Grammar, logic & rhetoric stages</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'style','Unit Study')">🔗 Unit Study — Subjects woven around themes</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'style','Online')">🖥️ Online — Self-paced digital or video lessons</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'style','Montessori')">🧸 Montessori — Hands-on, child-led learning</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'style','Eclectic')">🎨 Eclectic — I like to mix and match</div>
       </div>
     </div>
     <div class="quiz-step" id="qs3">
       <div class="quiz-q">3. What worldview fits your family?</div>
       <div class="quiz-options">
-        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Christian')">✝️ Christian / Biblical Worldview</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Christian')">✝️ Christian</div>
         <div class="quiz-option" onclick="selectQuiz(this,'worldview','Catholic')">⛪ Catholic</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Classical Christian')">📜 Classical Christian</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Secular')">🌐 Secular / No Religious Content</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Faith-Neutral')">🤝 No strong preference</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Jewish')">✡️ Jewish</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Secular')">🌐 Secular — No religious content</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'worldview','Faith-Neutral')">🤝 Faith-Neutral — No strong preference</div>
       </div>
     </div>
     <div class="quiz-step" id="qs4">
       <div class="quiz-q">4. What's your annual curriculum budget?</div>
       <div class="quiz-options">
-        <div class="quiz-option" onclick="selectQuiz(this,'budget','free')">🆓 Free — $0</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'budget','budget')">💚 Budget — Under $100/year</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'budget','moderate')">💛 Moderate — $100–$300/year</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'budget','premium')">🧡 Premium — $300–$600/year</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'budget','high')">💎 High Investment — $600+/year</div>
-        <div class="quiz-option" onclick="selectQuiz(this,'budget','any')">💜 Budget is not a concern</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'budget','0')">🆓 Free — $0</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'budget','100')">💚 Budget — Under $100/year</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'budget','300')">💛 Moderate — $100–$300/year</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'budget','600')">🧡 Premium — $300–$600/year</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'budget','1500')">💎 High Investment — $600+/year</div>
+        <div class="quiz-option" onclick="selectQuiz(this,'budget','99999')">💜 Budget is not a concern</div>
       </div>
     </div>
     <div class="quiz-step" id="qs5">
@@ -633,7 +632,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
         <ul>
           <li><a href="/">All Curricula</a></li>
           <li><a href="/?sort=rating">Top Rated</a></li>
-          <li><a href="/?budget=free">Free Options</a></li>
+          <li><a href="/?priceMax=0">Free Options</a></li>
           <li><a href="/?badges=new">New Additions</a></li>
         </ul>
       </div>
@@ -681,6 +680,8 @@ async function fetchCurricula() {
   Object.entries(activeFilters).forEach(([k,v]) => { if(v.length) params.set(k, v.join(',')); });
   const search = document.getElementById('searchInput').value;
   if (search) params.set('search', search);
+  const priceMax = document.getElementById('priceRange').value;
+  if (priceMax < 1500) params.set('priceMax', priceMax);
   params.set('sort', document.getElementById('sortSelect').value);
 
   try {
@@ -834,7 +835,7 @@ async function openDetail(slug, fromQuiz) {
       <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:18px">${c.tagline}</p>
       <div class="modal-grid">
         <div class="modal-item"><div class="modal-item-key">Grade Range</div><div class="modal-item-val">${(c.grades||[]).join(', ')}</div></div>
-        <div class="modal-item"><div class="modal-item-key">Cost</div><div class="modal-item-val">${c.price}${c.pricingNote ? ' *' : ''}${c.pricingModel ? ` <span style="font-size:.7rem;color:var(--text-muted)">(${c.pricingModel})</span>` : ''}</div></div>
+        <div class="modal-item"><div class="modal-item-key">Cost</div><div class="modal-item-val">${c.price}${c.pricingNote ? ' *' : ''}</div></div>
         <div class="modal-item"><div class="modal-item-key">Teaching Style</div><div class="modal-item-val">${(c.style||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Worldview</div><div class="modal-item-val">${(c.worldview||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Format</div><div class="modal-item-val">${(c.format||[]).join(', ')}</div></div>
@@ -1043,9 +1044,17 @@ function applyQuizFilters() {
   activeFilters = {};
   document.querySelectorAll('.chip.active').forEach(c=>c.classList.remove('active'));
   document.getElementById('searchInput').value='';
-  // Apply only grade and worldview to avoid overly narrow results
+  document.getElementById('priceRange').value=1500;
+  document.getElementById('priceLabel').textContent='Any price';
+  // Apply quiz answers to matching filters
   if (quizAnswers.grade) activateChip('grade', quizAnswers.grade);
+  if (quizAnswers.style) activateChip('style', quizAnswers.style);
   if (quizAnswers.worldview) activateChip('worldview', quizAnswers.worldview);
+  if (quizAnswers.budget && quizAnswers.budget !== '99999') {
+    const budgetVal = parseInt(quizAnswers.budget);
+    document.getElementById('priceRange').value = budgetVal;
+    updatePriceLabel(document.getElementById('priceRange'));
+  }
   closeOverlay('quizOverlay');
   fetchCurricula();
 }
@@ -1082,7 +1091,18 @@ function clearFilters() {
   activeFilters = {};
   document.querySelectorAll('.chip.active').forEach(c=>c.classList.remove('active'));
   document.getElementById('searchInput').value='';
+  document.getElementById('priceRange').value=1500;
+  document.getElementById('priceLabel').textContent='Any price';
   fetchCurricula();
+}
+
+function updatePriceLabel(input) {
+  document.getElementById('priceLabel').textContent = parseInt(input.value)>=1500?'Any price':'Up to $'+parseInt(input.value).toLocaleString()+'/yr';
+}
+
+function debounceFilter() {
+  clearTimeout(filterDebounce);
+  filterDebounce = setTimeout(fetchCurricula, 350);
 }
 
 // ── UTILITIES ────────────────────────────────────────────────────────────────
