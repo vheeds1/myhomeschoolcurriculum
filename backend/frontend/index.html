@@ -832,7 +832,7 @@ async function openDetail(slug, fromQuiz) {
       <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:18px">${c.tagline}</p>
       <div class="modal-grid">
         <div class="modal-item"><div class="modal-item-key">Grade Range</div><div class="modal-item-val">${(c.grades||[]).join(', ')}</div></div>
-        <div class="modal-item"><div class="modal-item-key">Cost</div><div class="modal-item-val">${c.price}${c.pricingNote ? ' *' : ''}</div></div>
+        <div class="modal-item"><div class="modal-item-key">Cost</div><div class="modal-item-val">${c.price}${c.pricingNote ? ' *' : ''}${c.pricingModel ? ` <span style="font-size:.7rem;color:var(--text-muted)">(${c.pricingModel})</span>` : ''}</div></div>
         <div class="modal-item"><div class="modal-item-key">Teaching Style</div><div class="modal-item-val">${(c.style||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Worldview</div><div class="modal-item-val">${(c.worldview||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Format</div><div class="modal-item-val">${(c.format||[]).join(', ')}</div></div>

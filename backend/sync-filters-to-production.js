@@ -28,6 +28,7 @@ async function main() {
     priceMin: c.priceMin,
     priceMax: c.priceMax,
     pricingNote: c.pricingNote || '',
+    pricingModel: c.pricingModel || '',
     grades: c.grades
   }));
 
