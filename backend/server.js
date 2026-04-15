@@ -242,7 +242,7 @@ app.get('/api/curricula', (req, res) => {
   const db = readDB();
   if (!db) return res.status(500).json({ error: 'Database error' });
   let results = db.curricula.filter(c => c.active);
-  const { grade, style, worldview, format, subject, special, search, priceMax, sort } = req.query;
+  const { grade, style, worldview, format, subject, special, search, priceMax, budget, sort } = req.query;
   if (search) {
     const q = search.toLowerCase();
     results = results.filter(c =>
@@ -260,6 +260,23 @@ app.get('/api/curricula', (req, res) => {
   }
   if (special)   { const v = special.split(',');   results = results.filter(c => v.some(x => c.special?.includes(x))); }
   if (priceMax)  { results = results.filter(c => (c.priceMin || 0) <= parseInt(priceMax)); }
+  if (budget) {
+    const buckets = budget.split(',');
+    results = results.filter(c => {
+      const min = c.priceMin || 0;
+      const max = c.priceMax || 0;
+      return buckets.some(b => {
+        switch(b) {
+          case 'free': return min === 0 && max === 0;
+          case 'budget': return min < 100;
+          case 'moderate': return min <= 300 && max >= 100;
+          case 'premium': return min <= 600 && max >= 300;
+          case 'high': return max >= 600;
+          default: return true;
+        }
+      });
+    });
+  }
   const tierScore = { platinum: 3, gold: 2, silver: 1 };
   switch (sort) {
     case 'rating':     results.sort((a,b) => (b.rating||0) - (a.rating||0)); break;
@@ -346,9 +363,19 @@ app.post('/api/quiz', (req, res) => {
   db.quizResults.push({ id: uuidv4(), grade, style, worldview, budget, timestamp: new Date().toISOString() });
   writeDB(db);
   let matches = db.curricula.filter(c => c.active);
-  const budgetMap = { free: 30, low: 200, mid: 600, high: 1200, any: 99999 };
-  const maxBudget = budgetMap[budget] || 99999;
-  matches = matches.filter(c => (c.priceMin||0) <= maxBudget).map(c => {
+  function matchesBudget(c, b) {
+    const min = c.priceMin || 0, max = c.priceMax || 0;
+    switch(b) {
+      case 'free': return min === 0 && max === 0;
+      case 'budget': return min < 100;
+      case 'moderate': return min <= 300 && max >= 100;
+      case 'premium': return min <= 600 && max >= 300;
+      case 'high': return max >= 600;
+      default: return true;
+    }
+  }
+  if (budget && budget !== 'any') matches = matches.filter(c => matchesBudget(c, budget));
+  matches = matches.map(c => {
     let score = 0;
     if (grade && c.grades?.includes(grade)) score += 3;
     if (style && c.style?.includes(style)) score += 3;
