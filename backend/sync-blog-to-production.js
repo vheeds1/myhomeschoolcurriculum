@@ -28,13 +28,24 @@ async function main() {
     body: JSON.stringify({ posts })
   });
 
-  const data = await res.json();
-  if (data.success) {
-    console.log(`✅ Added ${data.added} new post(s), skipped ${data.skipped} duplicate(s).`);
-    console.log(`   Total blog posts in production: ${data.total}`);
-  } else {
-    console.error('❌ Error:', data);
+  const ct = res.headers.get('content-type') || '';
+  if (!ct.includes('application/json')) {
+    const text = await res.text();
+    console.error(`❌ Server returned HTTP ${res.status} with non-JSON response.`);
+    if (res.status === 404) console.error('   The endpoint does not exist yet. Railway may still be deploying — wait 1-2 minutes and retry.');
+    else console.error('   Response body (first 300 chars):', text.slice(0, 300));
+    process.exit(1);
   }
+
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    console.error(`❌ HTTP ${res.status}:`, data);
+    if (res.status === 401) console.error('   Check your ADMIN_TOKEN — it should match the token set in Railway env vars.');
+    process.exit(1);
+  }
+
+  console.log(`✅ Added ${data.added} new post(s), updated ${data.updated || 0} existing post(s), skipped ${data.skipped}.`);
+  console.log(`   Total blog posts in production: ${data.total}`);
 }
 
 main().catch(console.error);
