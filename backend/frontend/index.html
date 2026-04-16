@@ -43,17 +43,92 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .header-cta:hover{background:#b5503a!important}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(135deg,var(--navy) 0%,#2A4F5A 50%,#1A3340 100%);padding:70px 24px 60px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 80%,rgba(122,158,126,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(212,168,75,.1) 0%,transparent 50%)}
-.hero-content{position:relative;max-width:700px;margin:0 auto}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#2A4F5A 50%,#1A3340 100%);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 80%,rgba(122,158,126,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(212,168,75,.1) 0%,transparent 50%);pointer-events:none}
+.hero-left{padding:60px 40px 60px 48px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
+.hero-right{position:relative;overflow:hidden;min-height:340px}
+.hero-right::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.15);pointer-events:none}
+.hero-photo{width:100%;height:100%;object-fit:cover;display:block}
+.hero-content{position:relative;max-width:700px}
 .hero-badge{display:inline-block;background:rgba(212,168,75,.2);color:var(--gold);border:1px solid rgba(212,168,75,.4);padding:5px 16px;border-radius:20px;font-size:.78rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:20px}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);color:#fff;line-height:1.15;margin-bottom:16px}
 .hero h1 em{color:var(--gold);font-style:normal}
-.hero p{color:rgba(255,255,255,.75);font-size:1.05rem;margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto}
-.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap}
-.stat{text-align:center}
+.hero p{color:rgba(255,255,255,.75);font-size:1.05rem;margin-bottom:28px;max-width:520px}
+.hero-btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px}
+.btn-hero-primary{background:var(--gold);color:var(--navy);border:none;padding:12px 26px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-hero-primary:hover{background:#c4963f;transform:translateY(-1px)}
+.btn-hero-secondary{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.45);padding:11px 22px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.95rem;cursor:pointer;transition:all .2s}
+.btn-hero-secondary:hover{background:rgba(255,255,255,.1)}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.stat{text-align:left}
 .stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);font-weight:700;display:block}
 .stat-label{color:rgba(255,255,255,.6);font-size:.78rem;font-weight:500;letter-spacing:.3px}
+@media(max-width:768px){.hero{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:50px 24px}.hero-content{max-width:none}}
+
+/* ── HOW IT WORKS ── */
+.how-it-works{background:var(--warm-white);padding:60px 24px;border-bottom:1px solid var(--border)}
+.how-inner{max-width:900px;margin:0 auto;text-align:center}
+.how-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--deep-sage);margin-bottom:10px}
+.how-it-works h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--navy);margin-bottom:8px}
+.how-sub{color:var(--text-muted);font-size:.92rem;margin-bottom:36px}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:left}
+.how-step{background:var(--cream);border:1.5px solid var(--border);border-radius:16px;padding:26px 22px}
+.how-step-num{width:38px;height:38px;background:var(--light-sage);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--deep-sage);font-weight:700;margin-bottom:14px}
+.how-step-title{font-weight:600;color:var(--navy);margin-bottom:8px;font-size:.95rem}
+.how-step-desc{font-size:.82rem;color:var(--text-muted);line-height:1.7}
+@media(max-width:680px){.how-steps{grid-template-columns:1fr}}
+
+/* ── TRUST SECTION ── */
+.trust-section{background:var(--cream);border-bottom:1px solid var(--border);padding:60px 24px}
+.trust-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:center}
+.trust-text h2{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.5vw,1.7rem);color:var(--navy);margin-bottom:16px}
+.trust-text p{font-size:.88rem;color:var(--charcoal);line-height:1.8;margin-bottom:14px}
+.trust-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.trust-badge{display:inline-flex;align-items:center;background:var(--light-sage);border:1px solid #B8D8BB;border-radius:20px;padding:5px 14px;font-size:.78rem;color:#2C5A30;font-weight:600}
+.trust-image{border-radius:16px;overflow:hidden;box-shadow:0 8px 28px rgba(30,58,76,.12)}
+.trust-image img{width:100%;height:100%;object-fit:cover;display:block;min-height:280px}
+@media(max-width:768px){.trust-inner{grid-template-columns:1fr;gap:32px}.trust-image img{min-height:220px}}
+
+/* ── FEATURED PICKS ── */
+.featured-picks{background:var(--warm-white);padding:60px 24px;border-bottom:1px solid var(--border)}
+.picks-inner{max-width:1100px;margin:0 auto;text-align:center}
+.picks-inner h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--navy);margin-bottom:8px}
+.picks-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px;text-align:left}
+.pick-card{background:var(--cream);border:1.5px solid var(--border);border-radius:16px;padding:22px 18px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
+.pick-card:hover{border-color:var(--sage);box-shadow:0 6px 20px rgba(30,58,76,.08);transform:translateY(-2px)}
+.pick-emoji{font-size:1.6rem;margin-bottom:10px}
+.pick-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--deep-sage);margin-bottom:5px}
+.pick-name{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--navy);margin-bottom:6px}
+.pick-desc{font-size:.78rem;color:var(--text-muted);line-height:1.6;flex:1;margin-bottom:12px}
+.pick-link{font-size:.78rem;font-weight:600;color:var(--deep-sage);margin-top:auto}
+@media(max-width:900px){.picks-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.picks-grid{grid-template-columns:1fr}}
+
+/* ── TESTIMONIALS ── */
+.testimonials-section{background:var(--navy);padding:60px 24px}
+.testimonials-inner{max-width:1100px;margin:0 auto;text-align:center}
+.testimonials-inner h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,1.9rem);color:#fff;margin-bottom:8px}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:left;margin-top:8px}
+.testimonial-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:24px;display:flex;flex-direction:column}
+.testimonial-stars{color:var(--gold);font-size:.85rem;letter-spacing:2px;margin-bottom:12px}
+.testimonial-text{font-size:.85rem;color:rgba(255,255,255,.8);line-height:1.75;font-style:italic;flex:1;margin:0 0 18px 0;padding:0}
+figure.testimonial-card{margin:0}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.testimonial-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:.78rem;color:rgba(255,255,255,.75);font-weight:600;flex-shrink:0}
+.testimonial-name{font-size:.85rem;color:rgba(255,255,255,.85);font-weight:600}
+.testimonial-detail{font-size:.75rem;color:rgba(255,255,255,.45)}
+@media(max-width:768px){.testimonials-grid{grid-template-columns:1fr}}
+
+/* ── NEWSLETTER ── */
+.newsletter-section{background:linear-gradient(135deg,var(--deep-sage),var(--sage));padding:48px 24px}
+.newsletter-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.newsletter-inner h2{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.4rem);color:#fff;margin-bottom:6px}
+.newsletter-inner p{font-size:.85rem;color:rgba(255,255,255,.78)}
+.newsletter-form{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap}
+.newsletter-email{padding:11px 16px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:.88rem;min-width:230px;outline:none;color:var(--charcoal)}
+.newsletter-submit{background:var(--gold);color:var(--navy);border:none;padding:11px 22px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
+.newsletter-submit:hover{background:#c4963f}
+@media(max-width:680px){.newsletter-inner{flex-direction:column}.newsletter-email{min-width:100%}.newsletter-submit{width:100%}}
 
 /* ── QUIZ BANNER ── */
 .quiz-banner{background:linear-gradient(135deg,var(--deep-sage),var(--sage));padding:18px 24px;text-align:center}
@@ -234,7 +309,7 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .empty-state h3{font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:8px}
 
 /* ── FOOTER ── */
-footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px;margin-top:60px}
+footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px}
 .footer-inner{max-width:1200px;margin:0 auto}
 .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
 .footer-brand-name{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;display:block;margin-bottom:10px}
@@ -320,14 +395,148 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 </header>
 
 <section class="hero">
-  <div class="hero-content">
-    <div class="hero-badge">✦ Trusted by 50,000+ Homeschool Families</div>
-    <h1>Find Your Family's <em>Perfect</em><br>Homeschool Curriculum</h1>
-    <p>Filter through 60+ hand-picked curricula by grade, style, budget, and worldview — so you spend less time searching and more time teaching.</p>
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-num" id="statCurricula">60+</span><span class="stat-label">Curricula Reviewed</span></div>
-      <div class="stat"><span class="stat-num">Parent</span><span class="stat-label">Driven Reviews</span></div>
-      <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always Free To Use</span></div>
+  <div class="hero-left">
+    <div class="hero-content">
+      <div class="hero-badge">✦ Trusted by 50,000+ Homeschool Families</div>
+      <h1>Find Your Family's <em>Perfect</em><br>Homeschool Curriculum</h1>
+      <p>Filter through 60+ hand-picked curricula by grade, style, budget, and worldview — so you spend less time searching and more time teaching.</p>
+      <div class="hero-btn-row">
+        <a class="btn-hero-primary" href="#main-content">Browse Curricula</a>
+        <button class="btn-hero-secondary" onclick="openQuiz()">Take the Quiz →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="statCurricula">60+</span><span class="stat-label">Curricula Reviewed</span></div>
+        <div class="stat"><span class="stat-num">Parent</span><span class="stat-label">Driven Reviews</span></div>
+        <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always Free To Use</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img class="hero-photo" src="https://i.postimg.cc/YCfCQMrg/Adobe-Stock-342125144.jpg" alt="A parent and child reading and learning together at home" loading="eager" width="800" height="600" fetchpriority="high">
+  </div>
+</section>
+
+<section class="how-it-works" aria-labelledby="how-title">
+  <div class="how-inner">
+    <div class="how-eyebrow">How it works</div>
+    <h2 id="how-title">Everything you need to make a confident choice</h2>
+    <p class="how-sub">No more overwhelm. Here is exactly what this site does for you.</p>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-num">1</div>
+        <div class="how-step-title">Browse and filter</div>
+        <p class="how-step-desc">Search 40+ hand-reviewed curricula by grade level, teaching style, worldview, budget, and subjects. No ads, no paid rankings.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">2</div>
+        <div class="how-step-title">Compare side by side</div>
+        <p class="how-step-desc">Select up to 3 curricula and compare them head-to-head across price, features, pros, and cons in one clear view.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">3</div>
+        <div class="how-step-title">Read real reviews</div>
+        <p class="how-step-desc">Every listing includes honest ratings and reviews from homeschool parents — the same people you would ask in a Facebook group.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trust-section" aria-labelledby="trust-title">
+  <div class="trust-inner">
+    <div class="trust-text">
+      <div class="how-eyebrow">Our mission</div>
+      <h2 id="trust-title">Built by homeschool families, for homeschool families</h2>
+      <p>My Homeschool Curriculum was created by parents who spent years drowning in curriculum research — jumping between Facebook groups, catalog PDFs, and review blogs trying to find something that would actually work. We built the tool we wished had existed.</p>
+      <div class="trust-badges">
+        <span class="trust-badge">✓ Hours of research saved</span>
+        <span class="trust-badge">✓ One place for everything</span>
+        <span class="trust-badge">✓ Always free to use</span>
+        <span class="trust-badge">✓ Real parent reviews</span>
+      </div>
+    </div>
+    <div class="trust-image">
+      <img src="https://i.postimg.cc/7LRM7pnN/Adobe-Stock-608178672.jpg" alt="Homeschool parent helping a child with schoolwork" loading="lazy" width="800" height="600">
+    </div>
+  </div>
+</section>
+
+<section class="featured-picks" aria-labelledby="picks-title">
+  <div class="picks-inner">
+    <div class="how-eyebrow">Editor picks</div>
+    <h2 id="picks-title">Not sure where to start?</h2>
+    <p class="how-sub">Our top picks for the most common situations. Click any card to see the full listing.</p>
+    <div class="picks-grid">
+      <div class="pick-card" onclick="openDetail('the-good-and-the-beautiful')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+        <div class="pick-emoji">👶</div>
+        <div class="pick-tag">Best for early elementary</div>
+        <div class="pick-name">The Good and the Beautiful</div>
+        <p class="pick-desc">Beautiful, affordable, and works across K–8. One of the most popular programs in the homeschool community.</p>
+        <span class="pick-link">View listing →</span>
+      </div>
+      <div class="pick-card" onclick="openDetail('time4learning')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+        <div class="pick-emoji">💻</div>
+        <div class="pick-tag">Best online option</div>
+        <div class="pick-name">Time4Learning</div>
+        <p class="pick-desc">Fully online, self-paced, and automatically graded. Great for independent learners and busy parents.</p>
+        <span class="pick-link">View listing →</span>
+      </div>
+      <div class="pick-card" onclick="openDetail('easy-peasy-all-in-one')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+        <div class="pick-emoji">🆓</div>
+        <div class="pick-tag">Best free curriculum</div>
+        <div class="pick-name">Easy Peasy All-in-One</div>
+        <p class="pick-desc">A complete K–12 program at zero cost. Genuinely free — no upsells, no trials.</p>
+        <span class="pick-link">View listing →</span>
+      </div>
+      <div class="pick-card" onclick="openDetail('sonlight')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+        <div class="pick-emoji">📖</div>
+        <div class="pick-tag">Best literature-based</div>
+        <div class="pick-name">Sonlight</div>
+        <p class="pick-desc">Rich living books woven through every subject. A favorite for families who love to read together.</p>
+        <span class="pick-link">View listing →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-section" aria-labelledby="testimonials-title">
+  <div class="testimonials-inner">
+    <div class="how-eyebrow" style="color: var(--gold)">From the community</div>
+    <h2 id="testimonials-title">What families are saying</h2>
+    <p class="how-sub" style="color: rgba(255,255,255,.65)">Real parents, real experiences.</p>
+    <div class="testimonials-grid">
+      <figure class="testimonial-card">
+        <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <blockquote class="testimonial-text">"I spent three weeks researching curriculum before finding this site. Within 20 minutes I had narrowed it down to two options. The comparison tool is a game changer."</blockquote>
+        <figcaption class="testimonial-author">
+          <div class="testimonial-avatar" aria-hidden="true">SM</div>
+          <div>
+            <div class="testimonial-name">Sarah M.</div>
+            <div class="testimonial-detail">Homeschooling since 2021 · Texas</div>
+          </div>
+        </figcaption>
+      </figure>
+      <figure class="testimonial-card">
+        <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <blockquote class="testimonial-text">"As a new homeschool mom the filters were exactly what I needed. I could see everything for my daughter's grade in one place instead of jumping between a dozen websites."</blockquote>
+        <figcaption class="testimonial-author">
+          <div class="testimonial-avatar" aria-hidden="true">JL</div>
+          <div>
+            <div class="testimonial-name">Jessica L.</div>
+            <div class="testimonial-detail">First year homeschooling · Ohio</div>
+          </div>
+        </figcaption>
+      </figure>
+      <figure class="testimonial-card">
+        <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <blockquote class="testimonial-text">"I used to spend entire nap times down a curriculum rabbit hole. Now I can pull up this site, filter by what actually matters to us, and have a shortlist in under 10 minutes."</blockquote>
+        <figcaption class="testimonial-author">
+          <div class="testimonial-avatar" aria-hidden="true">RK</div>
+          <div>
+            <div class="testimonial-name">Rachel K.</div>
+            <div class="testimonial-detail">Homeschooling 3 kids · Colorado</div>
+          </div>
+        </figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -344,7 +553,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
   <button class="mobile-filter-btn" onclick="toggleFilters()">⚙️ Show Filters</button>
   <aside class="sidebar" id="filterSidebar">
     <div class="sidebar-header">
-      <h3>⚙️ Filter Curricula</h3>
+      <h3>🔍 Find Your Match</h3>
       <button class="clear-btn" onclick="clearFilters()">Clear All</button>
     </div>
 
@@ -614,6 +823,19 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 </div>
 
 </main>
+
+<section class="newsletter-section" aria-labelledby="newsletter-title">
+  <div class="newsletter-inner">
+    <div>
+      <h2 id="newsletter-title">Get weekly curriculum tips in your inbox</h2>
+      <p>Join 10,000+ families getting honest reviews, teaching ideas, and new curriculum alerts. Free, always.</p>
+    </div>
+    <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+      <input type="email" class="newsletter-email" placeholder="your@email.com" required aria-label="Email address">
+      <button type="submit" class="newsletter-submit">Subscribe Free →</button>
+    </form>
+  </div>
+</section>
 
 <!-- Toast -->
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
@@ -1112,6 +1334,24 @@ function showToast(msg, type='') {
   t.textContent = msg;
   t.className = 'toast show ' + type;
   setTimeout(()=>t.classList.remove('show'), 3500);
+}
+
+async function handleNewsletterSubmit(e) {
+  e.preventDefault();
+  const email = e.target.querySelector('.newsletter-email').value.trim();
+  if (!email) return;
+  try {
+    const res = await fetch(`${API}/newsletter/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'homepage' })
+    });
+    const data = await res.json();
+    showToast(data.message || "You're subscribed! Welcome to the community.", 'success');
+    e.target.querySelector('.newsletter-email').value = '';
+  } catch(err) {
+    showToast('Could not subscribe. Please try again.', 'error');
+  }
 }
 
 // ── FAVORITES ────────────────────────────────────────────────────────────────
