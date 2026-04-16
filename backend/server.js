@@ -726,23 +726,37 @@ app.get('/api/blog/:slug', (req, res) => {
   res.json(post);
 });
 
-// Bulk import blog posts (preserves IDs, skips duplicates by id or slug)
+// Bulk import blog posts — adds new posts, upserts SEO fields on existing
+// posts matched by id or slug. Content/title/excerpt on existing posts are
+// preserved so admin edits in production aren't overwritten.
 app.post('/api/admin/blog/bulk-import', requireAdmin, (req, res) => {
   const { posts } = req.body;
   if (!Array.isArray(posts)) return res.status(400).json({ error: 'posts array required' });
   const db = readDB();
   if (!db.blogPosts) db.blogPosts = [];
-  const existingIds = new Set(db.blogPosts.map(p => p.id));
-  const existingSlugs = new Set(db.blogPosts.map(p => p.slug));
-  let added = 0, skipped = 0;
+  const seoFields = ['featuredImage', 'ogImage', 'metaTitle', 'metaDescription', 'keywords', 'author', 'canonicalUrl', 'tags', 'category', 'wordCount', 'readingMinutes'];
+  let added = 0, updated = 0, skipped = 0;
   for (const p of posts) {
     if (!p.title || !p.content) { skipped++; continue; }
-    if (existingIds.has(p.id) || existingSlugs.has(p.slug)) { skipped++; continue; }
-    db.blogPosts.push(p);
-    added++;
+    const existingIdx = db.blogPosts.findIndex(x => x.id === p.id || x.slug === p.slug);
+    if (existingIdx === -1) {
+      db.blogPosts.push(p);
+      added++;
+    } else {
+      const existing = db.blogPosts[existingIdx];
+      let changed = false;
+      for (const field of seoFields) {
+        if (p[field] !== undefined && p[field] !== null && p[field] !== existing[field]) {
+          existing[field] = p[field];
+          changed = true;
+        }
+      }
+      if (changed) { existing.updatedAt = new Date().toISOString(); updated++; }
+      else skipped++;
+    }
   }
   writeDB(db);
-  res.json({ success: true, added, skipped, total: db.blogPosts.length });
+  res.json({ success: true, added, updated, skipped, total: db.blogPosts.length });
 });
 
 app.post('/api/blog', requireAdmin, (req, res) => {
