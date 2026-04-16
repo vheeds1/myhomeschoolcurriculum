@@ -726,6 +726,25 @@ app.get('/api/blog/:slug', (req, res) => {
   res.json(post);
 });
 
+// Bulk import blog posts (preserves IDs, skips duplicates by id or slug)
+app.post('/api/admin/blog/bulk-import', requireAdmin, (req, res) => {
+  const { posts } = req.body;
+  if (!Array.isArray(posts)) return res.status(400).json({ error: 'posts array required' });
+  const db = readDB();
+  if (!db.blogPosts) db.blogPosts = [];
+  const existingIds = new Set(db.blogPosts.map(p => p.id));
+  const existingSlugs = new Set(db.blogPosts.map(p => p.slug));
+  let added = 0, skipped = 0;
+  for (const p of posts) {
+    if (!p.title || !p.content) { skipped++; continue; }
+    if (existingIds.has(p.id) || existingSlugs.has(p.slug)) { skipped++; continue; }
+    db.blogPosts.push(p);
+    added++;
+  }
+  writeDB(db);
+  res.json({ success: true, added, skipped, total: db.blogPosts.length });
+});
+
 app.post('/api/blog', requireAdmin, (req, res) => {
   const { title, slug, excerpt, content, category, tags, published, featuredImage } = req.body;
   if (!title || !content) return res.status(400).json({ error: 'Title and content required.' });
