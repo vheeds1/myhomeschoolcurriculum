@@ -242,20 +242,112 @@ function filterCat(btn, cat) {
   renderPosts(cat === 'all' ? allPosts : allPosts.filter(p => p.category === cat));
 }
 
+function setMeta(attr, key, value) {
+  let el = document.querySelector(`meta[${attr}="${key}"]`);
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', value || '');
+}
+
+function setCanonical(url) {
+  let el = document.querySelector('link[rel="canonical"]');
+  if (!el) {
+    el = document.createElement('link');
+    el.rel = 'canonical';
+    document.head.appendChild(el);
+  }
+  el.href = url;
+}
+
+function injectPostSchema(post) {
+  const existing = document.getElementById('postSchemaLD');
+  if (existing) existing.remove();
+  const wordCount = post.wordCount || (post.content || '').split(/\s+/).filter(Boolean).length;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.metaDescription || post.excerpt || '',
+    "image": post.ogImage || post.featuredImage || "https://myhomeschoolcurriculum.com/og-default.png",
+    "author": { "@type": "Organization", "name": post.author || "My Homeschool Curriculum Team" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "My Homeschool Curriculum",
+      "url": "https://myhomeschoolcurriculum.com",
+      "logo": { "@type": "ImageObject", "url": "https://myhomeschoolcurriculum.com/favicon.svg" }
+    },
+    "datePublished": post.publishedAt || post.createdAt,
+    "dateModified": post.updatedAt || post.publishedAt || post.createdAt,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://myhomeschoolcurriculum.com/blog.html?post=${post.slug}` },
+    "articleSection": post.category || 'General',
+    "keywords": (post.keywords || post.tags || []).join(', '),
+    "wordCount": wordCount,
+    "inLanguage": "en-US"
+  };
+  const s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.id = 'postSchemaLD';
+  s.textContent = JSON.stringify(schema);
+  document.head.appendChild(s);
+}
+
+function applyPostSeo(post) {
+  const title = post.metaTitle || post.title;
+  const desc = post.metaDescription || post.excerpt || '';
+  const url = `https://myhomeschoolcurriculum.com/blog.html?post=${post.slug}`;
+  const img = post.ogImage || post.featuredImage || 'https://myhomeschoolcurriculum.com/og-default.png';
+
+  document.title = `${title} — My Homeschool Curriculum`;
+  setMeta('name', 'description', desc);
+  setMeta('name', 'keywords', (post.keywords || post.tags || []).join(', '));
+  setMeta('name', 'author', post.author || 'My Homeschool Curriculum Team');
+  setMeta('property', 'og:title', title);
+  setMeta('property', 'og:description', desc);
+  setMeta('property', 'og:type', 'article');
+  setMeta('property', 'og:url', url);
+  setMeta('property', 'og:image', img);
+  setMeta('property', 'article:published_time', post.publishedAt || post.createdAt || '');
+  setMeta('property', 'article:modified_time', post.updatedAt || '');
+  setMeta('property', 'article:section', post.category || 'General');
+  setMeta('name', 'twitter:card', 'summary_large_image');
+  setMeta('name', 'twitter:title', title);
+  setMeta('name', 'twitter:description', desc);
+  setMeta('name', 'twitter:image', img);
+  setCanonical(url);
+  injectPostSchema(post);
+}
+
+function resetBlogSeo() {
+  document.title = 'Blog — MyHomeschoolCurriculum';
+  setMeta('name', 'description', 'Homeschool guides, curriculum comparisons, teaching strategies, and advice for homeschool families.');
+  setMeta('property', 'og:title', 'The Homeschool Blog — My Homeschool Curriculum');
+  setMeta('property', 'og:description', 'Homeschool guides, curriculum comparisons, teaching strategies, and advice for homeschool families.');
+  setMeta('property', 'og:type', 'website');
+  setMeta('property', 'og:url', 'https://myhomeschoolcurriculum.com/blog.html');
+  setCanonical('https://myhomeschoolcurriculum.com/blog.html');
+  const schema = document.getElementById('postSchemaLD');
+  if (schema) schema.remove();
+}
+
 async function openPost(slug) {
   try {
     const res = await fetch(`${API}/blog/${slug}`);
     if (!res.ok) return;
     const post = await res.json();
+    const readMin = post.readingMinutes || Math.ceil((post.content||'').split(' ').length/200);
     document.getElementById('postHeader').innerHTML = `
       <span class="post-cat-badge">${post.category||'General'}</span>
       <h1>${post.title}</h1>
-      <div class="meta">${new Date(post.publishedAt||post.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})} · ${Math.ceil((post.content||'').split(' ').length/200)} min read</div>`;
+      <div class="meta">By ${post.author||'My Homeschool Curriculum Team'} · ${new Date(post.publishedAt||post.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})} · ${readMin} min read</div>`;
     document.getElementById('postBody').innerHTML = markdownToHtml(post.content||'');
     document.getElementById('listView').style.display = 'none';
     document.getElementById('postView').style.display = 'block';
     window.scrollTo(0,0);
     history.pushState({}, '', `/blog.html?post=${slug}`);
+    applyPostSeo(post);
   } catch(e) { showToast('Could not load post','error'); }
 }
 
@@ -263,6 +355,7 @@ function showList() {
   document.getElementById('listView').style.display = 'block';
   document.getElementById('postView').style.display = 'none';
   history.pushState({}, '', '/blog.html');
+  resetBlogSeo();
 }
 
 // Simple markdown-to-HTML converter

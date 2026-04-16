@@ -1083,19 +1083,32 @@ app.get('/sitemap.xml', (req, res) => {
   const curricula = (db.curricula || []).filter(c => c.active !== false);
   const states = Object.keys(STATE_LAWS || {});
 
+  const today = new Date().toISOString().split('T')[0];
   const urls = [
-    { loc: '/', priority: '1.0', changefreq: 'daily' },
-    { loc: '/blog', priority: '0.9', changefreq: 'weekly' },
-    { loc: '/legal', priority: '0.7', changefreq: 'monthly' },
-    { loc: '/publisher', priority: '0.6', changefreq: 'monthly' },
-    ...posts.map(p => ({ loc: `/blog?post=${p.slug}`, priority: '0.8', changefreq: 'monthly' })),
-    ...states.map(s => ({ loc: `/legal?state=${encodeURIComponent(s)}`, priority: '0.5', changefreq: 'yearly' })),
+    { loc: '/', priority: '1.0', changefreq: 'daily', lastmod: today },
+    { loc: '/blog', priority: '0.9', changefreq: 'weekly', lastmod: today },
+    { loc: '/legal', priority: '0.7', changefreq: 'monthly', lastmod: today },
+    { loc: '/about', priority: '0.6', changefreq: 'monthly', lastmod: today },
+    { loc: '/publisher', priority: '0.5', changefreq: 'monthly', lastmod: today },
+    ...posts.map(p => ({
+      loc: `/blog?post=${p.slug}`,
+      priority: '0.8',
+      changefreq: 'monthly',
+      lastmod: (p.updatedAt || p.publishedAt || p.createdAt || today).split('T')[0]
+    })),
+    ...states.map(s => ({
+      loc: `/legal?state=${encodeURIComponent(s)}`,
+      priority: '0.5',
+      changefreq: 'yearly',
+      lastmod: today
+    })),
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url>
     <loc>${siteUrl}${u.loc}</loc>
+    <lastmod>${u.lastmod}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`).join('\n')}
@@ -1107,7 +1120,89 @@ ${urls.map(u => `  <url>
 // ─── SERVE FRONTEND ──────────────────────────────────────────────────────────
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin/index.html')));
 app.get('/publisher', (req, res) => res.sendFile(path.join(__dirname, 'frontend/publisher.html')));
-app.get(['/blog', '/legal', '/account'], (req, res) => {
+function escapeHtmlAttr(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Inject server-side meta tags for blog post URLs so social crawlers (Facebook,
+// Twitter, LinkedIn) that don't execute JS still get per-post Open Graph data.
+app.get('/blog', (req, res) => {
+  const file = path.join(__dirname, 'frontend', 'blog.html');
+  if (!fs.existsSync(file)) return res.sendFile(path.join(__dirname, 'frontend/index.html'));
+  const slug = req.query.post;
+  if (!slug) return res.sendFile(file);
+  const db = readDB();
+  const post = (db.blogPosts || []).find(p => p.slug === slug && p.published);
+  if (!post) return res.sendFile(file);
+
+  const siteUrl = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
+  const title = post.metaTitle || post.title;
+  const desc = post.metaDescription || post.excerpt || '';
+  const img = post.ogImage || post.featuredImage || `${siteUrl}/og-default.png`;
+  const url = `${siteUrl}/blog?post=${post.slug}`;
+  const keywords = (post.keywords || post.tags || []).join(', ');
+  const published = post.publishedAt || post.createdAt || '';
+  const modified = post.updatedAt || published;
+  const wordCount = post.wordCount || (post.content || '').split(/\s+/).filter(Boolean).length;
+
+  const schema = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": desc,
+    "image": img,
+    "author": { "@type": "Organization", "name": post.author || "My Homeschool Curriculum Team" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "My Homeschool Curriculum",
+      "url": siteUrl,
+      "logo": { "@type": "ImageObject", "url": `${siteUrl}/favicon.svg` }
+    },
+    "datePublished": published,
+    "dateModified": modified,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": url },
+    "articleSection": post.category || 'General',
+    "keywords": keywords,
+    "wordCount": wordCount,
+    "inLanguage": "en-US"
+  });
+
+  let html = fs.readFileSync(file, 'utf8');
+  const injected = `
+<title>${escapeHtmlAttr(title)} — My Homeschool Curriculum</title>
+<meta name="description" content="${escapeHtmlAttr(desc)}">
+<meta name="keywords" content="${escapeHtmlAttr(keywords)}">
+<meta name="author" content="${escapeHtmlAttr(post.author || 'My Homeschool Curriculum Team')}">
+<link rel="canonical" href="${url}">
+<meta property="og:title" content="${escapeHtmlAttr(title)}">
+<meta property="og:description" content="${escapeHtmlAttr(desc)}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${escapeHtmlAttr(img)}">
+<meta property="og:site_name" content="My Homeschool Curriculum">
+<meta property="article:published_time" content="${published}">
+<meta property="article:modified_time" content="${modified}">
+<meta property="article:section" content="${escapeHtmlAttr(post.category || 'General')}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtmlAttr(title)}">
+<meta name="twitter:description" content="${escapeHtmlAttr(desc)}">
+<meta name="twitter:image" content="${escapeHtmlAttr(img)}">
+<script type="application/ld+json">${schema}</script>
+`;
+  // Strip existing title + OG/Twitter/canonical/description tags then inject new ones
+  html = html
+    .replace(/<title>[^<]*<\/title>/i, '')
+    .replace(/<meta\s+name="description"[^>]*>/gi, '')
+    .replace(/<meta\s+property="og:[^"]+"[^>]*>/gi, '')
+    .replace(/<meta\s+name="twitter:[^"]+"[^>]*>/gi, '')
+    .replace(/<link\s+rel="canonical"[^>]*>/gi, '')
+    .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/i, '')
+    .replace('</head>', `${injected}</head>`);
+
+  res.type('text/html').send(html);
+});
+
+app.get(['/legal', '/account'], (req, res) => {
   const page = req.path.replace('/', '') + '.html';
   const file = path.join(__dirname, 'frontend', page);
   if (fs.existsSync(file)) res.sendFile(file);
