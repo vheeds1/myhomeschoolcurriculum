@@ -31,16 +31,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charco
 
 /* ── HEADER ── */
 header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.15)}
-.header-inner{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.logo-icon{width:38px;height:38px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}
-.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;font-weight:700}
+.header-inner{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:nowrap}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;min-width:0}
+.logo-icon{width:38px;height:38px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .logo-text span{color:var(--gold)}
-nav{display:flex;gap:6px}
-nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;transition:all .2s}
+nav{display:flex;gap:4px;flex-wrap:nowrap;align-items:center}
+nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 12px;border-radius:20px;transition:all .2s;white-space:nowrap}
 nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .header-cta{background:var(--terracotta)!important;color:#fff!important;font-weight:600!important}
 .header-cta:hover{background:#b5503a!important}
+@media(max-width:1100px){
+  .header-inner{padding:12px 20px;gap:10px}
+  nav{gap:2px}
+  nav a{font-size:.8rem;padding:7px 9px}
+  .logo-text{font-size:1.25rem}
+  .logo-icon{width:34px;height:34px;font-size:16px}
+}
+@media(max-width:960px){
+  nav a{font-size:.76rem;padding:6px 8px}
+  .logo-text{font-size:1.15rem}
+}
 
 /* ── HERO ── */
 .hero{background:linear-gradient(135deg,var(--navy) 0%,#2A4F5A 50%,#1A3340 100%);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
@@ -361,12 +372,12 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 
   /* ── MOBILE NAV ─────────────────────────────────────────────────── */
   .mobile-menu-btn{display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1}
-  @media(max-width:768px){
+  @media(max-width:860px){
     .mobile-menu-btn{display:block}
     nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy,#1E3A4C);flex-direction:column;padding:12px 16px;gap:4px;border-top:1px solid rgba(255,255,255,.1);z-index:200}
     nav.open{display:flex}
-    nav a{padding:10px 14px;border-radius:8px;font-size:.9rem}
-    header{position:relative}
+    nav a{padding:10px 14px;border-radius:8px;font-size:.9rem;white-space:normal}
+    header{position:sticky}
   }
 
 </style>

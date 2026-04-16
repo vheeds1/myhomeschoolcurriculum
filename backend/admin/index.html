@@ -108,6 +108,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .form-group textarea{min-height:80px;resize:vertical}
 .modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.inq-field{display:grid;grid-template-columns:150px 1fr auto;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);align-items:start}
+.inq-field:last-child{border-bottom:none}
+.inq-field-label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding-top:4px}
+.inq-field-value{font-size:.88rem;color:var(--text);word-wrap:break-word;white-space:pre-wrap;user-select:text;cursor:text;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,.02);border:1px solid transparent;transition:background .15s}
+.inq-field-value:hover{background:rgba(0,0,0,.05)}
+.inq-field-value.empty{color:var(--muted);font-style:italic;background:transparent}
+.inq-copy-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:.72rem;cursor:pointer;color:var(--muted);transition:all .15s;white-space:nowrap}
+.inq-copy-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(var(--accent-rgb,59,130,246),.05)}
+.inq-copy-btn.copied{background:#10B981;border-color:#10B981;color:#fff}
+@media(max-width:600px){.inq-field{grid-template-columns:1fr}.inq-field-label{padding-top:0}}
 .cb-tag{display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--text);cursor:pointer;padding:3px 8px;border:1px solid var(--border);border-radius:6px;transition:all .15s}
 .cb-tag:hover{border-color:var(--accent)}
 .cb-tag:has(input:checked){background:rgba(74,154,84,.15);border-color:var(--accent)}
@@ -462,6 +472,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<!-- INQUIRY DETAILS MODAL -->
+<div class="modal-overlay" id="inquiryModal" onclick="if(event.target===this)closeInquiryModal()">
+  <div class="modal" style="max-width:720px">
+    <button class="modal-close" onclick="closeInquiryModal()">✕</button>
+    <h3 style="margin-bottom:6px">📋 Inquiry Details</h3>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:18px">All values are selectable — click any field to select, then copy to paste into the curriculum editor.</p>
+    <div id="inquiryDetailsBody"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeInquiryModal()">Close</button>
+      <button class="btn btn-ghost" id="inqCopyAll" onclick="copyAllInquiryFields()">📋 Copy All</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -644,7 +668,7 @@ async function loadInquiries() {
     allInquiries = inqs;
     document.getElementById('inquiriesTable').innerHTML = inqs.length
       ? inqs.map(i => `<tr>
-          <td><strong>${i.curriculumName}</strong>${i.description ? `<br><span style="font-size:.75rem;color:var(--muted)">${i.description.substring(0,100)}${i.description.length>100?'…':''}</span>` : ''}</td>
+          <td><strong>${i.curriculumName}</strong>${i.description ? `<br><span style="font-size:.75rem;color:var(--muted)" title="${escapeAttr(i.description)}">${i.description.substring(0,100)}${i.description.length>100?'… (click View Details)':''}</span>` : ''}</td>
           <td>${i.companyName}</td>
           <td>${i.contactName}</td>
           <td><a href="mailto:${i.email}" style="color:var(--accent)">${i.email}</a></td>
@@ -655,18 +679,130 @@ async function loadInquiries() {
           <td><span class="badge badge-${i.status}">${i.status}</span></td>
           <td>${fmt(i.createdAt)}</td>
           <td><div class="action-btns">
+            <button class="act-btn" onclick="viewInquiryDetails('${i.id}')">View Details</button>
             ${i.status === 'new' || i.status === 'contacted' ? `<button class="act-btn act-approve" onclick="approveInquiry('${i.id}')">Approve</button><button class="act-btn act-delete" onclick="denyInquiry('${i.id}')">Deny</button>` : ''}
             ${i.status === 'approved' ? `<span class="badge badge-active">Approved</span>` : ''}
             ${i.status === 'denied' ? `<span class="badge badge-inactive">Denied</span>` : ''}
-            ${i.message ? `<button class="act-btn" onclick="viewInquiryNote('${i.id}')">View Note</button>` : ''}
           </div></td>
         </tr>`).join('')
       : '<tr class="empty-row"><td colspan="11">No inquiries yet</td></tr>';
   } catch(e) {}
 }
-function viewInquiryNote(id) {
+function escapeAttr(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+let currentInquiry = null;
+function viewInquiryDetails(id) {
   const inq = allInquiries.find(i => i.id === id);
-  if (inq && inq.message) alert('Message from ' + inq.contactName + ':\n\n' + inq.message);
+  if (!inq) return;
+  currentInquiry = inq;
+
+  const fields = [
+    ['Curriculum Name', inq.curriculumName],
+    ['Tagline', inq.tagline],
+    ['Description', inq.description],
+    ['Long Description', inq.longDescription],
+    ['Website', inq.website],
+    ['Company', inq.companyName],
+    ['Contact Name', inq.contactName],
+    ['Email', inq.email],
+    ['Phone', inq.phone],
+    ['Listing Type', inq.listingType],
+    ['Grades', (inq.grades || []).join(', ')],
+    ['Teaching Style', (inq.style || []).join(', ')],
+    ['Worldview', (inq.worldview || []).join(', ')],
+    ['Format', (inq.format || []).join(', ')],
+    ['Subject Coverage', (inq.subject || []).join(', ')],
+    ['Special Needs', (inq.special || []).join(', ')],
+    ['Price Range', inq.priceRange || inq.price],
+    ['Pricing Note', inq.pricingNote],
+    ['Pros', Array.isArray(inq.pros) ? inq.pros.join('\n') : inq.pros],
+    ['Cons', Array.isArray(inq.cons) ? inq.cons.join('\n') : inq.cons],
+    ['Additional Message', inq.message],
+    ['Submitted', fmt(inq.createdAt)],
+    ['Status', inq.status]
+  ];
+
+  const rows = fields.map(([label, value], idx) => {
+    const isEmpty = !value || (Array.isArray(value) && !value.length);
+    const displayValue = isEmpty ? '—' : escapeHtml(value);
+    return `<div class="inq-field">
+      <div class="inq-field-label">${escapeHtml(label)}</div>
+      <div class="inq-field-value ${isEmpty ? 'empty' : ''}" id="inq-val-${idx}" onclick="selectFieldText(this)">${displayValue}</div>
+      ${isEmpty ? '<span></span>' : `<button class="inq-copy-btn" onclick="copyInquiryField(${idx}, this)">Copy</button>`}
+    </div>`;
+  }).join('');
+
+  document.getElementById('inquiryDetailsBody').innerHTML = rows;
+  document.getElementById('inquiryModal').classList.add('open');
+}
+
+function closeInquiryModal() {
+  document.getElementById('inquiryModal').classList.remove('open');
+  currentInquiry = null;
+}
+
+function selectFieldText(el) {
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+async function copyInquiryField(idx, btn) {
+  const el = document.getElementById('inq-val-' + idx);
+  if (!el) return;
+  try {
+    await navigator.clipboard.writeText(el.textContent);
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  } catch(e) {
+    selectFieldText(el);
+    showToast('Select was ready — press Cmd/Ctrl+C to copy', '');
+  }
+}
+
+async function copyAllInquiryFields() {
+  if (!currentInquiry) return;
+  const i = currentInquiry;
+  const lines = [
+    `Curriculum Name: ${i.curriculumName || ''}`,
+    `Tagline: ${i.tagline || ''}`,
+    `Description: ${i.description || ''}`,
+    `Long Description: ${i.longDescription || ''}`,
+    `Website: ${i.website || ''}`,
+    `Company: ${i.companyName || ''}`,
+    `Contact: ${i.contactName || ''}`,
+    `Email: ${i.email || ''}`,
+    `Phone: ${i.phone || ''}`,
+    `Listing Type: ${i.listingType || ''}`,
+    `Grades: ${(i.grades || []).join(', ')}`,
+    `Teaching Style: ${(i.style || []).join(', ')}`,
+    `Worldview: ${(i.worldview || []).join(', ')}`,
+    `Format: ${(i.format || []).join(', ')}`,
+    `Subject Coverage: ${(i.subject || []).join(', ')}`,
+    `Special Needs: ${(i.special || []).join(', ')}`,
+    `Price Range: ${i.priceRange || i.price || ''}`,
+    `Pricing Note: ${i.pricingNote || ''}`,
+    `Pros: ${Array.isArray(i.pros) ? i.pros.join(' | ') : (i.pros || '')}`,
+    `Cons: ${Array.isArray(i.cons) ? i.cons.join(' | ') : (i.cons || '')}`,
+    `Additional Message: ${i.message || ''}`
+  ].join('\n');
+  try {
+    await navigator.clipboard.writeText(lines);
+    const btn = document.getElementById('inqCopyAll');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  } catch(e) {
+    showToast('Copy failed — try copying individual fields', 'error');
+  }
 }
 async function approveInquiry(id) {
   if (!confirm('Approve this inquiry? The applicant will receive an email to create their publisher account.')) return;
