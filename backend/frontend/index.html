@@ -199,7 +199,9 @@ figure.testimonial-card{margin:0}
 .curriculum-card.featured{background:linear-gradient(135deg,#FFF9F0,#FDF0ED);border-color:var(--gold);border-width:2px}
 .curriculum-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--terracotta))}
 .card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
-.curriculum-logo{width:56px;height:56px;border-radius:12px;background:var(--light-sage);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid var(--border)}
+.curriculum-logo{width:56px;height:56px;border-radius:12px;background:var(--warm-white);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid var(--border);overflow:hidden;position:relative}
+.curriculum-logo img{width:100%;height:100%;object-fit:contain;padding:6px;display:block}
+.curriculum-logo.emoji-only{background:var(--light-sage)}
 .card-info{flex:1;min-width:0}
 .card-name-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:3px}
 .card-name{font-family:'Fraunces','Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--navy);text-decoration:none;cursor:pointer}
@@ -964,6 +966,24 @@ function renderPage() {
 
 function loadMore() { renderPage(); }
 
+// Build the curriculum brand mark. Priority:
+//   1. c.logoUrl (manually set in admin)
+//   2. Google favicon for the site's domain (128px)
+//   3. Emoji fallback (via onerror handler)
+function curriculumLogoHtml(c) {
+  const emoji = (c.emoji || '📘').replace(/'/g, "\\'");
+  let src = c.logoUrl;
+  if (!src && c.website) {
+    try {
+      const host = new URL(c.website).hostname.replace(/^www\./, '');
+      if (host) src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`;
+    } catch(e) {}
+  }
+  if (!src) return `<div class="curriculum-logo emoji-only">${c.emoji || '📘'}</div>`;
+  const alt = `${(c.name || '').replace(/"/g, '&quot;')} logo`;
+  return `<div class="curriculum-logo"><img src="${src}" alt="${alt}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.classList.add('emoji-only');this.parentElement.innerHTML='${emoji}'"></div>`;
+}
+
 function makeCard(c) {
   const el = document.createElement('div');
   el.className = 'curriculum-card' + (c.featured ? ' featured' : '');
@@ -987,7 +1007,7 @@ function makeCard(c) {
 
   el.innerHTML = `
     <div class="card-top">
-      <div class="curriculum-logo">${c.emoji||'📘'}</div>
+      ${curriculumLogoHtml(c)}
       <div class="card-info">
         <div class="card-name-row">
           <span class="card-name" onclick="openDetail('${c.slug}')">${c.name}</span>
@@ -1067,7 +1087,7 @@ async function openDetail(slug, fromQuiz) {
 
     document.getElementById('detailBody').innerHTML = `
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-        <div style="width:56px;height:56px;background:var(--light-sage);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px">${c.emoji}</div>
+        ${curriculumLogoHtml(c)}
         <div>
           <h2>${c.name}</h2>
           <div style="display:flex;align-items:center;gap:8px;margin-top:4px">

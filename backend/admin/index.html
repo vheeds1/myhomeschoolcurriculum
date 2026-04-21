@@ -320,6 +320,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="form-group" style="flex:3"><label>Tagline</label><input id="cTagline" placeholder="Short tagline"></div>
     </div>
     <div class="form-group"><label>Website URL</label><input id="cWebsite" placeholder="https://www.curriculum-site.com"></div>
+    <div class="form-group"><label>Logo URL <span style="color:var(--muted);font-weight:400">(optional — leave blank to auto-fetch from website)</span></label><input id="cLogoUrl" placeholder="https://.../logo.png — overrides auto-fetched logo"></div>
     <div class="form-group"><label>Short Description</label><textarea id="cDescription" rows="2"></textarea></div>
     <div class="form-group"><label>Long Description (Full Review)</label><textarea id="cLongDescription" rows="4"></textarea></div>
     <div class="form-row">
@@ -1023,7 +1024,7 @@ async function loadBlog() {
 function openCurriculumModal() {
   document.getElementById('currModalTitle').textContent = 'Add Curriculum';
   document.getElementById('currModalId').value = '';
-  ['cName','cSlug','cEmoji','cTagline','cWebsite','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cPricingNote','cAffiliate','cDiscountCode','cDiscountDesc','cDiscountLink','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
+  ['cName','cSlug','cEmoji','cTagline','cWebsite','cLogoUrl','cDescription','cLongDescription','cPriceMin','cPriceMax','cPrice','cPricingNote','cAffiliate','cDiscountCode','cDiscountDesc','cDiscountLink','cPros','cCons'].forEach(id => document.getElementById(id).value = '');
   ['cGrades','cStyle','cWorldview','cFormat','cSubject','cSpecial'].forEach(id => clearCheckboxGroup(id));
   document.getElementById('cPricingModel').value = 'Subscription';
   document.getElementById('extRatingsContainer').innerHTML = '';
@@ -1042,6 +1043,7 @@ function editCurriculum(c) {
   document.getElementById('cEmoji').value = c.emoji||'';
   document.getElementById('cTagline').value = c.tagline||'';
   document.getElementById('cWebsite').value = c.website||'';
+  document.getElementById('cLogoUrl').value = c.logoUrl||'';
   document.getElementById('cDescription').value = c.description||'';
   document.getElementById('cLongDescription').value = c.longDescription||'';
   document.getElementById('cPriceMin').value = c.priceMin||'';
@@ -1143,6 +1145,7 @@ async function saveCurriculum() {
     emoji: document.getElementById('cEmoji').value.trim() || '📘',
     tagline: document.getElementById('cTagline').value,
     website: document.getElementById('cWebsite').value.trim(),
+    logoUrl: document.getElementById('cLogoUrl').value.trim(),
     description: document.getElementById('cDescription').value,
     longDescription: document.getElementById('cLongDescription').value,
     pros: document.getElementById('cPros').value.split('\n').map(s=>s.trim()).filter(Boolean),
