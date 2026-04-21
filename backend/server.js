@@ -62,7 +62,7 @@ app.use(cors({
 
 // Raw body for Stripe webhooks BEFORE express.json()
 app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'frontend')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
