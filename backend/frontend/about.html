@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/brand/png/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/brand/png/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/brand/png/apple-touch-icon.png">
 <title>About Us — My Homeschool Curriculum</title>
 <meta name="description" content="Learn about MyHomeschoolCurriculum — built by a homeschool parent to help families find the right curriculum without the overwhelm.">
 <meta property="og:title" content="About Us — My Homeschool Curriculum">
@@ -26,7 +29,7 @@
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-67QGQLFQFR"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-67QGQLFQFR");</script>
 <style>
@@ -36,8 +39,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charco
 
 /* Header */
 header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo-text{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;text-decoration:none}
-.logo-text span{color:var(--gold)}
+.logo-text{font-family:'Fraunces','Playfair Display',serif;font-size:1.3rem;color:#fff;text-decoration:none}
+.logo-text span{color:var(--gold);font-style:italic;font-weight:400}
 nav{display:flex;gap:6px}
 nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;transition:all .2s}
 nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
@@ -55,14 +58,14 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .hero{background:linear-gradient(135deg,var(--navy) 0%,#2A4F5A 50%,#1A3340 100%);padding:80px 24px 70px;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 80%,rgba(122,158,126,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(212,168,75,.1) 0%,transparent 50%)}
 .hero-content{position:relative;max-width:640px;margin:0 auto}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;line-height:1.2;margin-bottom:16px}
+.hero h1{font-family:'Fraunces','Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;line-height:1.2;margin-bottom:16px}
 .hero h1 em{color:var(--gold);font-style:normal}
 .hero p{color:rgba(255,255,255,.75);font-size:1.05rem;max-width:520px;margin:0 auto}
 
 /* Content */
 .content-wrap{max-width:760px;margin:0 auto;padding:60px 24px}
 .section{margin-bottom:48px}
-.section h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:16px}
+.section h2{font-family:'Fraunces','Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:16px}
 .section h2 span{color:var(--gold)}
 .section p{color:#555;font-size:.95rem;line-height:1.8;margin-bottom:14px}
 
@@ -70,19 +73,19 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:24px}
 .value-card{background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center}
 .value-icon{font-size:2rem;margin-bottom:10px}
-.value-card h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:8px}
+.value-card h3{font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:8px}
 .value-card p{font-size:.82rem;color:var(--text-muted);line-height:1.6}
 
 /* Transparency */
 .transparency-box{background:var(--light-sage);border:1px solid rgba(74,117,80,.2);border-radius:14px;padding:28px;margin-top:24px}
-.transparency-box h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:12px}
+.transparency-box h3{font-family:'Fraunces','Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:12px}
 .transparency-box ul{list-style:none;display:flex;flex-direction:column;gap:10px}
 .transparency-box li{font-size:.88rem;color:#555;display:flex;align-items:flex-start;gap:10px;line-height:1.6}
 .transparency-box li::before{content:'✓';color:var(--deep-sage);font-weight:700;flex-shrink:0}
 
 /* CTA */
 .cta-section{background:linear-gradient(135deg,var(--navy),#2A4F5A);border-radius:20px;padding:48px 32px;text-align:center;margin-top:48px}
-.cta-section h2{font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:12px}
+.cta-section h2{font-family:'Fraunces','Playfair Display',serif;color:#fff;font-size:1.5rem;margin-bottom:12px}
 .cta-section p{color:rgba(255,255,255,.75);font-size:.95rem;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .btn-primary{background:var(--deep-sage);color:#fff;border:none;padding:12px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}

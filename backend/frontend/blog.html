@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/brand/png/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/brand/png/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/brand/png/apple-touch-icon.png">
 <title>Blog — MyHomeschoolCurriculum</title>
 <meta name="description" content="Homeschool guides, curriculum comparisons, teaching strategies, and advice for homeschool families.">
 <meta property="og:title" content="The Homeschool Blog — My Homeschool Curriculum">
@@ -26,18 +29,18 @@
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--cream:#FDF6EC;--warm-white:#FFFBF5;--sage:#7A9E7E;--deep-sage:#4A7550;--terracotta:#C8614A;--gold:#D4A84B;--navy:#1E3A4C;--charcoal:#2C3E3F;--light-sage:#EAF2EB;--border:#E8DDD0;--text-muted:#7A7A6E}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal)}
 header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;text-decoration:none}
-.logo-text span{color:var(--gold)}
+.logo-text{font-family:'Fraunces','Playfair Display',serif;font-size:1.4rem;color:#fff;text-decoration:none}
+.logo-text span{color:var(--gold);font-style:italic;font-weight:400}
 nav a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;margin-left:4px;transition:all .2s}
 nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .hero{background:linear-gradient(135deg,var(--navy),#2A4F5A);padding:50px 24px;text-align:center}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;margin-bottom:10px}
+.hero h1{font-family:'Fraunces','Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;margin-bottom:10px}
 .hero h1 span{color:var(--gold)}
 .hero p{color:rgba(255,255,255,.7);max-width:500px;margin:0 auto;font-size:.95rem}
 .wrap{max-width:1100px;margin:0 auto;padding:50px 24px}
@@ -51,7 +54,7 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .post-thumb{height:140px;background:linear-gradient(135deg,var(--light-sage),#d4e8d5);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
 .post-cat{position:absolute;top:12px;left:12px;background:var(--deep-sage);color:#fff;padding:3px 10px;border-radius:12px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
 .post-body{padding:20px}
-.post-title{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:8px;line-height:1.3}
+.post-title{font-family:'Fraunces','Playfair Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:8px;line-height:1.3}
 .post-excerpt{font-size:.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:12px}
 .post-meta{display:flex;align-items:center;justify-content:space-between;font-size:.74rem;color:var(--text-muted)}
 .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
@@ -65,10 +68,10 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 #postView{display:none}
 .post-header{background:linear-gradient(135deg,var(--navy),#2A4F5A);padding:50px 24px;text-align:center}
 .post-cat-badge{display:inline-block;background:rgba(212,168,75,.25);color:var(--gold);border:1px solid rgba(212,168,75,.4);padding:4px 14px;border-radius:20px;font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:16px}
-.post-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.6rem);color:#fff;max-width:700px;margin:0 auto 16px;line-height:1.2}
+.post-header h1{font-family:'Fraunces','Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.6rem);color:#fff;max-width:700px;margin:0 auto 16px;line-height:1.2}
 .post-header .meta{color:rgba(255,255,255,.6);font-size:.82rem}
 .post-content{max-width:720px;margin:0 auto;padding:50px 24px;line-height:1.8;font-size:.95rem;color:#444}
-.post-content h1,.post-content h2{font-family:'Playfair Display',serif;color:var(--navy);margin:32px 0 12px}
+.post-content h1,.post-content h2{font-family:'Fraunces','Playfair Display',serif;color:var(--navy);margin:32px 0 12px}
 .post-content h2{font-size:1.4rem}
 .post-content h3{font-size:1.1rem;color:var(--charcoal);margin:24px 0 8px;font-weight:600}
 .post-content p{margin-bottom:16px}
@@ -84,7 +87,7 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--deep-sage);font-weight:600;text-decoration:none;font-size:.85rem;margin-bottom:24px;cursor:pointer}
 .back-link:hover{color:var(--navy)}
 .newsletter-cta{background:linear-gradient(135deg,var(--deep-sage),var(--sage));border-radius:16px;padding:32px;text-align:center;margin:40px 0;color:#fff}
-.newsletter-cta h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:8px}
+.newsletter-cta h3{font-family:'Fraunces','Playfair Display',serif;font-size:1.3rem;margin-bottom:8px}
 .newsletter-cta p{opacity:.85;font-size:.88rem;margin-bottom:20px}
 .newsletter-form{display:flex;gap:8px;max-width:400px;margin:0 auto;flex-wrap:wrap;justify-content:center}
 .newsletter-form input{flex:1;min-width:200px;padding:10px 14px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none}
@@ -271,13 +274,13 @@ function injectPostSchema(post) {
     "@type": "BlogPosting",
     "headline": post.title,
     "description": post.metaDescription || post.excerpt || '',
-    "image": post.ogImage || post.featuredImage || "https://myhomeschoolcurriculum.com/og-default.png",
+    "image": post.ogImage || post.featuredImage || "https://myhomeschoolcurriculum.com/brand/png/og-image-1200x630.png",
     "author": { "@type": "Organization", "name": post.author || "My Homeschool Curriculum Team" },
     "publisher": {
       "@type": "Organization",
       "name": "My Homeschool Curriculum",
       "url": "https://myhomeschoolcurriculum.com",
-      "logo": { "@type": "ImageObject", "url": "https://myhomeschoolcurriculum.com/favicon.svg" }
+      "logo": { "@type": "ImageObject", "url": "https://myhomeschoolcurriculum.com/brand/png/icon-512.png" }
     },
     "datePublished": post.publishedAt || post.createdAt,
     "dateModified": post.updatedAt || post.publishedAt || post.createdAt,
@@ -298,7 +301,7 @@ function applyPostSeo(post) {
   const title = post.metaTitle || post.title;
   const desc = post.metaDescription || post.excerpt || '';
   const url = `https://myhomeschoolcurriculum.com/blog.html?post=${post.slug}`;
-  const img = post.ogImage || post.featuredImage || 'https://myhomeschoolcurriculum.com/og-default.png';
+  const img = post.ogImage || post.featuredImage || 'https://myhomeschoolcurriculum.com/brand/png/og-image-1200x630.png';
 
   document.title = `${title} — My Homeschool Curriculum`;
   setMeta('name', 'description', desc);

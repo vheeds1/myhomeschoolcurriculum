@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" width="480" height="260">
+  <g transform="translate(204,24)">
+    <path d="M36 6 L68 30 L4 30 Z" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="none"></path>
+    <path d="M10 30 L10 62 L36 56 L36 30 Z" fill="#ffffff"></path>
+    <path d="M62 30 L62 62 L36 56 L36 30 Z" fill="#d4a84c"></path>
+    <line x1="36" y1="30" x2="36" y2="56" stroke="#1f3a4d" stroke-width="1.6"></line>
+  </g>
+  <g font-family="Fraunces, &#39;Source Serif 4&#39;, serif" text-anchor="middle" letter-spacing="-1.4">
+    <text x="240" y="160" font-weight="700" font-size="40" fill="#ffffff">My Homeschool</text>
+    <text x="240" y="204" font-weight="400" font-style="italic" font-size="40" fill="#d4a84c">Curriculum</text>
+  </g>
+</svg>

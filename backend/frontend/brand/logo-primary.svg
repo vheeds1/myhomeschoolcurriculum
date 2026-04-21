@@ -1,0 +1,17 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="640" height="160">
+  <title>My Homeschool Curriculum</title>
+  <g transform="translate(20,36)">
+    
+    <g>
+      <path d="M50 6 L92 38 L8 38 Z" stroke="#1f3a4d" stroke-width="4" stroke-linejoin="round" fill="none"></path>
+      <path d="M14 38 L14 80 L50 72 L50 38 Z" fill="#1f3a4d"></path>
+      <path d="M86 38 L86 80 L50 72 L50 38 Z" fill="#d4a84c"></path>
+      <line x1="50" y1="38" x2="50" y2="72" stroke="#ffffff" stroke-width="2"></line>
+    </g>
+  </g>
+  <g font-family="Fraunces, &#39;Source Serif 4&#39;, serif" letter-spacing="-2">
+    <text x="140" y="74" font-weight="700" font-size="52" fill="#1f3a4d">My Homeschool</text>
+    <text x="140" y="128" font-weight="400" font-style="italic" font-size="52" fill="#d4a84c">Curriculum</text>
+  </g>
+</svg>

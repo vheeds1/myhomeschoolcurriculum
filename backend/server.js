@@ -1152,7 +1152,7 @@ app.get('/blog', (req, res) => {
   const siteUrl = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
   const title = post.metaTitle || post.title;
   const desc = post.metaDescription || post.excerpt || '';
-  const img = post.ogImage || post.featuredImage || `${siteUrl}/og-default.png`;
+  const img = post.ogImage || post.featuredImage || `${siteUrl}/brand/png/og-image-1200x630.png`;
   const url = `${siteUrl}/blog?post=${post.slug}`;
   const keywords = (post.keywords || post.tags || []).join(', ');
   const published = post.publishedAt || post.createdAt || '';
@@ -1170,7 +1170,7 @@ app.get('/blog', (req, res) => {
       "@type": "Organization",
       "name": "My Homeschool Curriculum",
       "url": siteUrl,
-      "logo": { "@type": "ImageObject", "url": `${siteUrl}/favicon.svg` }
+      "logo": { "@type": "ImageObject", "url": `${siteUrl}/brand/png/icon-512.png` }
     },
     "datePublished": published,
     "dateModified": modified,

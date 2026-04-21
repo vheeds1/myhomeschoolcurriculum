@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/brand/png/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/brand/png/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/brand/png/apple-touch-icon.png">
 <title>Publisher Portal — My Homeschool Curriculum</title>
 <meta name="description" content="Publisher portal for MyHomeschoolCurriculum — manage your listing, view analytics, and track performance.">
 <link rel="canonical" href="https://myhomeschoolcurriculum.com/publisher-portal.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <!-- Google Analytics 4 -->
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -30,7 +33,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* ── AUTH SCREENS ── */
 #authScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(135deg,#0F1923,#1C2D3D)}
 .auth-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:440px}
-.auth-logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text);text-align:center;margin-bottom:6px}
+.auth-logo{font-family:'Fraunces','Playfair Display',serif;font-size:1.4rem;color:var(--text);text-align:center;margin-bottom:6px}
 .auth-logo span{color:var(--gold)}
 .auth-sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:28px}
 .auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
@@ -57,7 +60,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* Sidebar */
 .sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto}
 .sidebar-logo{padding:20px 18px;border-bottom:1px solid var(--border)}
-.sidebar-logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text)}
+.sidebar-logo-text{font-family:'Fraunces','Playfair Display',serif;font-size:1.1rem;color:var(--text)}
 .sidebar-logo-text span{color:var(--gold)}
 .sidebar-subtitle{font-size:.7rem;color:var(--muted);margin-top:2px}
 .nav-section{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:14px 18px 4px}
@@ -82,7 +85,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .dash-main{margin-left:240px;flex:1;padding:32px;min-height:100vh}
 .page{display:none}
 .page.active{display:block}
-.page-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text);margin-bottom:4px}
+.page-title{font-family:'Fraunces','Playfair Display',serif;font-size:1.4rem;color:var(--text);margin-bottom:4px}
 .page-sub{color:var(--muted);font-size:.85rem;margin-bottom:28px}
 
 /* Pending state */
@@ -94,7 +97,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
 .stat-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px}
-.stat-value{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--text)}
+.stat-value{font-family:'Fraunces','Playfair Display',serif;font-size:1.8rem;color:var(--text)}
 .stat-sub{font-size:.72rem;color:var(--muted);margin-top:3px}
 .stat-card.highlight{border-color:var(--accent);background:rgba(74,154,84,.08)}
 .stat-card.highlight .stat-value{color:var(--accent)}
@@ -130,7 +133,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .package-card.popular-plan{border-color:var(--gold)}
 .popular-plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);padding:2px 14px;border-radius:10px;font-size:.68rem;font-weight:700;white-space:nowrap}
 .package-header{margin-bottom:16px}
-.package-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text);margin-bottom:4px}
+.package-name{font-family:'Fraunces','Playfair Display',serif;font-size:1.05rem;color:var(--text);margin-bottom:4px}
 .package-price{font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:2px}
 .package-price span{font-size:.75rem;font-weight:400;color:var(--muted)}
 .package-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
@@ -145,7 +148,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .upgrade-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:24px}
 .upgrade-overlay.show{display:flex}
 .upgrade-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;max-width:520px;width:100%;text-align:center;position:relative}
-.upgrade-modal h2{font-family:'Playfair Display',serif;color:var(--text);font-size:1.3rem;margin-bottom:8px}
+.upgrade-modal h2{font-family:'Fraunces','Playfair Display',serif;color:var(--text);font-size:1.3rem;margin-bottom:8px}
 .upgrade-modal p{color:var(--muted);font-size:.88rem;line-height:1.6;margin-bottom:20px}
 .upgrade-modal .dismiss{background:none;border:none;color:var(--muted);font-size:.82rem;cursor:pointer;margin-top:12px;text-decoration:underline}
 
@@ -186,7 +189,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .sidebar.open{transform:translateX(0)}
   .sidebar .sidebar-logo{display:flex;align-items:center;justify-content:space-between}
   .mobile-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:998}
-  .mobile-header-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text)}
+  .mobile-header-title{font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--text)}
   .mobile-header-title span{color:var(--gold)}
   .dash-main{margin-left:0;padding:16px}
   .form-row{grid-template-columns:1fr}
@@ -210,7 +213,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <!-- ══ AUTH SCREEN ══════════════════════════════════════════════════════════ -->
 <div id="authScreen">
   <div class="auth-card">
-    <div class="auth-logo">📚 My Homeschool <span>Curriculum</span></div>
+    <div class="auth-logo"><svg viewBox="0 0 100 88" aria-hidden="true" style="width:26px;height:22px;vertical-align:-4px;margin-right:6px"><path d="M50 6 L92 38 L8 38 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round" fill="none"/><path d="M14 38 L14 80 L50 72 L50 38 Z" fill="currentColor"/><path d="M86 38 L86 80 L50 72 L50 38 Z" fill="#D4A84B"/><line x1="50" y1="38" x2="50" y2="72" stroke="rgba(255,255,255,0.4)" stroke-width="2"/></svg>My Homeschool <span>Curriculum</span></div>
     <div class="auth-sub">Publisher Portal</div>
 
     <div class="auth-tabs">
@@ -276,7 +279,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <!-- Mobile Header -->
     <div class="mobile-header">
-      <div class="mobile-header-title">📚 My Homeschool <span>Curriculum</span></div>
+      <div class="mobile-header-title"><svg viewBox="0 0 100 88" aria-hidden="true" style="width:26px;height:22px;vertical-align:-4px;margin-right:6px"><path d="M50 6 L92 38 L8 38 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round" fill="none"/><path d="M14 38 L14 80 L50 72 L50 38 Z" fill="currentColor"/><path d="M86 38 L86 80 L50 72 L50 38 Z" fill="#D4A84B"/><line x1="50" y1="38" x2="50" y2="72" stroke="rgba(255,255,255,0.4)" stroke-width="2"/></svg>My Homeschool <span>Curriculum</span></div>
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">☰</button>
     </div>
 
@@ -284,7 +287,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="sidebar" id="sidebar">
       <div class="sidebar-logo">
         <div>
-          <div class="sidebar-logo-text">📚 My Homeschool <span>Curriculum</span></div>
+          <div class="sidebar-logo-text"><svg viewBox="0 0 100 88" aria-hidden="true" style="width:26px;height:22px;vertical-align:-4px;margin-right:6px"><path d="M50 6 L92 38 L8 38 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round" fill="none"/><path d="M14 38 L14 80 L50 72 L50 38 Z" fill="currentColor"/><path d="M86 38 L86 80 L50 72 L50 38 Z" fill="#D4A84B"/><line x1="50" y1="38" x2="50" y2="72" stroke="rgba(255,255,255,0.4)" stroke-width="2"/></svg>My Homeschool <span>Curriculum</span></div>
           <div class="sidebar-subtitle">Publisher Portal</div>
         </div>
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Close menu">✕</button>
