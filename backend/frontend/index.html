@@ -64,7 +64,8 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 /* ── HERO ── */
 .hero{background:var(--navy);position:relative;overflow:hidden;min-height:560px;display:flex;align-items:center;justify-content:center;text-align:center}
 .hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
-.hero-bg img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.85) brightness(.92)}
+.hero-bg img{width:100%;height:120%;object-fit:cover;display:block;filter:saturate(.85) brightness(.92);will-change:transform;transform:translate3d(0,0,0)}
+@media (prefers-reduced-motion:reduce){.hero-bg img{transform:none!important}}
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,40,56,.7) 0%,rgba(20,40,56,.78) 55%,rgba(20,40,56,.82) 100%),radial-gradient(circle at 50% 120%,rgba(122,158,126,.22) 0%,transparent 55%),radial-gradient(circle at 85% 15%,rgba(212,168,75,.12) 0%,transparent 55%)}
 .hero-left{padding:80px 32px;position:relative;z-index:1;width:100%;max-width:880px;display:flex;flex-direction:column;align-items:center}
 .hero-content{position:relative;max-width:720px;display:flex;flex-direction:column;align-items:center}
@@ -1512,9 +1513,27 @@ function toggleDefs(category) {
 }
 
 // ── BACK TO TOP ──────────────────────────────────────────────────────────────
+// Parallax hero photo — rAF-throttled; respects prefers-reduced-motion
+const heroBgImg = document.querySelector('.hero-bg img');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let parallaxTicking = false;
+function updateParallax() {
+  if (!heroBgImg) return;
+  const y = window.scrollY;
+  // Move background up at ~40% of scroll speed, only while hero is near viewport
+  if (y < window.innerHeight * 1.2) {
+    heroBgImg.style.transform = `translate3d(0, ${y * 0.4}px, 0)`;
+  }
+  parallaxTicking = false;
+}
+
 window.addEventListener('scroll', () => {
   document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
-});
+  if (!reduceMotion && !parallaxTicking) {
+    parallaxTicking = true;
+    requestAnimationFrame(updateParallax);
+  }
+}, { passive: true });
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 fetchCurricula();
