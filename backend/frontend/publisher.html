@@ -22,7 +22,7 @@
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal)}
 header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
 .logo-text{font-family:'Fraunces','Playfair Display',serif;font-size:1.4rem;color:#fff;text-decoration:none}
-.logo-text span{color:var(--gold);font-style:italic;font-weight:400}
+.logo-text{display:inline-flex;align-items:center;gap:10px;min-width:0}.logo-text svg{width:28px;height:24px;flex-shrink:0}.logo-text .wordmark{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.logo-text em{color:var(--gold);font-style:italic;font-weight:400}
 .back-link{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:20px;transition:all .2s}
 .back-link:hover{background:rgba(255,255,255,.12);color:#fff}
 
@@ -147,7 +147,7 @@ footer a{color:var(--gold);text-decoration:none}
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 <header>
-  <a href="/" class="logo-text">My Homeschool <span>Curriculum</span></a>
+  <a href="/" class="logo-text" aria-label="My Homeschool Curriculum — home"><svg viewBox="0 0 100 88" aria-hidden="true" focusable="false"><path d="M50 6 L92 38 L8 38 Z" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" fill="none"/><path d="M14 38 L14 80 L50 72 L50 38 Z" fill="#ffffff"/><path d="M86 38 L86 80 L50 72 L50 38 Z" fill="#d4a84c"/><line x1="50" y1="38" x2="50" y2="72" stroke="#1f3a4d" stroke-width="2"/></svg><span class="wordmark">My Homeschool <em>Curriculum</em></span></a>
   <nav aria-label="Main navigation">
     <a href="/">Browse</a>
     <a href="/blog.html">Blog</a>
