@@ -1,0 +1,16 @@
+{
+  "name": "My Homeschool Curriculum",
+  "short_name": "MHC",
+  "description": "Compare 60+ homeschool curricula — filter by grade, teaching style, worldview, and budget.",
+  "icons": [
+    { "src": "/brand/png/favicon-48.png", "sizes": "48x48", "type": "image/png" },
+    { "src": "/brand/png/favicon-128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/brand/png/favicon-256.png", "sizes": "256x256", "type": "image/png" },
+    { "src": "/brand/png/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/png/icon-1024.png", "sizes": "1024x1024", "type": "image/png", "purpose": "maskable" }
+  ],
+  "theme_color": "#1F3A4D",
+  "background_color": "#FDF6EC",
+  "display": "browser",
+  "start_url": "/"
+}

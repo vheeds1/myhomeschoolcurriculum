@@ -1083,6 +1083,12 @@ app.get('/api/admin/blog', requireAdmin, (req, res) => {
 });
 
 // ─── SEO — SITEMAP + ROBOTS ──────────────────────────────────────────────────
+// Googlebot requests /favicon.ico by default — route it to the 48px PNG so the
+// crawler always gets a real branded icon even though our primary is SVG.
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/brand/png/favicon-48.png'));
+});
+
 app.get('/robots.txt', (req, res) => {
   const siteUrl = process.env.SITE_URL || `http://localhost:${PORT}`;
   res.type('text/plain').send(
