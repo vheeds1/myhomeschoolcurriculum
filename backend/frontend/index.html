@@ -62,13 +62,16 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 }
 
 /* ── HERO ── */
-.hero{background:linear-gradient(135deg,var(--navy) 0%,#2A4F5A 50%,#1A3340 100%);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
-.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 80%,rgba(122,158,126,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(212,168,75,.1) 0%,transparent 50%);pointer-events:none}
-.hero-left{padding:60px 40px 60px 48px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
-.hero-right{position:relative;overflow:hidden;min-height:340px}
-.hero-right::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.15);pointer-events:none}
-.hero-photo{width:100%;height:100%;object-fit:cover;display:block}
-.hero-content{position:relative;max-width:700px}
+.hero{background:var(--navy);position:relative;overflow:hidden;min-height:560px;display:flex;align-items:center;justify-content:center;text-align:center}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.85) brightness(.92)}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,40,56,.7) 0%,rgba(20,40,56,.78) 55%,rgba(20,40,56,.82) 100%),radial-gradient(circle at 50% 120%,rgba(122,158,126,.22) 0%,transparent 55%),radial-gradient(circle at 85% 15%,rgba(212,168,75,.12) 0%,transparent 55%)}
+.hero-left{padding:80px 32px;position:relative;z-index:1;width:100%;max-width:880px;display:flex;flex-direction:column;align-items:center}
+.hero-content{position:relative;max-width:720px;display:flex;flex-direction:column;align-items:center}
+.hero p{margin-left:auto;margin-right:auto}
+.hero-btn-row{justify-content:center}
+.hero-stats{justify-content:center}
+.stat{text-align:center}
 .hero-badge{display:inline-block;background:rgba(212,168,75,.2);color:var(--gold);border:1px solid rgba(212,168,75,.4);padding:5px 16px;border-radius:20px;font-size:.78rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:20px}
 .hero h1{font-family:'Fraunces','Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);color:#fff;line-height:1.15;margin-bottom:16px}
 .hero h1 em{color:var(--gold);font-style:italic;font-weight:400}
@@ -82,7 +85,7 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .stat{text-align:left}
 .stat-num{font-family:'Fraunces','Playfair Display',serif;font-size:2rem;color:var(--gold);font-weight:700;display:block}
 .stat-label{color:rgba(255,255,255,.6);font-size:.78rem;font-weight:500;letter-spacing:.3px}
-@media(max-width:768px){.hero{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:50px 24px}.hero-content{max-width:none}}
+@media(max-width:768px){.hero{min-height:auto}.hero-left{padding:60px 24px}.hero-bg::after{background:linear-gradient(180deg,rgba(20,40,56,.85) 0%,rgba(20,40,56,.8) 100%)}.hero p{max-width:none}}
 
 /* ── HOW IT WORKS ── */
 .how-it-works{background:var(--warm-white);padding:60px 24px;border-bottom:1px solid var(--border)}
@@ -421,6 +424,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 </header>
 
 <section class="hero">
+  <div class="hero-bg">
+    <img src="https://i.postimg.cc/YCfCQMrg/Adobe-Stock-342125144.jpg" alt="" loading="eager" width="1600" height="900" fetchpriority="high">
+  </div>
   <div class="hero-left">
     <div class="hero-content">
       <div class="hero-badge">✦ Trusted by 50,000+ Homeschool Families</div>
@@ -436,9 +442,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
         <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always Free To Use</span></div>
       </div>
     </div>
-  </div>
-  <div class="hero-right">
-    <img class="hero-photo" src="https://i.postimg.cc/YCfCQMrg/Adobe-Stock-342125144.jpg" alt="A parent and child reading and learning together at home" loading="eager" width="800" height="600" fetchpriority="high">
   </div>
 </section>
 
