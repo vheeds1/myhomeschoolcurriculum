@@ -320,14 +320,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 <div id="listView">
   <div class="list-hero">
     <div class="list-hero-inner">
-      <span class="list-eyebrow">The Homeschool Blog</span>
-      <h1>Real advice from <em>real</em> homeschool families</h1>
+      <h1>The Homeschool <em>Blog</em></h1>
       <p class="lead">Guides, curriculum comparisons, teaching strategies, and honest advice — written for families who are actually doing this.</p>
-      <div class="hero-stats">
-        <div class="hero-stat"><span class="hero-stat-num" id="statPosts">—</span><span class="hero-stat-label">Articles</span></div>
-        <div class="hero-stat"><span class="hero-stat-num" id="statCats">—</span><span class="hero-stat-label">Topics</span></div>
-        <div class="hero-stat"><span class="hero-stat-num">10k+</span><span class="hero-stat-label">Readers</span></div>
-      </div>
     </div>
   </div>
   <div class="wrap">
@@ -481,17 +475,10 @@ async function loadPosts() {
     const data = await res.json();
     allPosts = (data.posts || []).filter(p => p.published !== false);
     buildFilterPills();
-    updateHeroStats();
     renderListView(allPosts);
   } catch (e) {
     document.getElementById('blogGrid').innerHTML = '<div class="empty">Could not load posts. Is the server running?</div>';
   }
-}
-
-function updateHeroStats() {
-  document.getElementById('statPosts').textContent = allPosts.length;
-  const cats = new Set(allPosts.map(p => p.category || 'General'));
-  document.getElementById('statCats').textContent = cats.size;
 }
 
 function buildFilterPills() {
