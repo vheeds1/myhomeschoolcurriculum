@@ -870,6 +870,65 @@ app.get('/api/legal/states/:state', (req, res) => {
 // ─── FULL ANALYTICS ──────────────────────────────────────────────────────────
 // ════════════════════════════════════════════════════════════════════════════════
 
+// Detailed affiliate clicks — grouped per-day and per-curriculum, plus a raw list
+app.get('/api/admin/affiliate-clicks', requireAdmin, (req, res) => {
+  const db = readDB();
+  if (!db) return res.status(500).json({ error: 'Database error' });
+  const clicks = (db.affiliateClicks || []).slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const days = parseInt(req.query.days) || 30;
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  const inRange = clicks.filter(c => new Date(c.timestamp) >= since);
+
+  // Build a curriculum → affiliate-link lookup so we can show the actual URL
+  const curriculumLookup = {};
+  (db.curricula || []).forEach(c => { curriculumLookup[c.id] = { name: c.name, link: c.affiliateLink || c.discountLink || c.website, emoji: c.emoji }; });
+
+  // Daily totals (YYYY-MM-DD → count)
+  const daily = {};
+  for (let i = 0; i < days; i++) {
+    const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    daily[d] = 0;
+  }
+  inRange.forEach(c => {
+    const day = new Date(c.timestamp).toISOString().slice(0, 10);
+    if (daily[day] !== undefined) daily[day]++;
+  });
+  const dailySeries = Object.entries(daily).sort((a, b) => a[0].localeCompare(b[0])).map(([date, count]) => ({ date, count }));
+
+  // Per-curriculum totals (in range)
+  const byCurriculum = {};
+  inRange.forEach(c => {
+    const key = c.curriculumId;
+    if (!byCurriculum[key]) {
+      const info = curriculumLookup[key] || {};
+      byCurriculum[key] = { curriculumId: key, name: c.curriculumName, emoji: info.emoji || '', link: info.link || '', count: 0, lastClick: c.timestamp };
+    }
+    byCurriculum[key].count++;
+    if (new Date(c.timestamp) > new Date(byCurriculum[key].lastClick)) byCurriculum[key].lastClick = c.timestamp;
+  });
+  const topCurricula = Object.values(byCurriculum).sort((a, b) => b.count - a.count);
+
+  // Recent raw clicks (enriched with the affiliate link)
+  const recent = inRange.slice(0, 200).map(c => ({
+    id: c.id,
+    curriculumId: c.curriculumId,
+    curriculumName: c.curriculumName,
+    link: (curriculumLookup[c.curriculumId] && curriculumLookup[c.curriculumId].link) || '',
+    timestamp: c.timestamp,
+    referrer: c.referrer,
+    userAgent: c.userAgent
+  }));
+
+  res.json({
+    totalInRange: inRange.length,
+    totalAllTime: clicks.length,
+    days,
+    dailySeries,
+    topCurricula,
+    recent
+  });
+});
+
 app.get('/api/analytics', requireAdmin, (req, res) => {
   const db = readDB();
   if (!db) return res.status(500).json({ error: 'Database error' });

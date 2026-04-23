@@ -111,8 +111,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 /* Blog editor toolbar */
 .editor-toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:var(--bg,#F7F3EC);border:1px solid var(--border);border-radius:8px 8px 0 0;margin-top:6px}
-.editor-toolbar button{background:#fff;border:1px solid var(--border);color:var(--text,#2C3E3F);padding:6px 10px;font-size:.78rem;font-weight:600;border-radius:6px;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:4px;line-height:1.2}
-.editor-toolbar button:hover{border-color:var(--accent,#4A7550);color:var(--accent,#4A7550);background:#F0F7F0}
+.editor-toolbar button{background:#fff;border:1px solid #D5D5D0;color:#1E3A4C;padding:6px 10px;font-size:.78rem;font-weight:600;border-radius:6px;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:4px;line-height:1.2}
+.editor-toolbar button:hover{border-color:#4A7550;color:#4A7550;background:#F0F7F0}
+.editor-toolbar button strong,.editor-toolbar button em{color:inherit}
 .editor-toolbar .toolbar-sep{display:inline-block;width:1px;background:var(--border);margin:0 4px}
 .editor-pane{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden}
 .editor-pane.split{grid-template-columns:1fr 1fr}
@@ -136,6 +137,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .editor-pane .editor-preview td{padding:6px 10px;border-top:1px solid #E8DDD0}
 .editor-help{font-size:.72rem;color:var(--muted,#7A7A6E);margin-top:6px;line-height:1.6}
 .editor-help code{background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px;font-size:.88em}
+
+/* Clicks chart — simple CSS bar chart */
+.clicks-chart{display:flex;align-items:flex-end;gap:3px;height:180px;padding:10px 0;overflow-x:auto}
+.clicks-chart .bar{flex:1;min-width:14px;background:linear-gradient(180deg,var(--accent),#3A6040);border-radius:4px 4px 0 0;position:relative;cursor:default;transition:opacity .15s;min-height:2px}
+.clicks-chart .bar:hover{opacity:.85}
+.clicks-chart .bar .tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%) translateY(-4px);background:var(--navy);color:#fff;padding:4px 8px;border-radius:6px;font-size:.7rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:10}
+.clicks-chart .bar:hover .tip{opacity:1}
+.clicks-chart .bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.62rem;color:var(--muted);white-space:nowrap;font-family:ui-monospace,monospace}
+.clicks-chart .bar.zero{background:var(--border);opacity:.4}
 .inq-field{display:grid;grid-template-columns:150px 1fr auto;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);align-items:start}
 .inq-field:last-child{border-bottom:none}
 .inq-field-label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding-top:4px}
@@ -184,6 +194,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="nav-item" onclick="showTab('reviews',this)"><span class="icon">⭐</span> Reviews <span class="nav-badge" id="reviewsBadge" style="display:none"></span></div>
       <div class="nav-item" onclick="showTab('blog',this)"><span class="icon">✍️</span> Blog Posts</div>
       <div class="nav-section">Business</div>
+      <div class="nav-item" onclick="showTab('clicks',this)"><span class="icon">🔗</span> Affiliate Clicks</div>
       <div class="nav-item" onclick="showTab('inquiries',this)"><span class="icon">📋</span> Inquiries <span class="nav-badge" id="inquiriesBadge" style="display:none"></span></div>
       <div class="nav-item" onclick="showTab('subscriptions',this)"><span class="icon">💰</span> Revenue & Billing</div>
       <div class="nav-section">People</div>
@@ -245,6 +256,52 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <input class="search-input" placeholder="Search…" oninput="filterTable('reviewsTable',this.value)">
         </div>
         <div class="table-wrap"><table><thead><tr><th>Curriculum</th><th>Reviewer</th><th>Rating</th><th>Title</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="reviewsTable"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- AFFILIATE CLICKS TAB -->
+      <div class="tab-content" id="tab-clicks">
+        <div class="section-header">
+          <div class="section-title">🔗 Affiliate Clicks</div>
+          <select id="clicksRange" class="search-input" style="width:auto" onchange="loadClicks()">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="365">Last 12 months</option>
+          </select>
+        </div>
+
+        <!-- Summary stat cards -->
+        <div class="stats-grid" id="clicksStats" style="margin-bottom:20px"></div>
+
+        <!-- Daily bar chart -->
+        <div class="card" style="padding:20px;margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div style="font-size:.95rem;font-weight:600;color:var(--text)">Clicks per day</div>
+            <div style="font-size:.72rem;color:var(--muted)" id="clicksChartHint"></div>
+          </div>
+          <div id="clicksChart" class="clicks-chart" role="img" aria-label="Daily affiliate click counts"></div>
+        </div>
+
+        <!-- Top curricula -->
+        <div class="section-header"><div class="section-title" style="font-size:.95rem">Top curricula by clicks</div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th style="width:40px">#</th><th>Curriculum</th><th>Clicks</th><th>% of total</th><th>Last click</th><th>Affiliate link</th></tr></thead>
+            <tbody id="clicksTopTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+          </table>
+        </div>
+
+        <!-- Recent clicks -->
+        <div class="section-header" style="margin-top:26px">
+          <div class="section-title" style="font-size:.95rem">Recent clicks <span style="font-size:.72rem;color:var(--muted);font-weight:400">(newest 200)</span></div>
+          <input class="search-input" placeholder="Search by curriculum…" oninput="filterTable('clicksRecentTable',this.value)">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>When</th><th>Curriculum</th><th>Referrer</th><th>Affiliate link</th></tr></thead>
+            <tbody id="clicksRecentTable"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- INQUIRIES TAB -->
@@ -1421,6 +1478,61 @@ function showTab(tab, el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   if (el) el.classList.add('active');
+  if (tab === 'clicks') loadClicks();
+}
+
+// ── AFFILIATE CLICKS ─────────────────────────────────────────────────────────
+async function loadClicks() {
+  const range = document.getElementById('clicksRange').value;
+  const res = await fetch(`${API}/admin/affiliate-clicks?days=${range}`, { headers: authHeaders() });
+  if (!res.ok) { showToast('Could not load clicks', 'err'); return; }
+  const d = await res.json();
+
+  // Stats cards
+  document.getElementById('clicksStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">In range</div><div class="stat-value">${d.totalInRange.toLocaleString()}</div><div class="stat-delta">Last ${d.days} days</div></div>
+    <div class="stat-card"><div class="stat-label">All time</div><div class="stat-value">${d.totalAllTime.toLocaleString()}</div></div>
+    <div class="stat-card"><div class="stat-label">Top curriculum</div><div class="stat-value" style="font-size:1.1rem;line-height:1.3">${d.topCurricula[0] ? d.topCurricula[0].name : '—'}</div><div class="stat-delta">${d.topCurricula[0] ? d.topCurricula[0].count + ' clicks' : ''}</div></div>
+    <div class="stat-card"><div class="stat-label">Unique curricula</div><div class="stat-value">${d.topCurricula.length}</div></div>
+  `;
+
+  // Daily bar chart
+  const max = Math.max(1, ...d.dailySeries.map(x => x.count));
+  const chart = document.getElementById('clicksChart');
+  // Show every Nth label so things stay readable
+  const labelEvery = d.days <= 14 ? 1 : (d.days <= 60 ? 5 : 15);
+  chart.innerHTML = d.dailySeries.map((x, i) => {
+    const pct = Math.max(2, (x.count / max) * 100);
+    const showLabel = (d.dailySeries.length - 1 - i) % labelEvery === 0;
+    const shortDate = x.date.slice(5); // MM-DD
+    return `<div class="bar ${x.count === 0 ? 'zero' : ''}" style="height:${pct}%" role="presentation">
+      <span class="tip">${shortDate}: ${x.count} click${x.count === 1 ? '' : 's'}</span>
+      ${showLabel ? `<span class="bar-label">${shortDate}</span>` : ''}
+    </div>`;
+  }).join('');
+  document.getElementById('clicksChartHint').textContent = `${d.dailySeries.length} days · hover bars for detail`;
+
+  // Top curricula table
+  const topTable = document.getElementById('clicksTopTable');
+  topTable.innerHTML = d.topCurricula.length ? d.topCurricula.map((c, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td><strong>${c.emoji || ''} ${escapeHtml(c.name)}</strong></td>
+      <td><strong>${c.count}</strong></td>
+      <td>${d.totalInRange ? ((c.count / d.totalInRange) * 100).toFixed(1) : '0.0'}%</td>
+      <td>${fmt(c.lastClick)}</td>
+      <td>${c.link ? `<a href="${escapeAttr(c.link)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:.78rem">${escapeHtml(c.link.replace(/^https?:\/\//, '').slice(0, 45))}${c.link.length > 45 ? '…' : ''}</a>` : '<span style="color:var(--muted)">—</span>'}</td>
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="6">No clicks in this range yet.</td></tr>';
+
+  // Recent clicks
+  const recent = document.getElementById('clicksRecentTable');
+  recent.innerHTML = d.recent.length ? d.recent.map(c => `
+    <tr>
+      <td style="white-space:nowrap">${fmt(c.timestamp)}</td>
+      <td><strong>${escapeHtml(c.curriculumName)}</strong></td>
+      <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.referrer ? `<a href="${escapeAttr(c.referrer)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:.78rem" title="${escapeAttr(c.referrer)}">${escapeHtml(c.referrer.replace(/^https?:\/\//, '').slice(0, 40))}</a>` : '<span style="color:var(--muted)">Direct</span>'}</td>
+      <td>${c.link ? `<a href="${escapeAttr(c.link)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:.78rem">Visit →</a>` : '<span style="color:var(--muted)">—</span>'}</td>
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="4">No recent clicks.</td></tr>';
 }
 
 function filterTable(tableId, q) {
