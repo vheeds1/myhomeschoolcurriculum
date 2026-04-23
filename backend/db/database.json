@@ -65,26 +65,6 @@
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
       "updatedAt": "2026-04-15T00:02:22.520Z",
-      "externalRatings": [
-        {
-          "source": "Google",
-          "rating": 4.8,
-          "reviewCount": 2341,
-          "url": "https://google.com"
-        },
-        {
-          "source": "Trustpilot",
-          "rating": 4.6,
-          "reviewCount": 876,
-          "url": "https://trustpilot.com"
-        },
-        {
-          "source": "Facebook",
-          "rating": 4.9,
-          "reviewCount": 5200,
-          "url": "https://facebook.com"
-        }
-      ],
       "pricingModel": "Per Subject",
       "pricingNote": "Language Arts PDF levels free to download. Print courses $10–$125. Math, handwriting, and history sold separately."
     },
@@ -158,20 +138,6 @@
       "active": true,
       "createdAt": "2024-01-15T00:00:00Z",
       "updatedAt": "2026-04-15T00:02:22.524Z",
-      "externalRatings": [
-        {
-          "source": "Google",
-          "rating": 4.5,
-          "reviewCount": 1890,
-          "url": "https://google.com"
-        },
-        {
-          "source": "App Store",
-          "rating": 4.3,
-          "reviewCount": 12400,
-          "url": "https://apps.apple.com"
-        }
-      ],
       "pricingNote": "PreK–8: $39.95/mo first student; 9–12: $39.95/mo. Annual plan ~30% off (~$336/yr). Each additional student discounted.",
       "pricingModel": "Subscription"
     },
@@ -3895,7 +3861,19 @@
     }
   ],
   "reviews": [],
-  "affiliateClicks": [],
+  "affiliateClicks": [
+    {
+      "id": "d31bb7d3-7f93-40ec-8240-862233298c60",
+      "curriculumId": 1,
+      "curriculumName": "The Good and the Beautiful",
+      "affiliateCode": "COMPASS10",
+      "ip": "::1",
+      "userAgent": "curl/8.7.1",
+      "referrer": null,
+      "isTest": true,
+      "timestamp": "2026-04-23T00:45:01.445Z"
+    }
+  ],
   "listingInquiries": [
     {
       "id": "2b9b3776-995b-433e-91e7-f0b90a073f46",

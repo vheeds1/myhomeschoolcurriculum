@@ -29,7 +29,8 @@ async function main() {
     priceMax: c.priceMax,
     pricingNote: c.pricingNote || '',
     pricingModel: c.pricingModel || '',
-    grades: c.grades
+    grades: c.grades,
+    clearExternalRatings: true
   }));
 
   console.log(`Pushing filter updates for ${updates.length} curricula to ${SITE_URL}...`);

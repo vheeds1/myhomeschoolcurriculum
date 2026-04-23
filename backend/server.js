@@ -1036,6 +1036,8 @@ app.put('/api/admin/curricula/bulk-update', requireAdmin, (req, res) => {
       if (u.pricingNote !== undefined) db.curricula[idx].pricingNote = u.pricingNote;
       if (u.pricingModel) db.curricula[idx].pricingModel = u.pricingModel;
       if (u.grades) db.curricula[idx].grades = u.grades;
+      // Pass clearExternalRatings:true to wipe the legacy fabricated ratings field
+      if (u.clearExternalRatings === true) delete db.curricula[idx].externalRatings;
       db.curricula[idx].updatedAt = new Date().toISOString();
       updated++;
     }

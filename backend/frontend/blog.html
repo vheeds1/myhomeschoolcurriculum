@@ -49,7 +49,7 @@ img{max-width:100%;display:block}
 @media(max-width:540px){.back-to-top{width:42px;height:42px;bottom:18px;right:18px}}
 
 /* ── READING PROGRESS BAR ───────────────────────────────────────────── */
-.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--deep-sage));width:0;z-index:200;transition:width .1s ease-out;box-shadow:0 1px 6px rgba(212,168,75,.4)}
+.progress-bar{position:fixed;top:0;left:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 0;background:linear-gradient(90deg,var(--gold),var(--deep-sage));z-index:200;transition:transform .1s ease-out;box-shadow:0 1px 6px rgba(212,168,75,.4);will-change:transform}
 
 /* ── HEADER ─────────────────────────────────────────────────────────── */
 header{background:var(--navy);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
@@ -1037,11 +1037,11 @@ function updateProgress() {
   const onPost = document.getElementById('postView').style.display !== 'none';
   const bar = document.getElementById('progressBar');
   const btt = document.getElementById('backToTop');
-  if (!onPost) { bar.style.width = '0%'; btt.classList.remove('visible'); return; }
+  if (!onPost) { bar.style.transform = 'scaleX(0)'; btt.classList.remove('visible'); return; }
   const scrollTop = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
-  bar.style.width = pct + '%';
+  const pct = docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0;
+  bar.style.transform = `scaleX(${pct})`;
   btt.classList.toggle('visible', scrollTop > 500);
 }
 window.addEventListener('scroll', updateProgress, { passive: true });
