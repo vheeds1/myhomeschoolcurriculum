@@ -69,12 +69,14 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .section h2 span{color:var(--gold)}
 .section p{color:#555;font-size:.95rem;line-height:1.8;margin-bottom:14px}
 
-/* Values */
-.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:24px}
-.value-card{background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center}
-.value-icon{font-size:2rem;margin-bottom:10px}
-.value-card h3{font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:8px}
-.value-card p{font-size:.82rem;color:var(--text-muted);line-height:1.6}
+/* Values — all 4 cards in one row on desktop */
+.values-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px}
+.value-card{background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:22px 16px;text-align:center}
+.value-icon{font-size:1.8rem;margin-bottom:10px}
+.value-card h3{font-family:'Fraunces','Playfair Display',serif;font-size:.95rem;color:var(--navy);margin-bottom:8px}
+.value-card p{font-size:.78rem;color:var(--text-muted);line-height:1.55}
+@media(max-width:760px){.values-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:460px){.values-grid{grid-template-columns:1fr}}
 
 /* Transparency */
 .transparency-box{background:var(--light-sage);border:1px solid rgba(74,117,80,.2);border-radius:14px;padding:28px;margin-top:24px}
