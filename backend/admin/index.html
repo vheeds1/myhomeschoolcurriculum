@@ -108,6 +108,33 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .form-group textarea{min-height:80px;resize:vertical}
 .modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+
+/* Blog editor toolbar */
+.editor-toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:var(--bg,#F7F3EC);border:1px solid var(--border);border-radius:8px 8px 0 0;margin-top:6px}
+.editor-toolbar button{background:#fff;border:1px solid var(--border);color:var(--text,#2C3E3F);padding:6px 10px;font-size:.78rem;font-weight:600;border-radius:6px;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;gap:4px;line-height:1.2}
+.editor-toolbar button:hover{border-color:var(--accent,#4A7550);color:var(--accent,#4A7550);background:#F0F7F0}
+.editor-toolbar .toolbar-sep{display:inline-block;width:1px;background:var(--border);margin:0 4px}
+.editor-pane{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden}
+.editor-pane.split{grid-template-columns:1fr 1fr}
+.editor-pane textarea{min-height:320px;border:none;border-radius:0;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;line-height:1.6;outline:none;resize:vertical;background:#fff;width:100%}
+.editor-pane .editor-preview{padding:14px 18px;background:#FFFBF5;overflow-y:auto;max-height:500px;font-size:.88rem;line-height:1.7;color:#333;border-left:1px solid var(--border)}
+.editor-pane .editor-preview h2{font-size:1.2rem;color:#1E3A4C;margin:16px 0 8px;padding-top:14px;border-top:1px solid #E8DDD0}
+.editor-pane .editor-preview h2:first-child{border-top:none;padding-top:0;margin-top:0}
+.editor-pane .editor-preview h3{font-size:1rem;color:#1E3A4C;margin:14px 0 6px}
+.editor-pane .editor-preview img{max-width:100%;border-radius:6px;margin:8px 0;border:1px solid #E8DDD0}
+.editor-pane .editor-preview blockquote{border-left:3px solid #D4A84B;padding:8px 14px;margin:10px 0;background:#FFFBF5;font-style:italic;border-radius:0 6px 6px 0}
+.editor-pane .editor-preview .callout{padding:10px 14px;border-radius:8px;margin:10px 0;border:1px solid;display:flex;gap:8px;font-size:.85rem}
+.editor-pane .editor-preview .callout.tip{background:#F0F7F0;border-color:#C8DFCA;color:#4A7550}
+.editor-pane .editor-preview .callout.warning{background:#FDF2ED;border-color:#F2C9B8;color:#8A3E25}
+.editor-pane .editor-preview .product-card{display:grid;grid-template-columns:120px 1fr;gap:14px;background:#FFFBF5;border:1px solid #E8DDD0;border-radius:10px;padding:12px;margin:12px 0}
+.editor-pane .editor-preview .product-card img{max-width:110px;max-height:110px;object-fit:contain;margin:0}
+.editor-pane .editor-preview .product-title{font-size:.95rem;color:#1E3A4C;font-weight:700;margin:2px 0}
+.editor-pane .editor-preview .product-cta{display:inline-block;background:#4A7550;color:#fff!important;padding:5px 12px;border-radius:6px;font-size:.76rem;text-decoration:none;margin-top:4px}
+.editor-pane .editor-preview table{width:100%;border-collapse:collapse;font-size:.8rem;margin:10px 0}
+.editor-pane .editor-preview th{background:#1E3A4C;color:#fff;padding:6px 10px;text-align:left}
+.editor-pane .editor-preview td{padding:6px 10px;border-top:1px solid #E8DDD0}
+.editor-help{font-size:.72rem;color:var(--muted,#7A7A6E);margin-top:6px;line-height:1.6}
+.editor-help code{background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px;font-size:.88em}
 .inq-field{display:grid;grid-template-columns:150px 1fr auto;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);align-items:start}
 .inq-field:last-child{border-bottom:none}
 .inq-field-label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding-top:4px}
@@ -449,7 +476,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!-- Blog Modal -->
 <div class="modal-overlay" id="blogModal" onclick="if(event.target===this)closeBlogModal()">
-  <div class="modal">
+  <div class="modal" style="max-width:980px">
     <button class="modal-close" onclick="closeBlogModal()">✕</button>
     <h3 id="blogModalTitle">New Blog Post</h3>
     <input type="hidden" id="blogModalId">
@@ -458,13 +485,52 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="form-group"><label>Slug</label><input id="bSlug" placeholder="auto-generated from title"></div>
     </div>
     <div class="form-group"><label>Excerpt</label><textarea id="bExcerpt" style="min-height:60px"></textarea></div>
-    <div class="form-group"><label>Content (Markdown supported)</label><textarea id="bContent" style="min-height:180px"></textarea></div>
+
+    <div class="form-group">
+      <label style="display:flex;justify-content:space-between;align-items:center">
+        <span>Content</span>
+        <button type="button" class="btn btn-ghost" style="padding:4px 10px;font-size:.72rem" onclick="toggleBlogPreview()"><span id="previewToggleLabel">Show Preview</span></button>
+      </label>
+      <div class="editor-toolbar">
+        <button type="button" title="Heading 2" onclick="insertBlogTemplate('h2')">H2</button>
+        <button type="button" title="Heading 3" onclick="insertBlogTemplate('h3')">H3</button>
+        <button type="button" title="Bold" onclick="insertBlogTemplate('bold')"><strong>B</strong></button>
+        <button type="button" title="Italic" onclick="insertBlogTemplate('italic')"><em>I</em></button>
+        <button type="button" title="Link" onclick="insertBlogTemplate('link')">🔗 Link</button>
+        <button type="button" title="Bullet list" onclick="insertBlogTemplate('ul')">• List</button>
+        <button type="button" title="Numbered list" onclick="insertBlogTemplate('ol')">1. List</button>
+        <span class="toolbar-sep"></span>
+        <button type="button" title="Insert image" onclick="insertBlogTemplate('image')">🖼️ Image</button>
+        <button type="button" title="Insert affiliate product card" onclick="insertBlogTemplate('product')" style="background:#FBF1DC;color:#8A6315;border-color:#E6C98C">💰 Product Card</button>
+        <button type="button" title="Amazon / raw HTML embed" onclick="insertBlogTemplate('html')">&lt;/&gt; HTML</button>
+        <span class="toolbar-sep"></span>
+        <button type="button" title="Tip callout" onclick="insertBlogTemplate('tip')">💡 Tip</button>
+        <button type="button" title="Warning callout" onclick="insertBlogTemplate('warning')">⚠️ Warning</button>
+        <button type="button" title="Blockquote" onclick="insertBlogTemplate('quote')">❝ Quote</button>
+        <span class="toolbar-sep"></span>
+        <button type="button" title="Table" onclick="insertBlogTemplate('table')">▦ Table</button>
+        <button type="button" title="Divider" onclick="insertBlogTemplate('hr')">— HR</button>
+      </div>
+      <div class="editor-pane">
+        <textarea id="bContent" placeholder="Write in Markdown — or use the toolbar above to insert templates." oninput="updateBlogPreview()"></textarea>
+        <div class="editor-preview" id="blogPreview" style="display:none">Preview will appear here…</div>
+      </div>
+      <div class="editor-help">
+        <strong>Quick tips:</strong>
+        <code>![alt](url)</code> for images ·
+        <code>::product</code> block for affiliate cards ·
+        <code>```html</code> … <code>```</code> for Amazon widgets or raw HTML ·
+        <code>&gt; 💡 Tip:</code> for tip callouts
+      </div>
+    </div>
+
     <div class="form-row">
       <div class="form-group"><label>Category</label>
-        <select id="bCategory"><option>Getting Started</option><option>Teaching Styles</option><option>Budget</option><option>Special Needs</option><option>High School</option><option>General</option></select>
+        <select id="bCategory"><option>Getting Started</option><option>Teaching Styles</option><option>Budget</option><option>Special Needs</option><option>High School</option><option>Curriculum Reviews</option><option>General</option></select>
       </div>
       <div class="form-group"><label>Tags (comma-sep)</label><input id="bTags"></div>
     </div>
+    <div class="form-group"><label>Featured Image URL <span style="color:var(--muted);font-weight:400">(optional — shows on list page and in social shares)</span></label><input id="bFeaturedImage" placeholder="https://..."></div>
     <div class="form-group"><label>Published</label><select id="bPublished"><option value="true">Yes — Live</option><option value="false">No — Draft</option></select></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeBlogModal()">Cancel</button>
@@ -1188,9 +1254,10 @@ async function toggleActive(id, active) {
 function openBlogModal() {
   document.getElementById('blogModalTitle').textContent = 'New Blog Post';
   document.getElementById('blogModalId').value = '';
-  ['bTitle','bSlug','bExcerpt','bContent','bTags'].forEach(id => document.getElementById(id).value = '');
+  ['bTitle','bSlug','bExcerpt','bContent','bTags','bFeaturedImage'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('bPublished').value = 'false';
   document.getElementById('blogModal').classList.add('open');
+  updateBlogPreview();
 }
 function editBlogPost(p) {
   document.getElementById('blogModalTitle').textContent = 'Edit Post';
@@ -1201,10 +1268,127 @@ function editBlogPost(p) {
   document.getElementById('bContent').value = p.content||'';
   document.getElementById('bCategory').value = p.category||'General';
   document.getElementById('bTags').value = (p.tags||[]).join(',');
+  document.getElementById('bFeaturedImage').value = p.featuredImage||'';
   document.getElementById('bPublished').value = p.published ? 'true' : 'false';
   document.getElementById('blogModal').classList.add('open');
+  updateBlogPreview();
 }
 function closeBlogModal() { document.getElementById('blogModal').classList.remove('open'); }
+
+// ── Blog editor: toolbar templates ───────────────────────────────────────────
+const blogTemplates = {
+  h2:    { insert: '\n## Section heading\n\n' },
+  h3:    { insert: '\n### Subsection\n\n' },
+  bold:  { wrap: '**' },
+  italic:{ wrap: '*' },
+  link:  { insert: '[link text](https://example.com)' },
+  ul:    { insert: '\n- First item\n- Second item\n- Third item\n\n' },
+  ol:    { insert: '\n1. First item\n2. Second item\n3. Third item\n\n' },
+  image: { insert: '\n![Image description](https://example.com/image.jpg "Optional caption")\n\n' },
+  product: { insert: '\n::product\nimage: https://example.com/product.jpg\ntitle: Product Name\nrating: 4.7\nprice: $29.99\nbadge: Best for Beginners\ndescription: Short description of why this product is great for homeschoolers.\nlink: https://amzn.to/your-affiliate-link\ncta: View on Amazon\n::\n\n' },
+  html:  { insert: '\n```html\n<!-- Paste raw HTML here — Amazon widget, iframe, etc. -->\n<a href="https://amzn.to/xxxxx" target="_blank" rel="noopener sponsored"><img src="https://images.amazon.com/..." alt="Product name"></a>\n```\n\n' },
+  tip:     { insert: '\n> 💡 Tip: Write your tip here.\n\n' },
+  warning: { insert: '\n> ⚠️ Warning: Write your warning here.\n\n' },
+  quote:   { insert: '\n> Quote goes here.\n\n' },
+  table:   { insert: '\n| Column 1 | Column 2 | Column 3 |\n| --- | --- | --- |\n| Row 1 | Row 1 | Row 1 |\n| Row 2 | Row 2 | Row 2 |\n\n' },
+  hr:      { insert: '\n---\n\n' }
+};
+
+function insertBlogTemplate(key) {
+  const t = blogTemplates[key];
+  if (!t) return;
+  const ta = document.getElementById('bContent');
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  const val = ta.value;
+  let newVal;
+  if (t.wrap) {
+    const selected = val.slice(start, end) || (key === 'bold' ? 'bold text' : 'italic text');
+    newVal = val.slice(0, start) + t.wrap + selected + t.wrap + val.slice(end);
+    ta.value = newVal;
+    ta.selectionStart = start + t.wrap.length;
+    ta.selectionEnd = start + t.wrap.length + selected.length;
+  } else {
+    newVal = val.slice(0, start) + t.insert + val.slice(end);
+    ta.value = newVal;
+    ta.selectionStart = ta.selectionEnd = start + t.insert.length;
+  }
+  ta.focus();
+  updateBlogPreview();
+}
+
+// ── Blog editor: live preview ────────────────────────────────────────────────
+let blogPreviewOn = false;
+function toggleBlogPreview() {
+  blogPreviewOn = !blogPreviewOn;
+  const pane = document.querySelector('#blogModal .editor-pane');
+  const preview = document.getElementById('blogPreview');
+  const label = document.getElementById('previewToggleLabel');
+  if (blogPreviewOn) {
+    pane.classList.add('split');
+    preview.style.display = 'block';
+    label.textContent = 'Hide Preview';
+    updateBlogPreview();
+  } else {
+    pane.classList.remove('split');
+    preview.style.display = 'none';
+    label.textContent = 'Show Preview';
+  }
+}
+function updateBlogPreview() {
+  if (!blogPreviewOn) return;
+  const md = document.getElementById('bContent').value;
+  document.getElementById('blogPreview').innerHTML = adminMarkdownToHtml(md);
+}
+
+// Minimal markdown → preview HTML mirror (subset of blog.html's renderer)
+function adminMarkdownToHtml(md) {
+  const lines = md.split(/\r?\n/);
+  const out = []; let inList = false, listType = '', inTable = false;
+  let inHtml = false, htmlBuf = [], inProduct = false, pd = {};
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const inline = s => s
+    .replace(/!\[([^\]]*)\]\(([^)\s]+)[^)]*\)/g, (_,a,u)=>`<img src="${esc(u)}" alt="${esc(a)}" loading="lazy">`)
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'<a href="$2">$1</a>');
+  const flushList=()=>{if(inList){out.push('</'+listType+'>');inList=false;}};
+  const flushTable=()=>{if(inTable){out.push('</tbody></table>');inTable=false;}};
+  const flushProduct=()=>{
+    if(!inProduct)return;
+    const img=pd.image?`<img src="${esc(pd.image)}" alt="${esc(pd.title||'')}">`:'';
+    out.push(`<div class="product-card">${img?`<div>${img}</div>`:''}<div><div class="product-title">${esc(pd.title||'')}</div>${pd.price?`<div>${esc(pd.price)}</div>`:''}${pd.description?`<div style="font-size:.82rem;color:#7A7A6E;margin:4px 0">${esc(pd.description)}</div>`:''}${pd.link?`<a class="product-cta" href="#">${esc(pd.cta||'View Product →')}</a>`:''}</div></div>`);
+    inProduct=false; pd={};
+  };
+  for (let i=0;i<lines.length;i++) {
+    const l = lines[i], t = l.trim();
+    if (/^```html$/.test(t)) { inHtml=true; htmlBuf=[]; continue; }
+    if (inHtml) { if (/^```$/.test(t)) { out.push(htmlBuf.join('\n')); inHtml=false; } else htmlBuf.push(l); continue; }
+    if (/^::product\s*$/.test(t)) { flushList(); flushTable(); inProduct=true; pd={}; continue; }
+    if (inProduct) { if (/^::\s*$/.test(t)) { flushProduct(); continue; } const m=l.match(/^\s*(\w+)\s*:\s*(.*)$/); if(m) pd[m[1].toLowerCase()]=m[2].trim(); continue; }
+    const imgAlone = t.match(/^!\[([^\]]*)\]\(([^)\s]+)[^)]*\)$/);
+    if (imgAlone) { flushList(); flushTable(); out.push(`<figure><img src="${esc(imgAlone[2])}" alt="${esc(imgAlone[1])}"></figure>`); continue; }
+    if (/^---+$/.test(t)) { flushList(); flushTable(); out.push('<hr>'); continue; }
+    const h3=t.match(/^###\s+(.+)$/),h2=t.match(/^##\s+(.+)$/),h1=t.match(/^#\s+(.+)$/);
+    if (h3){flushList();flushTable();out.push(`<h3>${inline(h3[1])}</h3>`);continue;}
+    if (h2){flushList();flushTable();out.push(`<h2>${inline(h2[1])}</h2>`);continue;}
+    if (h1){flushList();flushTable();out.push(`<h2>${inline(h1[1])}</h2>`);continue;}
+    if (/^>\s?/.test(l)) { const body = l.replace(/^>\s?/,''); const m = body.match(/^(💡\s*Tip|⚠️\s*Warning)[:.]?\s*(.*)/i); if (m) { const isT=/tip/i.test(m[1]); out.push(`<div class="callout ${isT?'tip':'warning'}"><span>${isT?'💡':'⚠️'}</span><div><strong>${isT?'Tip':'Warning'}</strong> ${inline(m[2])}</div></div>`); } else out.push(`<blockquote>${inline(body)}</blockquote>`); continue; }
+    if (/^\|.+\|$/.test(t)) { flushList(); const cells=t.replace(/^\|/,'').replace(/\|$/,'').split('|').map(c=>c.trim()); if(cells.every(c=>/^-+:?$|^:?-+:?$/.test(c)))continue; if(!inTable){out.push('<table>');inTable=true;} const next=(lines[i+1]||'').trim(); const isH=/^\|[-:|\s]+\|$/.test(next); if(isH)out.push(`<thead><tr>${cells.map(c=>`<th>${inline(c)}</th>`).join('')}</tr></thead><tbody>`); else out.push(`<tr>${cells.map(c=>`<td>${inline(c)}</td>`).join('')}</tr>`); continue; }
+    else if (inTable) flushTable();
+    const ul=t.match(/^[-*]\s+(.+)$/), ol=t.match(/^\d+\.\s+(.+)$/);
+    if (ul){if(!inList||listType!=='ul'){flushList();out.push('<ul>');inList=true;listType='ul';}out.push(`<li>${inline(ul[1])}</li>`);continue;}
+    if (ol){if(!inList||listType!=='ol'){flushList();out.push('<ol>');inList=true;listType='ol';}out.push(`<li>${inline(ol[1])}</li>`);continue;}
+    if (inList && !t) { flushList(); continue; }
+    if (inList && !ul && !ol) flushList();
+    if (!t) continue;
+    out.push(`<p>${inline(t)}</p>`);
+  }
+  flushList(); flushTable(); flushProduct();
+  if (inHtml && htmlBuf.length) out.push(htmlBuf.join('\n'));
+  return out.join('\n');
+}
+
 async function saveBlogPost() {
   const id = document.getElementById('blogModalId').value;
   const payload = {
@@ -1214,6 +1398,7 @@ async function saveBlogPost() {
     content: document.getElementById('bContent').value,
     category: document.getElementById('bCategory').value,
     tags: document.getElementById('bTags').value.split(',').map(s=>s.trim()).filter(Boolean),
+    featuredImage: document.getElementById('bFeaturedImage').value.trim(),
     published: document.getElementById('bPublished').value === 'true',
   };
   const url = id ? `${API}/blog/${id}` : `${API}/blog`;

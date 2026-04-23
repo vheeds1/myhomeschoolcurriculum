@@ -176,7 +176,41 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .post-content a{color:var(--deep-sage);font-weight:600;border-bottom:1px solid rgba(74,117,80,.25);transition:all .15s}
 .post-content a:hover{color:var(--navy);border-bottom-color:var(--navy)}
 .post-content hr{border:none;border-top:2px solid var(--border);margin:40px auto;width:80px}
-.post-content img{border-radius:10px;margin:24px 0;border:1px solid var(--border)}
+.post-content img{border-radius:10px;margin:24px 0;border:1px solid var(--border);max-width:100%;height:auto}
+
+/* Figure with optional caption */
+.post-figure{margin:28px 0;text-align:center}
+.post-figure img{width:100%;border-radius:12px;border:1px solid var(--border);margin:0}
+.post-figure figcaption{font-size:.82rem;color:var(--text-muted);font-style:italic;margin-top:10px;line-height:1.5;text-align:center}
+
+/* Raw HTML embed (Amazon widgets, iframes, etc.) */
+.html-embed{margin:28px 0;text-align:center}
+.html-embed iframe{max-width:100%;border-radius:10px}
+.html-embed img{max-width:100%;height:auto}
+
+/* Affiliate product card */
+.product-card{display:grid;grid-template-columns:180px 1fr;gap:22px;background:var(--warm-white);border:1px solid var(--border);border-radius:16px;padding:20px;margin:28px 0;box-shadow:0 4px 16px rgba(30,58,76,.05);transition:all .25s;align-items:center}
+.product-card:hover{border-color:var(--sage);box-shadow:0 8px 24px rgba(30,58,76,.12);transform:translateY(-2px)}
+.product-image{display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px;min-height:160px}
+.product-image img{width:100%;max-width:160px;height:auto;max-height:180px;object-fit:contain;border:none;margin:0;border-radius:6px}
+.product-body{display:flex;flex-direction:column;gap:6px}
+.product-badge{display:inline-block;background:var(--gold);color:var(--navy);padding:3px 10px;border-radius:10px;font-size:.7rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;align-self:flex-start;margin-bottom:2px}
+.product-title{font-family:'Fraunces','Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin:0;line-height:1.25;letter-spacing:-.2px}
+.product-rating{color:var(--gold);font-size:.95rem;letter-spacing:1px}
+.product-rating .rating-num{color:var(--text-muted);font-size:.82rem;margin-left:6px;letter-spacing:0}
+.product-desc{font-size:.88rem;color:var(--text-muted);line-height:1.6;margin:2px 0 6px}
+.product-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:6px}
+.product-price{font-family:'Fraunces','Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--navy)}
+.product-cta{background:var(--deep-sage);color:#fff!important;padding:9px 20px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none!important;border:none!important;transition:all .2s;white-space:nowrap}
+.product-cta:hover{background:#3A6040;transform:translateY(-1px);color:#fff!important}
+.product-disclosure{font-size:.7rem;color:var(--text-muted);margin-top:8px;font-style:italic;opacity:.85}
+@media(max-width:560px){
+  .product-card{grid-template-columns:1fr;text-align:center}
+  .product-image{margin:0 auto;max-width:200px}
+  .product-body{text-align:left}
+  .product-badge{align-self:center}
+  .product-actions{justify-content:flex-start}
+}
 
 /* Blockquotes */
 .post-content blockquote{margin:26px 0;padding:18px 24px;border-left:4px solid var(--gold);background:var(--warm-white);border-radius:0 10px 10px 0;font-style:italic;color:var(--charcoal);font-size:1.05rem;line-height:1.7;position:relative}
@@ -822,16 +856,17 @@ async function sidebarSubscribe() {
 // Supports headings, bold, italic, links, HRs, tables, lists, blockquotes,
 // and custom callout prefixes like "💡 Tip:" or "⚠️ Warning:"
 function markdownToHtml(md) {
-  // Escape any raw HTML first? We trust our own content — skip.
   const lines = md.split(/\r?\n/);
   const out = [];
-  let inList = false; let listType = ''; let inTable = false; let inBlockquote = false; let blockquoteBuf = [];
+  let inList = false, listType = '', inTable = false, inBlockquote = false, blockquoteBuf = [];
+  let inHtmlBlock = false, htmlBuf = [];
+  let inProduct = false, productData = {};
+
   const flushList = () => { if (inList) { out.push(`</${listType}>`); inList = false; listType = ''; } };
-  const flushTable = () => { if (inTable) { out.push('</table>'); inTable = false; } };
+  const flushTable = () => { if (inTable) { out.push('</tbody></table>'); inTable = false; } };
   const flushBlockquote = () => {
     if (!inBlockquote) return;
     const text = blockquoteBuf.join(' ').trim();
-    // Callout detection
     const calloutMatch = text.match(/^(💡\s*Tip|⚠️\s*Warning|ℹ️?\s*Note|📝\s*Note|✅\s*(?:Do|Tip))[:.]?\s*(.*)/i);
     if (calloutMatch) {
       const keyword = calloutMatch[1];
@@ -847,9 +882,70 @@ function markdownToHtml(md) {
     inBlockquote = false; blockquoteBuf = [];
   };
 
+  const flushProduct = () => {
+    if (!inProduct) return;
+    const p = productData;
+    const img = p.image ? `<div class="product-image"><img src="${escapeAttr(p.image)}" alt="${escapeAttr(p.title || 'Product image')}" loading="lazy"></div>` : '';
+    const price = p.price ? `<div class="product-price">${escapeAttr(p.price)}</div>` : '';
+    const badge = p.badge ? `<div class="product-badge">${escapeAttr(p.badge)}</div>` : '';
+    const rating = p.rating ? `<div class="product-rating">${'★'.repeat(Math.round(parseFloat(p.rating)))}${'☆'.repeat(5 - Math.round(parseFloat(p.rating)))} <span class="rating-num">${escapeAttr(p.rating)}</span></div>` : '';
+    const cta = p.cta || 'View Product →';
+    const ctaLink = p.link ? `<a class="product-cta" href="${escapeAttr(p.link)}" target="_blank" rel="noopener sponsored">${escapeAttr(cta)}</a>` : '';
+    const disclosure = p.affiliate !== 'false' ? `<div class="product-disclosure">Affiliate link — we may earn a commission at no cost to you.</div>` : '';
+    out.push(`<aside class="product-card">${img}<div class="product-body">${badge}<h4 class="product-title">${inlineMd(p.title || '')}</h4>${rating}${p.description ? `<p class="product-desc">${inlineMd(p.description)}</p>` : ''}<div class="product-actions">${price}${ctaLink}</div>${disclosure}</div></aside>`);
+    inProduct = false; productData = {};
+  };
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const trimmed = line.trim();
+
+    // Raw HTML block: ```html ... ```
+    if (/^```html$/.test(trimmed)) {
+      flushList(); flushTable(); flushBlockquote();
+      inHtmlBlock = true; htmlBuf = [];
+      continue;
+    }
+    if (inHtmlBlock) {
+      if (/^```$/.test(trimmed)) {
+        out.push(`<div class="html-embed">${htmlBuf.join('\n')}</div>`);
+        inHtmlBlock = false; htmlBuf = [];
+      } else {
+        htmlBuf.push(line);
+      }
+      continue;
+    }
+
+    // Product card block: ::product ... ::
+    if (/^::product\s*$/.test(trimmed)) {
+      flushList(); flushTable(); flushBlockquote();
+      inProduct = true; productData = {};
+      continue;
+    }
+    if (inProduct) {
+      if (/^::\s*$/.test(trimmed)) { flushProduct(); continue; }
+      const m = line.match(/^\s*(\w+)\s*:\s*(.*)$/);
+      if (m) productData[m[1].toLowerCase()] = m[2].trim();
+      continue;
+    }
+
+    // Standalone image: ![alt](url) on its own line — rendered as <figure>
+    const imgStandalone = trimmed.match(/^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)$/);
+    if (imgStandalone) {
+      flushList(); flushTable(); flushBlockquote();
+      const alt = imgStandalone[1] || '';
+      const src = imgStandalone[2];
+      const caption = imgStandalone[3] || '';
+      out.push(`<figure class="post-figure"><img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy">${caption ? `<figcaption>${inlineMd(caption)}</figcaption>` : ''}</figure>`);
+      continue;
+    }
+
+    // Raw HTML — line starting with block-level tag (div, iframe, video, img, a href) on its own
+    if (/^<(iframe|video|audio|div|figure|table|section)/i.test(trimmed) || /^<img\s/i.test(trimmed) || /^<a\s[^>]*>\s*<img/i.test(trimmed)) {
+      flushList(); flushTable(); flushBlockquote();
+      out.push(line);
+      continue;
+    }
 
     // Blockquote
     if (/^>\s?/.test(line)) {
@@ -876,19 +972,12 @@ function markdownToHtml(md) {
     if (/^\|.+\|$/.test(trimmed)) {
       flushList();
       const cells = trimmed.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
-      if (cells.every(c => /^-+:?$|^:?-+:?$|^:-+$/.test(c))) {
-        // separator row — skip
-        continue;
-      }
+      if (cells.every(c => /^-+:?$|^:?-+:?$|^:-+$/.test(c))) continue;
       if (!inTable) { out.push('<table>'); inTable = true; }
-      // Detect header (next line is separator)
       const nextLine = (lines[i + 1] || '').trim();
       const isHeader = /^\|[-:|\s]+\|$/.test(nextLine);
-      const tag = isHeader ? 'th' : 'td';
-      const rowTag = isHeader ? 'thead' : 'tbody';
       if (isHeader) out.push(`<thead><tr>${cells.map(c => `<th>${inlineMd(c)}</th>`).join('')}</tr></thead><tbody>`);
       else out.push(`<tr>${cells.map(c => `<td>${inlineMd(c)}</td>`).join('')}</tr>`);
-      if (isHeader) { /* body continues until !table */ }
       continue;
     } else if (inTable) {
       flushTable();
@@ -910,20 +999,24 @@ function markdownToHtml(md) {
     if (inList && !trimmed) { flushList(); continue; }
     if (inList && !ul && !ol) { flushList(); }
 
-    // Paragraph
+    // Paragraph (may contain inline images via ![](…))
     if (!trimmed) continue;
     out.push(`<p>${inlineMd(trimmed)}</p>`);
   }
-  flushList(); flushTable(); flushBlockquote();
+  flushList(); flushTable(); flushBlockquote(); flushProduct();
+  if (inHtmlBlock && htmlBuf.length) out.push(`<div class="html-embed">${htmlBuf.join('\n')}</div>`);
   return out.join('\n');
 }
 
 function inlineMd(s) {
   return s
+    // Inline image: ![alt](url)
+    .replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)/g, (_, alt, src, title) =>
+      `<img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" ${title ? `title="${escapeAttr(title)}"` : ''} loading="lazy" style="max-width:100%;border-radius:8px;margin:6px 0;vertical-align:middle">`)
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code>$1</code>')
-    .replace(/\[(.+?)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    .replace(/\[(.+?)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 }
 
 // ── PROGRESS BAR + TOAST + MENU ─────────────────────────────────────────
