@@ -291,12 +291,15 @@ app.post('/api/curricula/:id/click', (req, res) => {
   if (!db) return res.status(500).json({ error: 'Database error' });
   const c = db.curricula.find(c => c.id === parseInt(req.params.id));
   if (!c) return res.status(404).json({ error: 'Not found' });
+  const isTest = !!(req.body && req.body.isTest);
   db.affiliateClicks.push({
     id: uuidv4(), curriculumId: c.id, curriculumName: c.name, affiliateCode: c.affiliateCode,
     ip: req.ip, userAgent: req.headers['user-agent'], referrer: req.headers.referer || null,
+    isTest,
     timestamp: new Date().toISOString()
   });
-  db.analytics.totalClicks++;
+  // Only count real visitor clicks in the top-line totalClicks tally
+  if (!isTest) db.analytics.totalClicks++;
   writeDB(db);
   res.json({ success: true, affiliateLink: c.affiliateLink });
 });
@@ -871,13 +874,19 @@ app.get('/api/legal/states/:state', (req, res) => {
 // ════════════════════════════════════════════════════════════════════════════════
 
 // Detailed affiliate clicks — grouped per-day and per-curriculum, plus a raw list
+// Query params:
+//   days=30               time window
+//   includeTest=1         include clicks tagged from admin/test browsers (default: exclude)
 app.get('/api/admin/affiliate-clicks', requireAdmin, (req, res) => {
   const db = readDB();
   if (!db) return res.status(500).json({ error: 'Database error' });
-  const clicks = (db.affiliateClicks || []).slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const includeTest = req.query.includeTest === '1' || req.query.includeTest === 'true';
+  const allClicks = (db.affiliateClicks || []).slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const clicks = includeTest ? allClicks : allClicks.filter(c => !c.isTest);
   const days = parseInt(req.query.days) || 30;
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
   const inRange = clicks.filter(c => new Date(c.timestamp) >= since);
+  const testClicksInRange = allClicks.filter(c => c.isTest && new Date(c.timestamp) >= since).length;
 
   // Build a curriculum → affiliate-link lookup so we can show the actual URL
   const curriculumLookup = {};
@@ -908,7 +917,7 @@ app.get('/api/admin/affiliate-clicks', requireAdmin, (req, res) => {
   });
   const topCurricula = Object.values(byCurriculum).sort((a, b) => b.count - a.count);
 
-  // Recent raw clicks (enriched with the affiliate link)
+  // Recent raw clicks (enriched with the affiliate link + test flag)
   const recent = inRange.slice(0, 200).map(c => ({
     id: c.id,
     curriculumId: c.curriculumId,
@@ -916,12 +925,15 @@ app.get('/api/admin/affiliate-clicks', requireAdmin, (req, res) => {
     link: (curriculumLookup[c.curriculumId] && curriculumLookup[c.curriculumId].link) || '',
     timestamp: c.timestamp,
     referrer: c.referrer,
-    userAgent: c.userAgent
+    userAgent: c.userAgent,
+    isTest: !!c.isTest
   }));
 
   res.json({
     totalInRange: inRange.length,
     totalAllTime: clicks.length,
+    testClicksInRange,
+    includeTest,
     days,
     dailySeries,
     topCurricula,

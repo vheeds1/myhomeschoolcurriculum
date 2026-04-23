@@ -1408,7 +1408,16 @@ function activateChip(filter, val) {
 
 // ── AFFILIATE TRACKING ───────────────────────────────────────────────────────
 async function trackClick(id) {
-  try { await fetch(`${API}/curricula/${id}/click`, { method:'POST' }); } catch(e) {}
+  try {
+    // Auto-tag clicks from any browser that's logged into the admin OR has
+    // manually flagged itself as a test device via localStorage.cc_test_mode
+    const isTest = !!(localStorage.getItem('cc_admin_token') || localStorage.getItem('cc_test_mode'));
+    await fetch(`${API}/curricula/${id}/click`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ isTest })
+    });
+  } catch(e) {}
 }
 
 // ── FILTERS ──────────────────────────────────────────────────────────────────

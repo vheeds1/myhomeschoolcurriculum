@@ -262,13 +262,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="tab-content" id="tab-clicks">
         <div class="section-header">
           <div class="section-title">🔗 Affiliate Clicks</div>
-          <select id="clicksRange" class="search-input" style="width:auto" onchange="loadClicks()">
-            <option value="7">Last 7 days</option>
-            <option value="30" selected>Last 30 days</option>
-            <option value="90">Last 90 days</option>
-            <option value="365">Last 12 months</option>
-          </select>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <label style="font-size:.78rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px;cursor:pointer" title="Clicks from browsers logged into the admin or with test mode enabled are tagged automatically. Toggle this to include them.">
+              <input type="checkbox" id="includeTestClicks" onchange="loadClicks()" style="accent-color:var(--accent);cursor:pointer"> Include my test clicks
+            </label>
+            <select id="clicksRange" class="search-input" style="width:auto" onchange="loadClicks()">
+              <option value="7">Last 7 days</option>
+              <option value="30" selected>Last 30 days</option>
+              <option value="90">Last 90 days</option>
+              <option value="365">Last 12 months</option>
+            </select>
+          </div>
         </div>
+        <div id="testClicksNotice" style="display:none;background:#FBF1DC;border:1px solid #E6C98C;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.82rem;color:#5A4210"></div>
 
         <!-- Summary stat cards -->
         <div class="stats-grid" id="clicksStats" style="margin-bottom:20px"></div>
@@ -1484,9 +1490,21 @@ function showTab(tab, el) {
 // ── AFFILIATE CLICKS ─────────────────────────────────────────────────────────
 async function loadClicks() {
   const range = document.getElementById('clicksRange').value;
-  const res = await fetch(`${API}/admin/affiliate-clicks?days=${range}`, { headers: authHeaders() });
+  const includeTest = document.getElementById('includeTestClicks').checked ? '1' : '0';
+  const res = await fetch(`${API}/admin/affiliate-clicks?days=${range}&includeTest=${includeTest}`, { headers: authHeaders() });
   if (!res.ok) { showToast('Could not load clicks', 'err'); return; }
   const d = await res.json();
+
+  // Notice banner about test clicks
+  const notice = document.getElementById('testClicksNotice');
+  if (d.testClicksInRange > 0) {
+    notice.style.display = 'block';
+    notice.innerHTML = d.includeTest
+      ? `<strong>🧪 Showing ${d.testClicksInRange} test click${d.testClicksInRange === 1 ? '' : 's'}</strong> — these are tagged as coming from your admin browser. Untick the box above to exclude them.`
+      : `<strong>🧪 ${d.testClicksInRange} test click${d.testClicksInRange === 1 ? '' : 's'} hidden</strong> — clicks from browsers logged into the admin are automatically excluded. Tick the box above to include them.`;
+  } else {
+    notice.style.display = 'none';
+  }
 
   // Stats cards
   document.getElementById('clicksStats').innerHTML = `
@@ -1527,8 +1545,8 @@ async function loadClicks() {
   // Recent clicks
   const recent = document.getElementById('clicksRecentTable');
   recent.innerHTML = d.recent.length ? d.recent.map(c => `
-    <tr>
-      <td style="white-space:nowrap">${fmt(c.timestamp)}</td>
+    <tr${c.isTest ? ' style="opacity:.75"' : ''}>
+      <td style="white-space:nowrap">${fmt(c.timestamp)}${c.isTest ? ' <span style="background:#E8B84B;color:#5A4210;padding:1px 6px;border-radius:10px;font-size:.64rem;font-weight:700;letter-spacing:.4px;margin-left:4px">TEST</span>' : ''}</td>
       <td><strong>${escapeHtml(c.curriculumName)}</strong></td>
       <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.referrer ? `<a href="${escapeAttr(c.referrer)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:.78rem" title="${escapeAttr(c.referrer)}">${escapeHtml(c.referrer.replace(/^https?:\/\//, '').slice(0, 40))}</a>` : '<span style="color:var(--muted)">Direct</span>'}</td>
       <td>${c.link ? `<a href="${escapeAttr(c.link)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:.78rem">Visit →</a>` : '<span style="color:var(--muted)">—</span>'}</td>
