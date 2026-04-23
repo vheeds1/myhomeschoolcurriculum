@@ -706,7 +706,9 @@ app.post('/api/newsletter/subscribe', submitLimiter, async (req, res) => {
 // Uses the existing Resend-backed sendEmail() helper. Configure CHECKLIST_PDF_URL
 // in Railway env vars (Google Drive/Dropbox/S3 direct-download link).
 function sendChecklistEmail(email, siteUrl) {
-  const pdfUrl = process.env.CHECKLIST_PDF_URL || siteUrl;
+  // Default to the repo-hosted PDF. Override via CHECKLIST_PDF_URL env var if
+  // you later move it to Google Drive, Dropbox, S3, etc.
+  const pdfUrl = process.env.CHECKLIST_PDF_URL || `${siteUrl}/downloads/homeschool-curriculum-checklist.pdf`;
   const html = `
   <div style="font-family:'DM Sans',Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;color:#2C3E3F">
     <div style="background:#1F3A4D;padding:28px 32px;border-radius:12px 12px 0 0">
