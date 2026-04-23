@@ -116,7 +116,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .editor-toolbar .toolbar-sep{display:inline-block;width:1px;background:var(--border);margin:0 4px}
 .editor-pane{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden}
 .editor-pane.split{grid-template-columns:1fr 1fr}
-.editor-pane textarea{min-height:320px;border:none;border-radius:0;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;line-height:1.6;outline:none;resize:vertical;background:#fff;width:100%}
+.editor-pane textarea{min-height:320px;border:none;border-radius:0;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;line-height:1.6;outline:none;resize:vertical;background:#fff;color:#1E3A4C;width:100%;caret-color:#4A7550}
+.editor-pane textarea::placeholder{color:#8B9AA6}
 .editor-pane .editor-preview{padding:14px 18px;background:#FFFBF5;overflow-y:auto;max-height:500px;font-size:.88rem;line-height:1.7;color:#333;border-left:1px solid var(--border)}
 .editor-pane .editor-preview h2{font-size:1.2rem;color:#1E3A4C;margin:16px 0 8px;padding-top:14px;border-top:1px solid #E8DDD0}
 .editor-pane .editor-preview h2:first-child{border-top:none;padding-top:0;margin-top:0}
