@@ -702,6 +702,86 @@ app.post('/api/newsletter/subscribe', submitLimiter, async (req, res) => {
   res.status(201).json({ success: true, message: "You're subscribed! Check your inbox for a welcome email." });
 });
 
+// Quiz results email — sends the user's personalized curriculum matches so they
+// can come back to them later. Unlike the newsletter subscribe, this always
+// fires (even if the email is already subscribed) because it's a 1:1 transaction.
+app.post('/api/quiz/email-results', submitLimiter, async (req, res) => {
+  const { email, matches, answers } = req.body;
+  if (!email || !/\S+@\S+\.\S+/.test(email))
+    return res.status(400).json({ error: 'Valid email required.' });
+  if (!Array.isArray(matches) || matches.length === 0)
+    return res.status(400).json({ error: 'No matches to email.' });
+  const db = readDB();
+  const siteUrl = (process.env.SITE_URL || 'http://localhost:3001').replace(/\/$/, '');
+  const cleanEmail = email.trim().toLowerCase();
+
+  // Silently add them to the newsletter list if they're not there — admin can
+  // filter by source="quiz_results" to see who came from the quiz.
+  if (!(db.newsletterSubscribers||[]).find(s => s.email === cleanEmail)) {
+    db.newsletterSubscribers.push({
+      id: uuidv4(), email: cleanEmail, name: '',
+      source: 'quiz_results', subscribedAt: new Date().toISOString(), active: true
+    });
+    writeDB(db);
+    sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
+      `📬 New Newsletter Subscriber — ${cleanEmail}`,
+      `<h2>New Newsletter Signup</h2><p><strong>Email:</strong> ${cleanEmail}</p><p><strong>Source:</strong> quiz_results</p><p><strong>Date:</strong> ${new Date().toISOString()}</p>`);
+  }
+
+  // Build the match list HTML
+  const matchesHtml = matches.map((m, i) => `
+    <tr>
+      <td style="padding:14px 16px;border-bottom:1px solid #E8DDD0;vertical-align:top;width:44px;font-size:1.4rem">${m.emoji || '📘'}</td>
+      <td style="padding:14px 0 14px 4px;border-bottom:1px solid #E8DDD0;vertical-align:top">
+        <div style="font-family:Georgia,serif;font-size:1.02rem;font-weight:700;color:#1F3A4D;margin-bottom:4px">${m.name || 'Curriculum'}</div>
+        <div style="font-size:.86rem;color:#6B6B60;line-height:1.55">${m.tagline || ''}</div>
+      </td>
+      <td style="padding:14px 16px;border-bottom:1px solid #E8DDD0;vertical-align:top;text-align:right">
+        <a href="${siteUrl}/?curriculum=${encodeURIComponent(m.slug||'')}" style="background:#4A7550;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600;white-space:nowrap">View →</a>
+      </td>
+    </tr>`).join('');
+
+  // Summarize answers as a caption
+  const summaryBits = [];
+  if (answers?.grade) summaryBits.push(answers.grade);
+  if (answers?.style) summaryBits.push(answers.style);
+  if (answers?.worldview) summaryBits.push(answers.worldview);
+  const summary = summaryBits.length ? `Based on: ${summaryBits.join(' · ')}` : '';
+
+  const html = `
+  <div style="font-family:'DM Sans',Helvetica,Arial,sans-serif;max-width:600px;margin:0 auto;color:#2C3E3F">
+    <div style="background:#1F3A4D;padding:28px 32px;border-radius:12px 12px 0 0">
+      <p style="font-family:Georgia,'Times New Roman',serif;font-size:1.3rem;color:#fff;margin:0">
+        My Homeschool <span style="color:#D4A84C;font-style:italic">Curriculum</span>
+      </p>
+    </div>
+    <div style="background:#FFFBF5;padding:36px 32px;border:1px solid #E8DDD0;border-top:none;border-radius:0 0 12px 12px;line-height:1.65">
+      <p style="margin-top:0">Hi there,</p>
+      <p>Here are your top curriculum matches from the quiz — so you can come back to them later.</p>
+      ${summary ? `<p style="font-size:.84rem;color:#6B6B60;font-style:italic;margin-bottom:20px">${summary}</p>` : ''}
+      <table style="width:100%;border-collapse:collapse;margin:14px 0 24px;border:1px solid #E8DDD0;border-radius:10px;overflow:hidden;background:#fff">
+        ${matchesHtml}
+      </table>
+      <p style="font-size:.92rem;color:#6B6B60">A few things to know before you dig in:</p>
+      <ul style="font-size:.92rem;color:#6B6B60;line-height:1.8;padding-left:20px">
+        <li>These matches are based on your answers — not paid placement.</li>
+        <li>Use our <a href="${siteUrl}" style="color:#4A7550">side-by-side comparison tool</a> to narrow down to 2–3 finalists.</li>
+        <li>Read parent reviews on each curriculum's listing for real-world experience.</li>
+      </ul>
+      <p style="font-size:.92rem">Questions? Reply to this email — I read every one.</p>
+      <p style="font-size:.92rem;margin-bottom:4px">— Vanessa</p>
+      <p style="font-size:.82rem;color:#6B6B60;margin-top:0">Founder, My Homeschool Curriculum</p>
+      <hr style="border:none;border-top:1px solid #E8DDD0;margin:24px 0">
+      <p style="font-size:.74rem;color:#8B8B7E;margin:0">You requested this email at MyHomeschoolCurriculum.com.
+        <a href="${siteUrl}/unsubscribe.html?email=${encodeURIComponent(cleanEmail)}" style="color:#8B8B7E">Unsubscribe</a>.
+      </p>
+    </div>
+  </div>`;
+
+  const sent = await sendEmail(cleanEmail, `Your curriculum matches · ${matches.length} picks for your family`, html);
+  res.json({ success: !!sent, message: sent ? "Sent! Check your inbox." : "Subscription saved but email failed — we'll retry." });
+});
+
 // Checklist PDF-delivery email — sent when someone subscribes via the lead-gen popup.
 // Uses the existing Resend-backed sendEmail() helper. Configure CHECKLIST_PDF_URL
 // in Railway env vars (Google Drive/Dropbox/S3 direct-download link).

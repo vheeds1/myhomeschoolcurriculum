@@ -1404,7 +1404,9 @@ function updateQuizStep() {
   }
 }
 
-// Optional: email the quiz results to yourself. Never blocks the results view.
+// Email the quiz results to the user. Sends the actual matches (not just a
+// newsletter signup). Also silently adds them to the subscriber list so the
+// admin can follow up. Never blocks the results view.
 async function submitQuizEmail(e) {
   if (e) e.preventDefault();
   const input = document.getElementById('quizEmail');
@@ -1414,14 +1416,20 @@ async function submitQuizEmail(e) {
     input?.focus();
     return;
   }
+  if (!currentQuizMatches.length) {
+    showToast('No results to email yet — please wait a moment.', 'error');
+    return;
+  }
   const btn = document.getElementById('quizEmailSubmit');
   if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
   try {
-    await fetch(`${API}/newsletter/subscribe`, {
+    const res = await fetch(`${API}/quiz/email-results`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, source: 'quiz_results' })
+      body: JSON.stringify({ email, matches: currentQuizMatches, answers: quizAnswers })
     });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || 'send failed');
     if (typeof gtag === 'function') gtag('event', 'quiz_email_captured', { event_category: 'lead_generation' });
     const block = document.getElementById('quizEmailBlock');
     if (block) block.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:4px 2px"><span style="color:var(--deep-sage);font-size:1.1rem">✓</span><span style="font-size:.9rem;color:var(--deep-sage);font-weight:600">Sent! Check your inbox — your matches are on the way.</span></div>';
@@ -1431,6 +1439,7 @@ async function submitQuizEmail(e) {
   }
 }
 
+let currentQuizMatches = [];
 async function fetchQuizMatches() {
   try {
     const res = await fetch(`${API}/quiz`, {
@@ -1438,6 +1447,9 @@ async function fetchQuizMatches() {
       body: JSON.stringify(quizAnswers)
     });
     const data = await res.json();
+    currentQuizMatches = (data.matches || []).map(m => ({
+      name: m.name, slug: m.slug, tagline: m.tagline, emoji: m.emoji
+    }));
     document.getElementById('quizResults').innerHTML = (data.matches||[]).map(c=>`
       <div class="quiz-result-card">
         <span class="emoji">${c.emoji}</span>
