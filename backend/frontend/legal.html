@@ -83,7 +83,20 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .map-tooltip.show{opacity:1}
 .map-tooltip .diff{color:rgba(255,255,255,.7);font-size:.72rem;font-weight:500;margin-left:6px}
 .map-caption{font-size:.78rem;color:var(--text-muted);text-align:center;margin-top:14px}
-@media (max-width:640px){.map-section{display:none}}
+.caption-mobile{display:none}
+@media (max-width:640px){.caption-desktop{display:none}.caption-mobile{display:inline}}
+/* Mobile: keep the map as a visual reference, but compact the chrome around
+   it. Small states (RI, DC, DE) become hard-to-tap — the state grid below is
+   the primary interaction path on phones. */
+@media (max-width:640px){
+  .map-section{padding:18px 12px 16px;margin-bottom:24px;border-radius:14px}
+  .map-eyebrow{font-size:.7rem;margin-bottom:2px}
+  .map-heading{font-size:1rem;margin-bottom:14px;letter-spacing:-.2px}
+  .map-caption{font-size:.72rem;margin-top:10px;line-height:1.5}
+  .us-svg-map path.state:hover{filter:none}
+  /* Widen stroke slightly so small states read more clearly at phone sizes */
+  .us-svg-map path.state{stroke-width:.7}
+}
 
 .states-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
 /* On-brand state card — subtle tint + dot indicator instead of AI-slop left-border stripe */
@@ -206,7 +219,7 @@ footer a{color:var(--gold);text-decoration:none}
     <div class="us-svg-wrap" id="usMap">
       <div class="map-tooltip" id="mapTooltip" role="tooltip"></div>
     </div>
-    <p class="map-caption">Hover a state to see its oversight level · click to view requirements</p>
+    <p class="map-caption"><span class="caption-desktop">Hover a state to see its oversight level · click to view requirements</span><span class="caption-mobile">Tap a state below for details — or scroll down to browse the list</span></p>
   </section>
 
   <div class="results-bar" id="resultsBar">Loading…</div>
