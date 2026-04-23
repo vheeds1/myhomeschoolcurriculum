@@ -688,13 +688,57 @@ app.post('/api/newsletter/subscribe', submitLimiter, async (req, res) => {
     } catch(e) { console.log('Mailchimp error:', e.message); }
   }
   const siteUrl = process.env.SITE_URL || 'http://localhost:3001';
-  sendEmail(subscriber.email, 'Welcome to MyHomeschoolCurriculum! 🧭',
-    `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${siteUrl}">Browse curricula →</a></p><p style="font-size:12px;color:#999;margin-top:24px">Don't want these emails? <a href="${siteUrl}/unsubscribe.html?email=${encodeURIComponent(subscriber.email)}" style="color:#999">Unsubscribe</a></p>`);
+  // Route to the right welcome email based on source.
+  // For the checklist popup, the PDF-delivery email IS the welcome.
+  if (source === 'popup_checklist') {
+    sendChecklistEmail(subscriber.email, siteUrl);
+  } else {
+    sendEmail(subscriber.email, 'Welcome to MyHomeschoolCurriculum! 🧭',
+      `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${siteUrl}">Browse curricula →</a></p><p style="font-size:12px;color:#999;margin-top:24px">Don't want these emails? <a href="${siteUrl}/unsubscribe.html?email=${encodeURIComponent(subscriber.email)}" style="color:#999">Unsubscribe</a></p>`);
+  }
   sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
     `📬 New Newsletter Subscriber — ${subscriber.email}`,
     `<h2>New Newsletter Signup</h2><p><strong>Email:</strong> ${subscriber.email}</p>${subscriber.name ? `<p><strong>Name:</strong> ${subscriber.name}</p>` : ''}<p><strong>Source:</strong> ${subscriber.source||'website'}</p><p><strong>Date:</strong> ${subscriber.subscribedAt}</p><p>Total active subscribers: ${(db.newsletterSubscribers||[]).filter(s => s.active).length}</p>`);
   res.status(201).json({ success: true, message: "You're subscribed! Check your inbox for a welcome email." });
 });
+
+// Checklist PDF-delivery email — sent when someone subscribes via the lead-gen popup.
+// Uses the existing Resend-backed sendEmail() helper. Configure CHECKLIST_PDF_URL
+// in Railway env vars (Google Drive/Dropbox/S3 direct-download link).
+function sendChecklistEmail(email, siteUrl) {
+  const pdfUrl = process.env.CHECKLIST_PDF_URL || siteUrl;
+  const html = `
+  <div style="font-family:'DM Sans',Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;color:#2C3E3F">
+    <div style="background:#1F3A4D;padding:28px 32px;border-radius:12px 12px 0 0">
+      <p style="font-family:Georgia,'Times New Roman',serif;font-size:1.3rem;color:#fff;margin:0">
+        My Homeschool <span style="color:#D4A84C;font-style:italic">Curriculum</span>
+      </p>
+    </div>
+    <div style="background:#FFFBF5;padding:36px 32px;border:1px solid #E8DDD0;border-top:none;border-radius:0 0 12px 12px;line-height:1.65">
+      <p style="margin-top:0">Hi there,</p>
+      <p>Here's your copy of <strong>Before You Buy: The Homeschool Curriculum Checklist</strong> — 10 questions to work through before you spend a dollar on curriculum.</p>
+      <div style="text-align:center;margin:28px 0">
+        <a href="${pdfUrl}" style="background:#4A7550;color:#fff;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:600;font-size:.95rem;display:inline-block">
+          Download Your Checklist →
+        </a>
+      </div>
+      <p style="font-size:.92rem;color:#6B6B60">A few tips for using it:</p>
+      <ul style="font-size:.92rem;color:#6B6B60;line-height:1.8;padding-left:20px">
+        <li>Go through it once for each curriculum you're seriously considering.</li>
+        <li>Be honest on question 4 — most curriculum regrets come from overestimating available prep time.</li>
+        <li>Use our free <a href="${siteUrl}" style="color:#4A7550">curriculum comparison tool</a> to filter by grade, style, worldview, and budget.</li>
+      </ul>
+      <p style="font-size:.92rem">If you have questions or just want a second opinion, reply to this email — I read every one.</p>
+      <p style="font-size:.92rem;margin-bottom:4px">— Vanessa</p>
+      <p style="font-size:.82rem;color:#6B6B60;margin-top:0">Founder, My Homeschool Curriculum</p>
+      <hr style="border:none;border-top:1px solid #E8DDD0;margin:24px 0">
+      <p style="font-size:.74rem;color:#8B8B7E;margin:0">You're receiving this because you signed up at MyHomeschoolCurriculum.com.
+        <a href="${siteUrl}/unsubscribe.html?email=${encodeURIComponent(email)}" style="color:#8B8B7E">Unsubscribe</a>.
+      </p>
+    </div>
+  </div>`;
+  sendEmail(email, "Your free curriculum checklist is here 📋", html);
+}
 
 app.post('/api/newsletter/unsubscribe', (req, res) => {
   const { email } = req.body;

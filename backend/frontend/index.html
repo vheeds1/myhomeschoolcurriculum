@@ -439,6 +439,32 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 /* Heart pop — delight moment on favorite toggle (GPU-accelerated, no bounce) */
 @keyframes heartPop{0%{transform:scale(1)}35%{transform:scale(1.35)}100%{transform:scale(1)}}
 .btn-heart.pop{animation:heartPop .5s var(--ease-out-quart)}
+/* ── LEAD CAPTURE POPUP ── */
+.popup-overlay{position:fixed;inset:0;background:rgba(20,40,56,.55);z-index:900;animation:fadeIn .25s var(--ease-out-quart) both}
+.popup-box{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--warm-white);border-radius:20px;padding:40px 36px 34px;max-width:460px;width:calc(100% - 32px);z-index:901;text-align:center;box-shadow:0 24px 64px rgba(20,40,56,.28);animation:popupIn .35s var(--ease-out-quint) both}
+.popup-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-muted);padding:6px;line-height:1;border-radius:6px;transition:background .15s, color .15s}
+.popup-close:hover{background:var(--border);color:var(--charcoal)}
+.popup-icon{font-size:2.4rem;margin-bottom:12px;line-height:1}
+.popup-heading{font-family:'Fraunces','Playfair Display',serif;font-size:1.45rem;color:var(--navy);margin-bottom:10px;line-height:1.2;letter-spacing:-.3px}
+.popup-sub{font-size:.92rem;color:var(--charcoal);line-height:1.6;margin-bottom:22px;max-width:38ch;margin-left:auto;margin-right:auto}
+.popup-form{display:flex;flex-direction:column;gap:10px}
+.popup-form input{padding:12px 16px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.92rem;outline:none;transition:border-color .2s var(--ease-out-quart);color:var(--charcoal)}
+.popup-form input:focus{border-color:var(--deep-sage)}
+.popup-form input::placeholder{color:#A8A89E}
+.popup-form button{background:var(--deep-sage);color:#fff;border:none;padding:13px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;transition:background .2s var(--ease-out-quart), transform .15s var(--ease-out-quart)}
+.popup-form button:hover{background:#3A6040}
+.popup-form button:active{transform:scale(.97)}
+.popup-form button:disabled{opacity:.6;cursor:not-allowed}
+.popup-dismiss{font-size:.82rem;color:var(--text-muted);cursor:pointer;margin-top:16px;text-decoration:underline;background:none;border:none;font-family:'DM Sans',sans-serif;padding:4px 8px;border-radius:6px;transition:color .15s}
+.popup-dismiss:hover{color:var(--charcoal)}
+.popup-fine{font-size:.76rem;color:var(--text-muted);margin-top:10px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popupIn{from{opacity:0;transform:translate(-50%,-48%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes popupSheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(max-width:600px){
+  .popup-box{top:auto;bottom:0;left:0;right:0;transform:none;border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:32px 24px 36px;animation:popupSheetIn .36s var(--ease-out-quint) both}
+}
+
 /* Global accessibility: honor prefers-reduced-motion */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
@@ -864,6 +890,14 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
     <div class="quiz-step" id="qs5">
       <div class="quiz-q">🎉 Your top curriculum matches!</div>
       <div id="quizResults"></div>
+      <div id="quizEmailBlock" style="margin-top:20px;padding:16px 18px;background:var(--warm-white);border:1px solid var(--border);border-radius:12px">
+        <div style="font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:4px">📧 Want a copy of these results?</div>
+        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px;line-height:1.55">We'll email your matches so you can come back to them later.</p>
+        <form id="quizEmailForm" onsubmit="submitQuizEmail(event)" style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="email" id="quizEmail" placeholder="your@email.com" autocomplete="email" required aria-label="Email address" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;color:var(--charcoal);transition:border-color .2s var(--ease-out-quart)">
+          <button type="submit" id="quizEmailSubmit" style="background:var(--deep-sage);color:#fff;border:none;padding:10px 18px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s var(--ease-out-quart), transform .15s var(--ease-out-quart);white-space:nowrap">Email Me My Results</button>
+        </form>
+      </div>
       <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn-secondary" onclick="resetQuiz()">Retake Quiz</button>
       </div>
@@ -927,6 +961,23 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
 <!-- Toast -->
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
 <div class="toast" id="toast"></div>
+
+<!-- ── LEAD CAPTURE POPUP ────────────────────────────────────────────────────── -->
+<div id="checklistPopup" style="display:none" role="dialog" aria-modal="true" aria-labelledby="popupHeading">
+  <div class="popup-overlay" id="popupOverlay"></div>
+  <div class="popup-box" role="document">
+    <button class="popup-close" id="popupClose" aria-label="Close">✕</button>
+    <div class="popup-icon" aria-hidden="true">📋</div>
+    <h2 class="popup-heading" id="popupHeading">Not sure which curriculum to buy?</h2>
+    <p class="popup-sub">Download our free checklist — 10 questions every homeschool family should answer before spending a dollar on curriculum.</p>
+    <form class="popup-form" id="popupForm" novalidate>
+      <input type="email" id="popupEmail" placeholder="your@email.com" required autocomplete="email" aria-label="Email address">
+      <button type="submit" id="popupSubmit">Send Me the Checklist →</button>
+    </form>
+    <button type="button" class="popup-dismiss" id="popupDismiss">No thanks, I'll figure it out on my own</button>
+    <p class="popup-fine">Free. No spam. Unsubscribe anytime.</p>
+  </div>
+</div>
 
 <footer>
   <div class="footer-inner">
@@ -1299,15 +1350,31 @@ async function openCompare() {
 }
 
 // ── QUIZ ─────────────────────────────────────────────────────────────────────
+// Cache the email-capture form HTML so we can restore it if the user sent it
+// once and then retakes the quiz (success-state shouldn't persist across runs).
+const QUIZ_EMAIL_BLOCK_HTML = `<div style="font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:4px">📧 Want a copy of these results?</div>
+        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px;line-height:1.55">We'll email your matches so you can come back to them later.</p>
+        <form id="quizEmailForm" onsubmit="submitQuizEmail(event)" style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="email" id="quizEmail" placeholder="your@email.com" autocomplete="email" required aria-label="Email address" style="flex:1;min-width:200px;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;color:var(--charcoal);transition:border-color .2s var(--ease-out-quart)">
+          <button type="submit" id="quizEmailSubmit" style="background:var(--deep-sage);color:#fff;border:none;padding:10px 18px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s var(--ease-out-quart), transform .15s var(--ease-out-quart);white-space:nowrap">Email Me My Results</button>
+        </form>`;
+
+function resetQuizEmailBlock() {
+  const block = document.getElementById('quizEmailBlock');
+  if (block) block.innerHTML = QUIZ_EMAIL_BLOCK_HTML;
+}
+
 function openQuiz() {
   quizStep=1; quizAnswers={};
   document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+  resetQuizEmailBlock();
   updateQuizStep();
   document.getElementById('quizOverlay').classList.add('open');
 }
 function resetQuiz() {
   quizStep=1; quizAnswers={};
   document.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('selected'));
+  resetQuizEmailBlock();
   updateQuizStep();
 }
 
@@ -1321,13 +1388,47 @@ function selectQuiz(el, key, val) {
 function quizNav(dir) { quizStep += dir; updateQuizStep(); }
 
 function updateQuizStep() {
-  for(let i=1;i<=5;i++) {
-    const el=document.getElementById('qs'+i);
-    if(el) el.classList.toggle('active', i===quizStep);
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('qs' + i);
+    if (el) el.classList.toggle('active', i === quizStep);
   }
-  document.getElementById('quizBar').style.width=(quizStep/5*100)+'%';
-  document.getElementById('quizBack').style.display=quizStep>1&&quizStep<5?'block':'none';
-  if(quizStep===5) fetchQuizMatches();
+  document.getElementById('quizBar').style.width = (quizStep / 5 * 100) + '%';
+  document.getElementById('quizBack').style.display = quizStep > 1 && quizStep < 5 ? 'block' : 'none';
+  if (quizStep === 5) {
+    // Reset the email block whenever the user lands on results (retake, reopen, etc.)
+    const block = document.getElementById('quizEmailBlock');
+    if (block && !block.innerHTML.includes('<form')) {
+      // User already sent it this session — keep the success state visible
+    }
+    fetchQuizMatches();
+  }
+}
+
+// Optional: email the quiz results to yourself. Never blocks the results view.
+async function submitQuizEmail(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('quizEmail');
+  const email = (input?.value || '').trim();
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    showToast('Please enter a valid email address.', 'error');
+    input?.focus();
+    return;
+  }
+  const btn = document.getElementById('quizEmailSubmit');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  try {
+    await fetch(`${API}/newsletter/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'quiz_results' })
+    });
+    if (typeof gtag === 'function') gtag('event', 'quiz_email_captured', { event_category: 'lead_generation' });
+    const block = document.getElementById('quizEmailBlock');
+    if (block) block.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:4px 2px"><span style="color:var(--deep-sage);font-size:1.1rem">✓</span><span style="font-size:.9rem;color:var(--deep-sage);font-weight:600">Sent! Check your inbox — your matches are on the way.</span></div>';
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Email Me My Results'; }
+    showToast('Something went wrong. Please try again.', 'error');
+  }
 }
 
 async function fetchQuizMatches() {
@@ -1541,9 +1642,8 @@ function exportComparePDF() {
 }
 
 // ── GOOGLE ANALYTICS HELPERS ─────────────────────────────────────────────────
-function gtag() {
-  if (typeof window.gtag === 'function') window.gtag(...arguments);
-}
+// (The real gtag() is bootstrapped in the <script> tag in the head.
+// Don't re-declare it here — that caused infinite recursion.)
 
 // ── MOBILE MENU & FILTERS ────────────────────────────────────────────────────
 function toggleMenu() {
@@ -1636,6 +1736,103 @@ window.addEventListener('scroll', () => {
 
 fetchCurricula();
 loadUserFavorites();
+
+// ── CHECKLIST POPUP ──────────────────────────────────────────────────────────
+// Triggers on 50% scroll OR 45s timer OR desktop exit-intent (whichever first).
+// Won't fire in the first 10s. Cookie mhc_popup_seen=1 suppresses for 7 days.
+(function() {
+  if (document.cookie.includes('mhc_popup_seen=1')) return;
+
+  const popup    = document.getElementById('checklistPopup');
+  const overlay  = document.getElementById('popupOverlay');
+  const closeBtn = document.getElementById('popupClose');
+  const dismiss  = document.getElementById('popupDismiss');
+  const form     = document.getElementById('popupForm');
+  const submitBtn= document.getElementById('popupSubmit');
+  if (!popup) return;
+
+  let shown = false;
+  const startTime = Date.now();
+  const MIN_DELAY = 10000; // 10s silence
+  const TIME_TRIGGER = 45000; // 45s auto-trigger
+  const SCROLL_PCT = 50;
+
+  function track(action) {
+    if (typeof gtag === 'function') gtag('event', action, { event_category: 'lead_generation' });
+  }
+
+  function showPopup() {
+    if (shown) return;
+    shown = true;
+    popup.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    // Focus the email input for keyboard users
+    setTimeout(() => { const e = document.getElementById('popupEmail'); if (e) e.focus(); }, 60);
+    track('popup_shown');
+  }
+
+  function hidePopup(reason) {
+    popup.style.display = 'none';
+    document.body.style.overflow = '';
+    const exp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = 'mhc_popup_seen=1; expires=' + exp + '; path=/; SameSite=Lax';
+    if (reason) track('popup_' + reason);
+  }
+
+  // Scroll trigger
+  window.addEventListener('scroll', function() {
+    if (shown) return;
+    if (Date.now() - startTime < MIN_DELAY) return;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight <= 0) return;
+    const pct = (window.scrollY / docHeight) * 100;
+    if (pct >= SCROLL_PCT) showPopup();
+  }, { passive: true });
+
+  // Time trigger
+  setTimeout(function() { if (!shown) showPopup(); }, TIME_TRIGGER);
+
+  // Exit intent (desktop only — no touch events)
+  document.addEventListener('mouseleave', function(e) {
+    if (shown) return;
+    if (Date.now() - startTime < MIN_DELAY) return;
+    if (e.clientY <= 0) showPopup();
+  });
+
+  // Close handlers
+  closeBtn.addEventListener('click', () => hidePopup('closed'));
+  overlay.addEventListener('click', () => hidePopup('closed'));
+  dismiss.addEventListener('click', () => hidePopup('dismissed'));
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && popup.style.display === 'block') hidePopup('closed');
+  });
+
+  // Form submission
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('popupEmail').value.trim();
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      showToast('Please enter a valid email address.', 'error');
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    try {
+      await fetch(API + '/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'popup_checklist' })
+      });
+      form.innerHTML = '<p style="color:var(--deep-sage);font-weight:600;font-size:1rem;line-height:1.55">✓ Check your inbox — your free checklist is on its way!</p>';
+      track('popup_signup');
+      setTimeout(() => hidePopup(), 3200);
+    } catch(err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Me the Checklist →';
+      showToast('Something went wrong. Please try again.', 'error');
+    }
+  });
+})();
 </script>
 </body>
 </html>
