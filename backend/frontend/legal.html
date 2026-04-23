@@ -54,25 +54,54 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .diff-btn.active-easy{background:#E6F4EA;border-color:#4A7550;color:#1E7E34}
 .diff-btn.active-moderate{background:#FFF3CD;border-color:#D4A84B;color:#856404}
 .diff-btn.active-strict{background:#FFE9E6;border-color:#C8614A;color:var(--terracotta)}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;align-items:center;color:var(--text-muted);margin-bottom:24px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;align-items:center;color:var(--text-muted);margin-bottom:24px}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
 .dot-easy{background:#4A7550}
 .dot-moderate{background:#D4A84B}
 .dot-strict{background:#C8614A}
+
+/* ── US GEOGRAPHIC MAP ── */
+.map-section{background:var(--warm-white);border:1px solid var(--border);border-radius:18px;padding:24px 20px 24px;margin-bottom:32px}
+.map-eyebrow{font-size:.76rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--deep-sage);margin-bottom:4px;text-align:center}
+.map-heading{font-family:'Fraunces','Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:20px;text-align:center;letter-spacing:-.3px}
+.us-svg-wrap{position:relative;max-width:820px;margin:0 auto}
+.us-svg-map{width:100%;height:auto;display:block;overflow:visible}
+/* Default — hide anything not explicitly styled. Prevents the source SVG's
+   109 decorative border-overlay paths (.al-fl, .al-ga, .dc-md, etc.) and
+   AK/HI separator lines from rendering as gray patches. */
+.us-svg-map path,.us-svg-map circle{fill:transparent;stroke:none;cursor:default;pointer-events:none;outline:none}
+.us-svg-map line,.us-svg-map path.separator1,.us-svg-map .dccircle{display:none}
+/* State paths — only these render, click, and show a hairline border between them */
+.us-svg-map path.state{fill:var(--border);stroke:var(--warm-white);stroke-width:1;cursor:pointer;pointer-events:auto;transition:fill .15s ease-out, filter .15s ease-out}
+.us-svg-map path.easy{fill:#8BA990}
+.us-svg-map path.moderate{fill:#D2B158}
+.us-svg-map path.strict{fill:#CF7C63}
+.us-svg-map path.state:hover{filter:brightness(.88)}
+.us-svg-map path.state:focus-visible{stroke:var(--navy);stroke-width:2.5;filter:brightness(.92);outline:none}
+/* Tooltip that follows the cursor */
+.map-tooltip{position:absolute;background:var(--navy);color:#fff;padding:6px 10px;border-radius:6px;font-size:.78rem;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .12s;font-weight:600;z-index:10;box-shadow:0 4px 12px rgba(31,58,77,.25)}
+.map-tooltip.show{opacity:1}
+.map-tooltip .diff{color:rgba(255,255,255,.7);font-size:.72rem;font-weight:500;margin-left:6px}
+.map-caption{font-size:.78rem;color:var(--text-muted);text-align:center;margin-top:14px}
+@media (max-width:640px){.map-section{display:none}}
+
 .states-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.state-card{background:var(--warm-white);border:2px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s}
-.state-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(30,58,76,.08)}
-.state-card.easy{border-left:4px solid #4A7550}
-.state-card.moderate{border-left:4px solid #D4A84B}
-.state-card.strict{border-left:4px solid #C8614A}
-.state-name{font-family:'Fraunces','Playfair Display',serif;font-size:1.05rem;color:var(--navy);font-weight:700;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
-.diff-badge{padding:2px 9px;border-radius:10px;font-size:.68rem;font-weight:700;text-transform:uppercase}
+/* On-brand state card — subtle tint + dot indicator instead of AI-slop left-border stripe */
+.state-card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s}
+.state-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(31,58,77,.08);border-color:var(--sage)}
+.state-name{font-family:'Fraunces','Playfair Display',serif;font-size:1.05rem;color:var(--navy);font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.state-name .state-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.state-name .state-dot.easy{background:#4A7550}
+.state-name .state-dot.moderate{background:#D4A84B}
+.state-name .state-dot.strict{background:#C8614A}
+.state-name .diff-badge{margin-left:auto}
+.diff-badge{padding:3px 10px;border-radius:10px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
 .badge-easy{background:#E6F4EA;color:#1E7E34}
 .badge-moderate{background:#FFF3CD;color:#856404}
 .badge-strict{background:#FFE9E6;color:var(--terracotta)}
-.state-desc{font-size:.8rem;color:var(--text-muted);line-height:1.5}
+.state-desc{font-size:.84rem;color:var(--text-muted);line-height:1.55}
 .state-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-.tag{padding:2px 7px;border-radius:6px;font-size:.68rem;background:var(--light-sage);color:var(--deep-sage);font-weight:500}
+.tag{padding:2px 7px;border-radius:6px;font-size:.72rem;background:var(--light-sage);color:var(--deep-sage);font-weight:500}
 
 /* DETAIL OVERLAY */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
@@ -169,6 +198,17 @@ footer a{color:var(--gold);text-decoration:none}
     <span><span class="dot dot-moderate"></span> Moderate — Annual notice and/or assessment</span>
     <span><span class="dot dot-strict"></span> High — Approval, detailed documentation, testing</span>
   </div>
+
+  <!-- ── U.S. GEOGRAPHIC MAP ──────────────────────────────────────────────── -->
+  <section class="map-section" aria-labelledby="mapTitle">
+    <div class="map-eyebrow">Find your state</div>
+    <h2 class="map-heading" id="mapTitle">Click any state to see its homeschool laws</h2>
+    <div class="us-svg-wrap" id="usMap">
+      <div class="map-tooltip" id="mapTooltip" role="tooltip"></div>
+    </div>
+    <p class="map-caption">Hover a state to see its oversight level · click to view requirements</p>
+  </section>
+
   <div class="results-bar" id="resultsBar">Loading…</div>
   <div class="states-grid" id="statesGrid" role="list" aria-label="State homeschool laws" aria-live="polite"><div style="text-align:center;padding:40px;color:var(--text-muted)">Loading state data…</div></div>
 </div>
@@ -192,28 +232,131 @@ const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/ap
 let allStates = [];
 let currentDiff = 'all';
 
+// Maps SVG path class names (lowercase state abbreviations) to our state data.
+// The SVG is from Wikimedia Commons (CC0, public domain) — see /brand/us-states-map.svg.
+const STATE_NAME_TO_ABBR = {
+  Alabama:'al',Alaska:'ak',Arizona:'az',Arkansas:'ar',California:'ca',Colorado:'co',Connecticut:'ct',Delaware:'de','District of Columbia':'dc',Florida:'fl',Georgia:'ga',Hawaii:'hi',Idaho:'id',Illinois:'il',Indiana:'in',Iowa:'ia',Kansas:'ks',Kentucky:'ky',Louisiana:'la',Maine:'me',Maryland:'md',Massachusetts:'ma',Michigan:'mi',Minnesota:'mn',Mississippi:'ms',Missouri:'mo',Montana:'mt',Nebraska:'ne',Nevada:'nv','New Hampshire':'nh','New Jersey':'nj','New Mexico':'nm','New York':'ny','North Carolina':'nc','North Dakota':'nd',Ohio:'oh',Oklahoma:'ok',Oregon:'or',Pennsylvania:'pa','Rhode Island':'ri','South Carolina':'sc','South Dakota':'sd',Tennessee:'tn',Texas:'tx',Utah:'ut',Vermont:'vt',Virginia:'va',Washington:'wa','West Virginia':'wv',Wisconsin:'wi',Wyoming:'wy'
+};
+
+function difficultyClass(diff) {
+  if (diff === 'High' || diff === 'Strict') return 'strict';
+  if (diff === 'Moderate') return 'moderate';
+  if (diff === 'Easy' || diff === 'Low') return 'easy';
+  return 'unknown';
+}
+function difficultyLabel(diff) {
+  if (diff === 'High' || diff === 'Strict') return 'High oversight';
+  if (diff === 'Moderate') return 'Moderate oversight';
+  if (diff === 'Easy' || diff === 'Low') return 'Low oversight';
+  return '';
+}
+
 async function loadStates() {
   try {
     const res = await fetch(`${API}/legal/states`);
     const data = await res.json();
     allStates = data.states || [];
+    renderMap(allStates);
     renderStates(allStates);
   } catch(e) {
     document.getElementById('statesGrid').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Could not load state data. Is the server running?</div>';
   }
 }
 
+// Load the US geographic map (CC0 public-domain SVG from Wikimedia Commons),
+// color each state by its regulation difficulty, and wire click + hover +
+// keyboard handlers. Filter chips affect the grid below — not the map —
+// since the geographic view is always useful.
+async function renderMap(states) {
+  const wrap = document.getElementById('usMap');
+  const tooltip = document.getElementById('mapTooltip');
+  if (!wrap || !tooltip) return;
+
+  // Build abbr → state data lookup
+  const byAbbr = {};
+  states.forEach(s => {
+    const abbr = STATE_NAME_TO_ABBR[s.state];
+    if (abbr) byAbbr[abbr] = s;
+  });
+
+  // Fetch the SVG and inject it before the tooltip node
+  let svgText;
+  try {
+    const res = await fetch('/brand/us-states-map.svg');
+    svgText = await res.text();
+  } catch (e) {
+    wrap.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:24px">Map could not load. Use the state list below.</p>' + wrap.innerHTML;
+    return;
+  }
+
+  // Parse the SVG and apply our class
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgText, 'image/svg+xml');
+  const svg = doc.documentElement;
+  svg.classList.add('us-svg-map');
+  svg.setAttribute('viewBox', '0 0 959 593');
+  svg.removeAttribute('width');
+  svg.removeAttribute('height');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', 'Interactive map of the United States showing homeschool regulation difficulty by state');
+
+  // Bind state data to each path by class name. Only primary state paths
+  // (2-letter class names matching our lookup) are interactive — all the
+  // decorative border-overlay paths (.al-fl, .al-ga, etc.) stay transparent.
+  svg.querySelectorAll('path[class]').forEach(path => {
+    const firstCls = path.getAttribute('class').split(/\s+/)[0];
+    const s = byAbbr[firstCls];
+    if (!s) return; // helper/border path — leave hidden
+    path.classList.add('state');
+    path.classList.add(difficultyClass(s.difficulty));
+    path.setAttribute('tabindex', '0');
+    path.setAttribute('role', 'button');
+    path.setAttribute('aria-label', `${s.state} — ${difficultyLabel(s.difficulty)}. Open details.`);
+    // Replace the existing <title> with our richer label
+    const existingTitle = path.querySelector('title');
+    if (existingTitle) existingTitle.textContent = `${s.state} — ${difficultyLabel(s.difficulty)}`;
+
+    const open = () => openState(encodeURIComponent(s.state));
+    path.addEventListener('click', open);
+    path.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+
+    // Custom tooltip on hover + focus
+    const showTip = (e) => {
+      tooltip.innerHTML = `${s.state}<span class="diff">· ${difficultyLabel(s.difficulty)}</span>`;
+      tooltip.classList.add('show');
+      positionTooltip(e);
+    };
+    const hideTip = () => tooltip.classList.remove('show');
+    path.addEventListener('mouseenter', showTip);
+    path.addEventListener('mousemove', positionTooltip);
+    path.addEventListener('mouseleave', hideTip);
+    path.addEventListener('focus', showTip);
+    path.addEventListener('blur', hideTip);
+  });
+
+  function positionTooltip(e) {
+    const rect = wrap.getBoundingClientRect();
+    const x = (e.clientX || 0) - rect.left;
+    const y = (e.clientY || 0) - rect.top;
+    tooltip.style.left = `${x + 12}px`;
+    tooltip.style.top = `${y - 36}px`;
+  }
+
+  // Insert the SVG before the tooltip element so the tooltip renders on top
+  wrap.insertBefore(svg, tooltip);
+}
+
 function renderStates(states) {
-  document.getElementById('resultsBar').innerHTML = `<strong>${states.length}</strong> states`;
+  document.getElementById('resultsBar').innerHTML = `<strong>${states.length}</strong> state${states.length===1?'':'s'}`;
   const grid = document.getElementById('statesGrid');
   if (!states.length) { grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">No states match your filter.</div>'; return; }
   grid.innerHTML = states.map(s => {
-    const isHigh = s.difficulty === 'Strict' || s.difficulty === 'High';
-    const cls = isHigh ? 'strict' : s.difficulty === 'Moderate' ? 'moderate' : 'easy';
-    const badgeCls = isHigh ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
+    const cls = difficultyClass(s.difficulty);
+    const badgeCls = cls === 'strict' ? 'badge-strict' : cls === 'moderate' ? 'badge-moderate' : 'badge-easy';
     return `
-      <div class="state-card ${cls}" onclick="openState('${encodeURIComponent(s.state)}')">
+      <div class="state-card" onclick="openState('${encodeURIComponent(s.state)}')" role="listitem" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
         <div class="state-name">
+          <span class="state-dot ${cls}" aria-hidden="true"></span>
           ${s.state}
           <span class="diff-badge ${badgeCls}">${s.difficulty}</span>
         </div>
