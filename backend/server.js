@@ -384,7 +384,11 @@ app.post('/api/quiz', (req, res) => {
 //                    priceMax?, query?) — returns matching curricula
 //   get_curriculum_details(slug) — returns full info for a single curriculum
 
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+// gemini-1.5-flash is the most reliable free-tier-enabled model for new
+// API keys. gemini-2.0-flash often shows "limit: 0" on freshly-created
+// projects until the user upgrades their Cloud project tier. Override
+// via GEMINI_MODEL env var if you've enabled a different model.
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 const ADVISOR_SYSTEM_PROMPT = `You are a homeschool curriculum advisor for My Homeschool Curriculum (myhomeschoolcurriculum.com), a free comparison tool with 60+ curricula. Most visitors are NEW to homeschooling. Your job is to help them narrow down to 2-3 specific curricula they should look at more closely — not to make the decision for them.
