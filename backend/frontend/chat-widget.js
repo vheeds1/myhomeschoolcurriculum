@@ -276,7 +276,7 @@
   function paintHistory() {
     body.innerHTML = '';
     if (history.length === 0) {
-      const intro = "Hi! I'm a curriculum advisor for this site. Tell me about your family — kids' grade levels, teaching style you like, worldview preference, rough budget — and I'll suggest 2–3 curricula worth a closer look.";
+      const intro = "Hi! I'm here to help you find a curriculum that actually fits. Share whatever's helpful — grade levels, teaching style, worldview, rough budget — and I'll suggest 2–3 worth a closer look.";
       renderMessage('bot', intro);
       renderSuggestions([
         "We're brand new to homeschooling. Where do I start?",

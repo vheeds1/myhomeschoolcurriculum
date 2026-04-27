@@ -186,7 +186,15 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .pick-desc{font-size:.78rem;color:var(--text-muted);line-height:1.6;flex:1;margin-bottom:12px}
 .pick-link{font-size:.78rem;font-weight:600;color:var(--deep-sage);margin-top:auto}
 @media(max-width:900px){.picks-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:540px){.picks-grid{grid-template-columns:1fr}}
+@media(max-width:640px){
+  .picks-grid{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 24px 18px;margin:8px -24px 0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .picks-grid::-webkit-scrollbar{display:none}
+  .picks-grid .pick-card{flex:0 0 78%;min-width:78%;scroll-snap-align:center}
+  .picks-dots{display:flex;justify-content:center;gap:7px;margin-top:14px}
+  .picks-dot{width:7px;height:7px;border-radius:50%;background:rgba(31,58,77,.18);border:none;padding:0;cursor:pointer;transition:background .2s,transform .2s}
+  .picks-dot.active{background:var(--deep-sage);transform:scale(1.25)}
+}
+.picks-dots{display:none}
 
 
 /* ── PULL QUOTE CAROUSEL (below grid) ── */
@@ -584,7 +592,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
     <div class="how-eyebrow">Editor picks</div>
     <h2 id="picks-title">A good place to start</h2>
     <p class="how-sub">Our top picks for the most common situations. Click any card to see the full listing.</p>
-    <div class="picks-grid">
+    <div class="picks-grid" id="picksGrid">
       <div class="pick-card" onclick="openDetail('the-good-and-the-beautiful')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
         <div class="pick-emoji">👶</div>
         <div class="pick-tag">Best for early elementary</div>
@@ -614,6 +622,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.65);padding:48px 24px 28px
         <span class="pick-link">View listing →</span>
       </div>
     </div>
+    <div class="picks-dots" id="picksDots" role="tablist" aria-label="Editor picks navigation"></div>
   </div>
 </section>
 
@@ -1756,6 +1765,69 @@ loadUserFavorites();
 (function() {
   const slug = new URLSearchParams(location.search).get('curriculum');
   if (slug) setTimeout(() => openDetail(slug), 350);
+})();
+
+// ── EDITOR PICKS — mobile auto-scroll carousel ───────────────────────────────
+// On screens ≤640px the picks-grid is a horizontal snap-scroll strip; this
+// adds dot indicators, auto-advance every 5s, and pauses on user interaction
+// so it never fights the reader.
+(function() {
+  const grid = document.getElementById('picksGrid');
+  const dotsWrap = document.getElementById('picksDots');
+  if (!grid || !dotsWrap) return;
+  const cards = Array.from(grid.querySelectorAll('.pick-card'));
+  if (cards.length < 2) return;
+  const mq = window.matchMedia('(max-width:640px)');
+  let timer = null, paused = false, interacted = false;
+
+  // Build dots
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'picks-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `Go to pick ${i+1}`);
+    dot.addEventListener('click', () => {
+      interacted = true;
+      cards[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+    dotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  // Update active dot as the user scrolls
+  function syncDots() {
+    const center = grid.scrollLeft + grid.clientWidth / 2;
+    let nearest = 0, best = Infinity;
+    cards.forEach((card, i) => {
+      const cMid = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(cMid - center);
+      if (dist < best) { best = dist; nearest = i; }
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === nearest));
+    return nearest;
+  }
+  grid.addEventListener('scroll', () => requestAnimationFrame(syncDots), { passive: true });
+  grid.addEventListener('touchstart', () => { paused = true; interacted = true; }, { passive: true });
+  grid.addEventListener('mouseenter', () => { paused = true; });
+  grid.addEventListener('mouseleave', () => { paused = false; });
+
+  function tick() {
+    if (paused || !mq.matches || document.hidden) return;
+    const cur = syncDots();
+    const next = (cur + 1) % cards.length;
+    cards[next].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  function start() {
+    if (timer) return;
+    if (!mq.matches) return;
+    timer = setInterval(tick, 5000);
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+  mq.addEventListener('change', e => e.matches ? start() : stop());
+  start();
 })();
 
 // ── CHECKLIST POPUP ──────────────────────────────────────────────────────────
