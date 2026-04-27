@@ -684,6 +684,24 @@ app.get('/api/admin/chat-diagnostic', requireAdmin, async (req, res) => {
     result.error = 'Network error reaching Gemini';
     result.message = String(e.message || e);
   }
+
+  // If the test failed, list every model the API key has access to —
+  // helps identify the exact model name to set in GEMINI_MODEL.
+  if (result.error) {
+    try {
+      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+      if (listRes.ok) {
+        const listData = await listRes.json();
+        result.available_models = (listData.models || [])
+          .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
+          .map(m => m.name.replace(/^models\//, ''))
+          .slice(0, 30);
+      } else {
+        result.list_status = listRes.status;
+      }
+    } catch (e) {}
+  }
+
   res.json(result);
 });
 
