@@ -12,7 +12,11 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const { v4: uuidv4 } = require('uuid');
+// Use Node's built-in crypto.randomUUID() instead of the uuid package —
+// avoids the ERR_REQUIRE_ESM crash with newer uuid versions on CommonJS.
+// Works on Node 14.17+. Same API: uuidv4() → "uuid-v4-string"
+const { randomUUID } = require('crypto');
+const uuidv4 = () => randomUUID();
 const nodemailer = require('nodemailer');
 const { Resend } = require('resend');
 
