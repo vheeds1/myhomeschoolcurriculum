@@ -555,7 +555,7 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
   try {
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
       const reqBody = {
-        system_instruction: { parts: [{ text: ADVISOR_SYSTEM_PROMPT }] },
+        systemInstruction: { parts: [{ text: ADVISOR_SYSTEM_PROMPT }] },
         contents,
         tools: ADVISOR_TOOLS,
         generationConfig: { temperature: 0.4, maxOutputTokens: 1024 },
@@ -638,6 +638,51 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
 });
 
 // Admin: list conversations (newest first, most recent message preview)
+// Diagnostic — admin-only. Hits Gemini with a minimal test prompt and
+// returns the raw response (or error). Use to debug "advisor is having
+// trouble" without exposing internals to public users.
+//   curl -H "Authorization: Bearer $ADMIN_TOKEN" https://your-site/api/admin/chat-diagnostic
+app.get('/api/admin/chat-diagnostic', requireAdmin, async (req, res) => {
+  const apiKey = process.env.GEMINI_API_KEY;
+  const result = {
+    apiKey_set: !!apiKey,
+    apiKey_length: apiKey ? apiKey.length : 0,
+    apiKey_prefix: apiKey ? apiKey.slice(0, 6) + '…' : null,
+    model: GEMINI_MODEL,
+    endpoint: GEMINI_ENDPOINT
+  };
+  if (!apiKey) return res.json({ ...result, error: 'GEMINI_API_KEY not set' });
+  try {
+    const apiRes = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: 'Say "ok" and nothing else.' }] }],
+        generationConfig: { maxOutputTokens: 10 }
+      })
+    });
+    result.http_status = apiRes.status;
+    const text = await apiRes.text();
+    if (!apiRes.ok) {
+      result.error = 'Gemini rejected the request';
+      result.gemini_response = text.slice(0, 600);
+    } else {
+      try {
+        const data = JSON.parse(text);
+        result.success = true;
+        result.reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '(empty)';
+      } catch (e) {
+        result.error = 'Could not parse Gemini response';
+        result.raw = text.slice(0, 300);
+      }
+    }
+  } catch (e) {
+    result.error = 'Network error reaching Gemini';
+    result.message = String(e.message || e);
+  }
+  res.json(result);
+});
+
 app.get('/api/admin/conversations', requireAdmin, (req, res) => {
   const db = readDB();
   if (!db) return res.status(500).json({ error: 'Database error' });
