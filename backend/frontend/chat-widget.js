@@ -15,17 +15,34 @@
   const STORAGE_HISTORY = 'cc_chat_history';
   const STORAGE_SESSION = 'cc_chat_session';
   const STORAGE_SEEN = 'cc_chat_seen_intro';
+  const STORAGE_OPENED = 'cc_chat_has_opened';   // true after first time user opens the chat
+  const STORAGE_PEEK_DISMISSED = 'cc_chat_peek_dismissed'; // true once they dismiss the welcome peek
 
   // ── Inject styles ────────────────────────────────────────────────────────
   const styles = `
-  .mhc-chat-fab{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:#4A7550;color:#fff;border:none;cursor:pointer;box-shadow:0 6px 22px rgba(74,117,80,.4);z-index:9998;display:flex;align-items:center;justify-content:center;transition:transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s, background .2s}
-  .mhc-chat-fab:hover{background:#3a6040;transform:translateY(-2px) scale(1.04);box-shadow:0 10px 28px rgba(74,117,80,.5)}
-  .mhc-chat-fab:active{transform:scale(.94)}
-  .mhc-chat-fab svg{width:26px;height:26px}
-  .mhc-chat-fab .mhc-chat-dot{position:absolute;top:8px;right:8px;width:11px;height:11px;background:#D4A84C;border-radius:50%;border:2px solid #4A7550;animation:mhcPulse 2s ease-in-out infinite}
-  @keyframes mhcPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.85}}
-  .mhc-chat-fab.open .mhc-chat-dot{display:none}
+  /* Default button: pill with icon + label so it's obvious what it is */
+  .mhc-chat-fab{position:fixed;bottom:24px;right:24px;height:54px;padding:0 20px 0 16px;border-radius:30px;background:#4A7550;color:#fff;border:none;cursor:pointer;box-shadow:0 6px 22px rgba(74,117,80,.4);z-index:9998;display:flex;align-items:center;gap:10px;font-family:inherit;font-size:.92rem;font-weight:600;letter-spacing:-.1px;transition:transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s, background .2s, padding .25s, gap .25s}
+  .mhc-chat-fab:hover{background:#3a6040;transform:translateY(-2px) scale(1.03);box-shadow:0 10px 28px rgba(74,117,80,.5)}
+  .mhc-chat-fab:active{transform:scale(.97)}
+  .mhc-chat-fab svg{width:22px;height:22px;flex-shrink:0}
+  .mhc-chat-fab .mhc-chat-label{white-space:nowrap}
+  .mhc-chat-fab .mhc-chat-dot{position:absolute;top:6px;right:6px;width:11px;height:11px;background:#D4A84C;border-radius:50%;border:2px solid #4A7550;animation:mhcPulse 2s ease-in-out infinite}
+  @keyframes mhcPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.18);opacity:.85}}
+  .mhc-chat-fab.open .mhc-chat-label{display:none}
+  .mhc-chat-fab.open{width:54px;padding:0;justify-content:center}
   @media(prefers-reduced-motion:reduce){.mhc-chat-fab,.mhc-chat-dot{animation:none!important;transition:none!important}}
+  @media(max-width:480px){.mhc-chat-fab{padding:0;width:54px;justify-content:center}.mhc-chat-fab .mhc-chat-label{display:none}}
+
+  /* Welcome peek — a small speech bubble that appears once, after the
+     user has been on the page for a few seconds, pointing at the FAB.
+     Disappears on dismiss or when the chat opens. */
+  .mhc-chat-peek{position:fixed;bottom:90px;right:24px;background:#FFFBF5;border:1px solid #E8DDD0;border-radius:14px;padding:14px 16px 14px 18px;box-shadow:0 12px 32px rgba(31,58,77,.18);z-index:9997;max-width:300px;font-size:.86rem;line-height:1.5;color:#2C3E3F;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .35s ease-out, transform .35s cubic-bezier(.22,1,.36,1)}
+  .mhc-chat-peek.show{opacity:1;transform:translateY(0);pointer-events:auto}
+  .mhc-chat-peek::after{content:'';position:absolute;bottom:-7px;right:30px;width:14px;height:14px;background:#FFFBF5;border-right:1px solid #E8DDD0;border-bottom:1px solid #E8DDD0;transform:rotate(45deg)}
+  .mhc-chat-peek strong{font-family:'Fraunces','Playfair Display',serif;color:#1F3A4D;display:block;margin-bottom:3px;font-size:.94rem;font-weight:700}
+  .mhc-chat-peek .mhc-peek-close{position:absolute;top:6px;right:8px;background:none;border:none;color:#9E9E94;font-size:1rem;line-height:1;cursor:pointer;padding:4px}
+  .mhc-chat-peek .mhc-peek-close:hover{color:#1F3A4D}
+  @media(max-width:480px){.mhc-chat-peek{right:16px;left:16px;max-width:none;bottom:84px}}
 
   .mhc-chat-panel{position:fixed;bottom:96px;right:24px;width:380px;max-width:calc(100vw - 48px);height:560px;max-height:calc(100vh - 120px);background:#FFFBF5;border:1px solid #E8DDD0;border-radius:16px;box-shadow:0 18px 50px rgba(31,58,77,.18);z-index:9997;display:none;flex-direction:column;overflow:hidden;font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif}
   .mhc-chat-panel.open{display:flex;animation:mhcSlideUp .3s cubic-bezier(.22,1,.36,1) both}
@@ -33,8 +50,8 @@
   @media(prefers-reduced-motion:reduce){.mhc-chat-panel.open{animation:none}}
 
   .mhc-chat-head{background:#1F3A4D;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0}
-  .mhc-chat-head .mhc-chat-icon{width:36px;height:36px;background:rgba(212,168,76,.2);border:1px solid rgba(212,168,76,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#D4A84C}
-  .mhc-chat-head .mhc-chat-icon svg{width:18px;height:18px}
+  .mhc-chat-head .mhc-chat-avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid rgba(212,168,76,.5);background:rgba(212,168,76,.15)}
+  .mhc-chat-head .mhc-chat-avatar img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
   .mhc-chat-head .mhc-chat-title{font-family:'Fraunces','Playfair Display',serif;font-size:.98rem;font-weight:700;letter-spacing:-.2px;line-height:1.2}
   .mhc-chat-head .mhc-chat-sub{font-size:.7rem;color:rgba(255,255,255,.65);line-height:1.3;margin-top:2px}
   .mhc-chat-head .mhc-chat-close{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:background .15s, color .15s}
@@ -100,14 +117,26 @@
   // ── Build DOM ────────────────────────────────────────────────────────────
   const fab = document.createElement('button');
   fab.className = 'mhc-chat-fab';
-  fab.setAttribute('aria-label', 'Open homeschool curriculum advisor chat');
+  fab.setAttribute('aria-label', 'Open the curriculum advisor chat');
   fab.setAttribute('aria-expanded', 'false');
   fab.innerHTML = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
     </svg>
-    <span class="mhc-chat-dot" aria-hidden="true"></span>`;
+    <span class="mhc-chat-label">Ask the advisor</span>`;
   document.body.appendChild(fab);
+
+  // Welcome peek — appears once for new visitors after a few seconds
+  const peek = document.createElement('div');
+  peek.className = 'mhc-chat-peek';
+  peek.setAttribute('role', 'status');
+  peek.setAttribute('aria-live', 'polite');
+  peek.innerHTML = `
+    <button class="mhc-peek-close" aria-label="Dismiss">✕</button>
+    <strong>Need a hand picking?</strong>
+    Ask our curriculum advisor for personalized recommendations — free, takes a minute.`;
+  document.body.appendChild(peek);
+  const peekClose = peek.querySelector('.mhc-peek-close');
 
   const panel = document.createElement('div');
   panel.className = 'mhc-chat-panel';
@@ -116,10 +145,8 @@
   panel.setAttribute('aria-label', 'Curriculum advisor');
   panel.innerHTML = `
     <div class="mhc-chat-head">
-      <div class="mhc-chat-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
+      <div class="mhc-chat-avatar" aria-hidden="true">
+        <img src="/brand/advisor.png" alt="" loading="lazy">
       </div>
       <div>
         <div class="mhc-chat-title">Curriculum Advisor</div>
@@ -251,10 +278,6 @@
     if (history.length === 0) {
       const intro = "Hi! I'm a curriculum advisor for this site. Tell me about your family — kids' grade levels, teaching style you like, worldview preference, rough budget — and I'll suggest 2–3 curricula worth a closer look.";
       renderMessage('bot', intro);
-      if (!localStorage.getItem(STORAGE_SEEN)) {
-        renderDisclosure();
-        localStorage.setItem(STORAGE_SEEN, '1');
-      }
       renderSuggestions([
         "We're brand new to homeschooling. Where do I start?",
         "Charlotte Mason curriculum for K-2, Christian, on a budget",
@@ -315,10 +338,18 @@
   }
 
   // ── Wire up events ───────────────────────────────────────────────────────
+  function hidePeek() {
+    peek.classList.remove('show');
+    localStorage.setItem(STORAGE_PEEK_DISMISSED, '1');
+  }
   function open() {
     panel.classList.add('open');
     fab.classList.add('open');
     fab.setAttribute('aria-expanded', 'true');
+    hidePeek();
+    // Once the user has opened the chat, mark them as a returning visitor.
+    // Next page-load, the FAB shows in compact (icon-only) form.
+    localStorage.setItem(STORAGE_OPENED, '1');
     if (body.children.length === 0) paintHistory();
     setTimeout(() => input.focus(), 100);
   }
@@ -327,6 +358,20 @@
     fab.classList.remove('open');
     fab.setAttribute('aria-expanded', 'false');
   }
+  peekClose.addEventListener('click', hidePeek);
+  peek.addEventListener('click', (e) => {
+    if (e.target === peekClose) return;
+    open();
+  });
+
+  // Show the peek 12s after page load — but only for first-time visitors
+  // who haven't dismissed it before, and only on the homepage (the place
+  // where browse-stuck users are most likely to benefit from the advisor).
+  const isHomepage = location.pathname === '/' || location.pathname.endsWith('/index.html') || location.pathname === '';
+  const shouldShowPeek = isHomepage
+    && !localStorage.getItem(STORAGE_PEEK_DISMISSED)
+    && !localStorage.getItem(STORAGE_OPENED);
+  if (shouldShowPeek) setTimeout(() => peek.classList.add('show'), 12000);
   fab.addEventListener('click', () => panel.classList.contains('open') ? close() : open());
   closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && panel.classList.contains('open')) close(); });

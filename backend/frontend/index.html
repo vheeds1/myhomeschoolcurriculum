@@ -1749,6 +1749,15 @@ window.addEventListener('scroll', () => {
 fetchCurricula();
 loadUserFavorites();
 
+// Deep-link support: ?curriculum=slug opens the detail modal on load.
+// Used by the AI advisor when sharing curriculum links, by emailed
+// quiz results, and by anywhere else we want to point a user at a
+// specific curriculum.
+(function() {
+  const slug = new URLSearchParams(location.search).get('curriculum');
+  if (slug) setTimeout(() => openDetail(slug), 350);
+})();
+
 // ── CHECKLIST POPUP ──────────────────────────────────────────────────────────
 // Triggers on 50% scroll OR 45s timer OR desktop exit-intent (whichever first).
 // Won't fire in the first 10s. Cookie mhc_popup_seen=1 suppresses for 7 days.
