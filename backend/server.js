@@ -90,7 +90,7 @@ const DB_DEFAULTS = {
   curricula: [], reviews: [], affiliateClicks: [], listingInquiries: [],
   contactMessages: [], quizResults: [], users: [], userFavorites: [],
   sessions: [], blogPosts: [], newsletterSubscribers: [], publishers: [],
-  publisherSessions: [], stripeSubscriptions: [],
+  publisherSessions: [], stripeSubscriptions: [], conversations: [],
   analytics: { totalVisits: 0, totalClicks: 0, totalReviews: 0, totalInquiries: 0 }
 };
 
@@ -365,6 +365,296 @@ app.post('/api/quiz', (req, res) => {
     return { ...c, matchScore: score };
   }).sort((a,b) => b.matchScore - a.matchScore);
   res.json({ matches: matches.slice(0, 4).filter(m => m.matchScore > 0) });
+});
+
+// ════════════════════════════════════════════════════════════════════════════
+// ─── AI CURRICULUM ADVISOR (Gemini-powered chat) ────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+//
+// Uses Google's Gemini 2.0 Flash (free tier — 1500 requests/day, generous
+// rate limits) with function calling so the model is grounded in our actual
+// curriculum database rather than hallucinating from training data.
+//
+// Tools available to the model:
+//   search_curricula(grade?, style?, worldview?, format?, subject?, special?,
+//                    priceMax?, query?) — returns matching curricula
+//   get_curriculum_details(slug) — returns full info for a single curriculum
+
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+const ADVISOR_SYSTEM_PROMPT = `You are a homeschool curriculum advisor for My Homeschool Curriculum (myhomeschoolcurriculum.com), a free comparison tool with 60+ curricula. Most visitors are NEW to homeschooling. Your job is to help them narrow down to 2-3 specific curricula they should look at more closely — not to make the decision for them.
+
+VOICE
+- Warm, direct, no-BS — like a friend who already did the research
+- Plain English. Never use words like "leverage", "synergize", "robust solution"
+- 2-4 sentences per turn unless asked for detail
+- Ask ONE clarifying question at a time, never a list of 5
+- Sign off naturally; don't end every message with "Let me know if you have more questions!"
+
+PROCESS
+1. If you don't already know it, ask for: grade level, teaching style, worldview preference (Christian / Catholic / Secular / no preference), and rough budget
+2. Use the search_curricula tool — DO NOT recommend curricula from memory. Always search first.
+3. Pick 2-3 strongest fits and explain in one sentence per curriculum WHY this family
+4. Suggest the user click "View" on any that interest them, or compare side-by-side using the site's compare tool
+
+AFFILIATE BEHAVIOR (NON-NEGOTIABLE)
+- When a curriculum's response object includes a discountLink or affiliateLink, share that link as a clickable markdown link
+- Format: [Curriculum Name](URL) (affiliate link — we may earn a small commission at no cost to you)
+- ONLY when the curriculum is genuinely a good fit. NEVER recommend something just because it has an affiliate.
+- If the best fit doesn't have an affiliate link, recommend it without one anyway.
+- If asked directly about affiliate relationships, be transparent.
+
+DO NOT
+- Hallucinate curricula. Always use search_curricula to verify they exist.
+- Promise outcomes ("this WILL work for your family")
+- Recommend more than 3 curricula in one response — overwhelm is the problem you're solving
+- Replace a parent's judgment
+
+OUT OF SCOPE
+For state homeschool laws, point to /legal.html. For deeper guides, /blog. For who runs the site, /about.`;
+
+const ADVISOR_TOOLS = [{
+  functionDeclarations: [
+    {
+      name: 'search_curricula',
+      description: 'Search the curriculum database by any combination of filters. Returns up to 8 curricula matching ALL provided filters. Always call this before recommending — never recommend from memory.',
+      parameters: {
+        type: 'object',
+        properties: {
+          grade: { type: 'string', description: 'Grade level: Pre-K, K-2, 3-5, 6-8, 9-12, or "All Grades"' },
+          style: { type: 'string', description: 'Teaching style. Valid values: Traditional, Charlotte Mason, Classical, Unit Study, Interest-Led, Online, Eclectic, Montessori' },
+          worldview: { type: 'string', description: 'Worldview. Valid values: Christian, Catholic, Jewish, Faith-Neutral, Secular' },
+          format: { type: 'string', description: 'Material format. Valid values: Physical Books, Digital, Video, App, Online Platform, Hands-On, Audio, Hybrid' },
+          subject: { type: 'string', description: 'Subject coverage. Valid values: Full Curriculum, Math, Language Arts, History, Science, Bible / Theology, Latin / Classical Languages, Foreign Language, Logic, Fine Arts, Electives, STEM, Test Prep' },
+          special: { type: 'string', description: 'Special-needs accommodations. Valid values: Dyslexia, ADHD, Autism, Gifted, Learning Differences, Multiple Ages' },
+          priceMax: { type: 'number', description: 'Maximum annual budget in USD. Use 0 to mean "free only".' },
+          search: { type: 'string', description: 'Free-text search across name/description (e.g., "Charlotte Mason math"). Optional.' }
+        }
+      }
+    },
+    {
+      name: 'get_curriculum_details',
+      description: 'Fetch full details for one curriculum, including pros/cons, pricing notes, and the affiliate link if any. Use this after searching to share specifics.',
+      parameters: {
+        type: 'object',
+        properties: {
+          slug: { type: 'string', description: 'The curriculum slug (e.g., "the-good-and-the-beautiful")' }
+        },
+        required: ['slug']
+      }
+    }
+  ]
+}];
+
+// Trim curriculum data to just what the model needs — keeps tokens low and
+// makes the model less likely to leak internal fields it shouldn't share.
+function trimCurriculumForAdvisor(c, includeFull = false) {
+  const base = {
+    name: c.name,
+    slug: c.slug,
+    tagline: c.tagline,
+    grades: c.grades || [],
+    style: c.style || [],
+    worldview: c.worldview || [],
+    format: c.format || [],
+    subject: c.subject || [],
+    special: c.special || [],
+    price: c.price,
+    priceMin: c.priceMin || 0,
+    priceMax: c.priceMax || 0
+  };
+  if (includeFull) {
+    base.description = c.description;
+    base.pros = c.pros || [];
+    base.cons = c.cons || [];
+    base.pricingNote = c.pricingNote || '';
+    base.affiliateLink = c.discountLink || c.affiliateLink || '';
+    base.discountCode = c.discountCode || '';
+    base.discountDesc = c.discountDesc || '';
+    base.hasAffiliate = !!(c.discountLink || c.affiliateLink);
+  } else {
+    base.hasAffiliate = !!(c.discountLink || c.affiliateLink);
+  }
+  return base;
+}
+
+function runAdvisorTool(name, args) {
+  const db = readDB();
+  if (!db) return { error: 'Database unavailable' };
+  if (name === 'search_curricula') {
+    let results = db.curricula.filter(c => c.active);
+    if (args.search) {
+      const q = args.search.toLowerCase();
+      results = results.filter(c =>
+        c.name.toLowerCase().includes(q) ||
+        (c.tagline||'').toLowerCase().includes(q) ||
+        (c.description||'').toLowerCase().includes(q));
+    }
+    if (args.grade) results = results.filter(c => (c.grades||[]).includes(args.grade));
+    if (args.style) results = results.filter(c => (c.style||[]).includes(args.style));
+    if (args.worldview) results = results.filter(c => (c.worldview||[]).includes(args.worldview));
+    if (args.format) results = results.filter(c => (c.format||[]).includes(args.format));
+    if (args.special) results = results.filter(c => (c.special||[]).includes(args.special));
+    if (args.subject) {
+      const x = args.subject;
+      const core = ['Math','Language Arts','History','Science'];
+      results = results.filter(c => (c.subject||[]).includes(x) || (core.includes(x) && (c.subject||[]).includes('Full Curriculum')));
+    }
+    if (args.priceMax !== undefined) {
+      if (args.priceMax === 0) results = results.filter(c => (c.priceMin||0) === 0 && (c.priceMax||0) === 0);
+      else results = results.filter(c => (c.priceMin||0) <= args.priceMax);
+    }
+    return {
+      count: results.length,
+      curricula: results.slice(0, 8).map(c => trimCurriculumForAdvisor(c))
+    };
+  }
+  if (name === 'get_curriculum_details') {
+    const c = db.curricula.find(x => x.slug === args.slug);
+    if (!c) return { error: `No curriculum with slug "${args.slug}"` };
+    return trimCurriculumForAdvisor(c, true);
+  }
+  return { error: `Unknown tool: ${name}` };
+}
+
+const chatLimiter = rateLimit({
+  windowMs: 60 * 1000, max: 12,
+  standardHeaders: true, legacyHeaders: false,
+  message: { error: 'Slow down — try again in a minute.' }
+});
+
+app.post('/api/chat', chatLimiter, async (req, res) => {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return res.status(503).json({ error: 'Advisor unavailable. Set GEMINI_API_KEY in environment.' });
+
+  const { message, history = [], sessionId } = req.body || {};
+  if (typeof message !== 'string' || !message.trim() || message.length > 2000)
+    return res.status(400).json({ error: 'Message required (≤ 2000 chars).' });
+
+  // Build conversation history in Gemini format. The frontend sends
+  // alternating { role: 'user' | 'model', text } entries.
+  const contents = [];
+  for (const turn of history.slice(-20)) {
+    if (!turn || typeof turn.text !== 'string') continue;
+    if (turn.role !== 'user' && turn.role !== 'model') continue;
+    contents.push({ role: turn.role, parts: [{ text: turn.text }] });
+  }
+  contents.push({ role: 'user', parts: [{ text: message.trim() }] });
+
+  // Tool-call loop. Gemini may call multiple tools in sequence; we cap
+  // iterations to prevent runaway cost.
+  const MAX_TOOL_ITERATIONS = 5;
+  let finalText = '';
+  let toolCallsExecuted = [];
+
+  try {
+    for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
+      const reqBody = {
+        system_instruction: { parts: [{ text: ADVISOR_SYSTEM_PROMPT }] },
+        contents,
+        tools: ADVISOR_TOOLS,
+        generationConfig: { temperature: 0.4, maxOutputTokens: 1024 },
+        safetySettings: [
+          { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
+          { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },
+          { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
+          { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' }
+        ]
+      };
+
+      const apiRes = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reqBody)
+      });
+
+      if (!apiRes.ok) {
+        const err = await apiRes.text();
+        console.error('[advisor] Gemini error:', apiRes.status, err.slice(0, 300));
+        return res.status(502).json({ error: "The advisor is having trouble right now — try again in a moment." });
+      }
+
+      const data = await apiRes.json();
+      const candidate = data.candidates?.[0];
+      const parts = candidate?.content?.parts || [];
+
+      // Collect any function calls from this response
+      const functionCalls = parts.filter(p => p.functionCall).map(p => p.functionCall);
+      const textParts = parts.filter(p => p.text).map(p => p.text).join('');
+
+      if (functionCalls.length === 0) {
+        finalText = textParts || "I didn't catch that — could you rephrase?";
+        break;
+      }
+
+      // Push the model's tool-call message and execute each tool
+      contents.push({ role: 'model', parts: parts });
+      const responseParts = [];
+      for (const fc of functionCalls) {
+        const result = runAdvisorTool(fc.name, fc.args || {});
+        toolCallsExecuted.push({ name: fc.name, args: fc.args, resultSize: JSON.stringify(result).length });
+        responseParts.push({ functionResponse: { name: fc.name, response: result } });
+      }
+      contents.push({ role: 'user', parts: responseParts });
+    }
+    if (!finalText) finalText = "I'm thinking too hard about this — let me try a simpler answer. Can you tell me your child's grade level and what teaching style you're drawn to?";
+  } catch (err) {
+    console.error('[advisor] Exception:', err);
+    return res.status(500).json({ error: "Something went wrong on our end. Try again in a moment." });
+  }
+
+  // Persist conversation. Reuse session if provided; otherwise create new.
+  const db = readDB();
+  if (db) {
+    if (!db.conversations) db.conversations = [];
+    let convo = sessionId ? db.conversations.find(c => c.id === sessionId) : null;
+    const now = new Date().toISOString();
+    if (!convo) {
+      convo = {
+        id: sessionId || uuidv4(),
+        ip: req.ip,
+        userAgent: (req.headers['user-agent'] || '').slice(0, 200),
+        createdAt: now,
+        messages: []
+      };
+      db.conversations.push(convo);
+    }
+    convo.messages.push({ role: 'user', text: message.trim(), at: now });
+    convo.messages.push({ role: 'model', text: finalText, at: new Date().toISOString(), tools: toolCallsExecuted.map(t => t.name) });
+    convo.updatedAt = new Date().toISOString();
+    convo.messageCount = convo.messages.length;
+    // Cap stored conversations at 5000 to keep DB lean
+    if (db.conversations.length > 5000) db.conversations = db.conversations.slice(-5000);
+    writeDB(db);
+    res.json({ reply: finalText, sessionId: convo.id });
+  } else {
+    res.json({ reply: finalText });
+  }
+});
+
+// Admin: list conversations (newest first, most recent message preview)
+app.get('/api/admin/conversations', requireAdmin, (req, res) => {
+  const db = readDB();
+  if (!db) return res.status(500).json({ error: 'Database error' });
+  const all = (db.conversations || []).slice().sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+  const summarized = all.slice(0, 200).map(c => ({
+    id: c.id,
+    createdAt: c.createdAt,
+    updatedAt: c.updatedAt,
+    messageCount: c.messageCount || (c.messages || []).length,
+    firstMessage: (c.messages || []).find(m => m.role === 'user')?.text?.slice(0, 120) || '',
+    lastMessage: (c.messages || []).slice(-1)[0]?.text?.slice(0, 120) || ''
+  }));
+  res.json({ total: all.length, conversations: summarized });
+});
+
+app.get('/api/admin/conversations/:id', requireAdmin, (req, res) => {
+  const db = readDB();
+  if (!db) return res.status(500).json({ error: 'Database error' });
+  const c = (db.conversations || []).find(x => x.id === req.params.id);
+  if (!c) return res.status(404).json({ error: 'Not found' });
+  res.json(c);
 });
 
 // ─── CONTACT ─────────────────────────────────────────────────────────────────

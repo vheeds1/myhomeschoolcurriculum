@@ -440,5 +440,6 @@ function toggleMenu() {
 const stateParam = new URLSearchParams(location.search).get('state');
 loadStates().then(() => { if (stateParam) openState(stateParam); });
 </script>
+<script src="/chat-widget.js" defer></script>
 </body>
 </html>

@@ -195,6 +195,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="nav-item" onclick="showTab('blog',this)"><span class="icon">✍️</span> Blog Posts</div>
       <div class="nav-section">Business</div>
       <div class="nav-item" onclick="showTab('clicks',this)"><span class="icon">🔗</span> Affiliate Clicks</div>
+      <div class="nav-item" onclick="showTab('conversations',this)"><span class="icon">💬</span> Advisor Chats</div>
       <div class="nav-item" onclick="showTab('inquiries',this)"><span class="icon">📋</span> Inquiries <span class="nav-badge" id="inquiriesBadge" style="display:none"></span></div>
       <div class="nav-item" onclick="showTab('subscriptions',this)"><span class="icon">💰</span> Revenue & Billing</div>
       <div class="nav-section">People</div>
@@ -307,6 +308,33 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <thead><tr><th>When</th><th>Curriculum</th><th>Referrer</th><th>Affiliate link</th></tr></thead>
             <tbody id="clicksRecentTable"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- ADVISOR CHATS TAB -->
+      <div class="tab-content" id="tab-conversations">
+        <div class="section-header">
+          <div class="section-title">💬 Curriculum Advisor Chats</div>
+          <input class="search-input" placeholder="Search messages…" oninput="filterTable('conversationsTable',this.value)">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Started</th><th>Last activity</th><th>Messages</th><th>First message</th><th></th></tr></thead>
+            <tbody id="conversationsTable"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CONVERSATION DETAIL MODAL -->
+      <div class="modal-overlay" id="conversationModal" onclick="if(event.target===this)closeConversationModal()">
+        <div class="modal" style="max-width:680px">
+          <button class="modal-close" onclick="closeConversationModal()">✕</button>
+          <h3 style="margin-bottom:6px">💬 Conversation</h3>
+          <p id="convoMeta" style="font-size:.78rem;color:var(--muted);margin-bottom:18px"></p>
+          <div id="convoTranscript" style="display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow-y:auto"></div>
+          <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeConversationModal()">Close</button>
+          </div>
         </div>
       </div>
 
@@ -1463,9 +1491,54 @@ function showTab(tab, el) {
   document.getElementById('tab-' + tab).classList.add('active');
   if (el) el.classList.add('active');
   if (tab === 'clicks') loadClicks();
+  if (tab === 'conversations') loadConversations();
 }
 
 // ── AFFILIATE CLICKS ─────────────────────────────────────────────────────────
+// ── ADVISOR CHATS ────────────────────────────────────────────────────────────
+let allConversations = [];
+async function loadConversations() {
+  try {
+    const res = await fetch(`${API}/admin/conversations`, { headers: authHeaders() });
+    if (!res.ok) { showToast('Could not load chats', 'err'); return; }
+    const data = await res.json();
+    allConversations = data.conversations || [];
+    const table = document.getElementById('conversationsTable');
+    table.innerHTML = allConversations.length ? allConversations.map(c => `
+      <tr>
+        <td style="white-space:nowrap">${fmt(c.createdAt)}</td>
+        <td style="white-space:nowrap">${fmt(c.updatedAt)}</td>
+        <td><strong>${c.messageCount}</strong></td>
+        <td style="max-width:380px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeAttr(c.firstMessage)}">${escapeHtml(c.firstMessage)}</td>
+        <td><button class="act-btn" onclick="viewConversation('${c.id}')">View</button></td>
+      </tr>`).join('') : '<tr class="empty-row"><td colspan="5">No conversations yet — chat traffic will appear here.</td></tr>';
+  } catch (e) { showToast('Could not load chats', 'err'); }
+}
+
+async function viewConversation(id) {
+  try {
+    const res = await fetch(`${API}/admin/conversations/${id}`, { headers: authHeaders() });
+    if (!res.ok) { showToast('Could not load conversation', 'err'); return; }
+    const c = await res.json();
+    const meta = `${(c.messages || []).length} messages · started ${fmt(c.createdAt)} · IP ${escapeHtml(c.ip || 'unknown')}`;
+    document.getElementById('convoMeta').textContent = meta;
+    const transcript = document.getElementById('convoTranscript');
+    transcript.innerHTML = (c.messages || []).map(m => {
+      const isUser = m.role === 'user';
+      const bg = isUser ? 'background:var(--surface2);border-left:none' : 'background:rgba(74,154,84,.08);';
+      const label = isUser ? 'User' : 'Advisor';
+      const tools = !isUser && m.tools && m.tools.length ? `<div style="font-size:.66rem;color:var(--muted);margin-top:6px">tools: ${m.tools.join(', ')}</div>` : '';
+      return `<div style="${bg};padding:10px 14px;border-radius:10px">
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.5px;color:${isUser ? 'var(--muted)' : 'var(--accent)'};text-transform:uppercase;margin-bottom:4px">${label} · ${fmt(m.at)}</div>
+        <div style="white-space:pre-wrap;font-size:.85rem;line-height:1.55;color:var(--text)">${escapeHtml(m.text)}</div>
+        ${tools}
+      </div>`;
+    }).join('') || '<p style="color:var(--muted);font-size:.85rem">No messages.</p>';
+    document.getElementById('conversationModal').classList.add('open');
+  } catch (e) { showToast('Could not load conversation', 'err'); }
+}
+function closeConversationModal() { document.getElementById('conversationModal').classList.remove('open'); }
+
 async function loadClicks() {
   const range = document.getElementById('clicksRange').value;
   const includeTest = document.getElementById('includeTestClicks').checked ? '1' : '0';
