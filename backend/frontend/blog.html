@@ -94,10 +94,11 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .cat-btn.active[data-cat="General"]{background:var(--charcoal)}
 
 /* ── FEATURED POST ──────────────────────────────────────────────────── */
-.featured-card{position:relative;border-radius:20px;overflow:hidden;margin-bottom:40px;cursor:pointer;box-shadow:var(--shadow);background:var(--warm-white);border:1px solid var(--border);transition:all .28s;display:grid;grid-template-columns:1.2fr 1fr;min-height:340px}
+.featured-card{position:relative;border-radius:20px;overflow:hidden;margin-bottom:40px;cursor:pointer;box-shadow:var(--shadow);background:var(--warm-white);border:1px solid var(--border);transition:all .28s;display:grid;grid-template-columns:1.2fr 1fr;height:380px}
 .featured-card:hover{box-shadow:0 14px 48px rgba(30,58,76,.14);transform:translateY(-3px)}
-.featured-card .thumb{position:relative;overflow:hidden;min-height:280px}
-.featured-card .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.featured-card .thumb{position:relative;overflow:hidden;height:100%}
+.featured-card .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.featured-card .excerpt{display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .featured-card:hover .thumb img{transform:scale(1.04)}
 .featured-card .thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.35) 100%);pointer-events:none}
 .featured-badge{position:absolute;top:18px;left:18px;background:var(--gold);color:var(--navy);padding:5px 14px;border-radius:14px;font-size:.72rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;z-index:1}
@@ -309,8 +310,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:900px){
   .blog-grid{grid-template-columns:repeat(2,1fr)}
   .related-grid{grid-template-columns:repeat(2,1fr)}
-  .featured-card{grid-template-columns:1fr}
-  .featured-card .thumb{min-height:220px}
+  .featured-card{grid-template-columns:1fr;height:auto}
+  .featured-card .thumb{height:240px}
   .featured-card .content{padding:28px 24px}
 }
 @media(max-width:768px){
