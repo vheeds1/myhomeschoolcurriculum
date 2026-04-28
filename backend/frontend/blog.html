@@ -953,10 +953,30 @@ function markdownToHtml(md) {
       continue;
     }
 
-    // Raw HTML — line starting with block-level tag (div, iframe, video, img, a href) on its own
-    if (/^<(iframe|video|audio|div|figure|table|section)/i.test(trimmed) || /^<img\s/i.test(trimmed) || /^<a\s[^>]*>\s*<img/i.test(trimmed)) {
+    // Raw HTML block — any line that opens a recognized block-level tag.
+    // We pass it through verbatim, accumulating subsequent lines until the
+    // tag depth returns to zero so multi-line <style>, <div>, <table> etc.
+    // render correctly. <script> is intentionally excluded for safety even
+    // though blog content is admin-authored.
+    const ROOT_TAGS = 'style|div|section|article|aside|header|footer|figure|table|details|summary|nav|main|iframe|video|audio|blockquote|h[1-6]|ul|ol|p|hr|br|img|a';
+    const VOID_TAGS = /^(hr|br|img)$/i;
+    const openMatch = trimmed.match(new RegExp(`^<(${ROOT_TAGS})\\b`, 'i'));
+    if (openMatch) {
       flushList(); flushTable(); flushBlockquote();
-      out.push(line);
+      const tag = openMatch[1].toLowerCase();
+      // Void tags (<hr>, <br>, <img>) are always single-line
+      if (VOID_TAGS.test(tag)) { out.push(line); continue; }
+      // Count opens minus closes for this tag on this line
+      const opensRe = new RegExp(`<${tag}\\b`, 'gi');
+      const closesRe = new RegExp(`</${tag}\\s*>`, 'gi');
+      let depth = (line.match(opensRe) || []).length - (line.match(closesRe) || []).length;
+      const buf = [line];
+      while (depth > 0 && i + 1 < lines.length) {
+        i++;
+        buf.push(lines[i]);
+        depth += (lines[i].match(opensRe) || []).length - (lines[i].match(closesRe) || []).length;
+      }
+      out.push(buf.join('\n'));
       continue;
     }
 
