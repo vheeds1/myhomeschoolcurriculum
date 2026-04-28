@@ -544,10 +544,12 @@ function renderListView(posts) {
     grid.innerHTML = '<div class="empty">No posts in this category yet.</div>';
     return;
   }
-  // Sort by date, newest first
+  // Sort by date, newest first. If a post is manually flagged
+  // featured: true, pin it to the top slot; otherwise default to newest.
   const sorted = [...posts].sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt));
-  const featured = sorted[0];
-  const rest = sorted.slice(1);
+  const manualFeatured = sorted.find(p => p.featured);
+  const featured = manualFeatured || sorted[0];
+  const rest = sorted.filter(p => p !== featured);
 
   // Featured card
   const fCat = featured.category || 'General';

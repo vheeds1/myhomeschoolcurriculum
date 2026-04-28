@@ -1256,7 +1256,7 @@ app.post('/api/admin/blog/bulk-import', requireAdmin, (req, res) => {
 });
 
 app.post('/api/blog', requireAdmin, (req, res) => {
-  const { title, slug, excerpt, content, category, tags, published, featuredImage } = req.body;
+  const { title, slug, excerpt, content, category, tags, published, featuredImage, featured } = req.body;
   if (!title || !content) return res.status(400).json({ error: 'Title and content required.' });
   const db = readDB();
   const post = {
@@ -1265,10 +1265,13 @@ app.post('/api/blog', requireAdmin, (req, res) => {
     title, excerpt: excerpt||(content.substring(0,160)+'…'), content,
     category: category||'General', tags: tags||[], featuredImage: featuredImage||null,
     published: published !== false,
+    featured: !!featured,
     publishedAt: published !== false ? new Date().toISOString() : null,
     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
   };
   if (!db.blogPosts) db.blogPosts = [];
+  // Only one post can hold the featured slot at a time — un-feature others
+  if (post.featured) db.blogPosts.forEach(p => { p.featured = false; });
   db.blogPosts.push(post);
   writeDB(db);
   res.status(201).json({ success: true, post });
@@ -1278,6 +1281,10 @@ app.put('/api/blog/:id', requireAdmin, (req, res) => {
   const db = readDB();
   const post = (db.blogPosts||[]).find(p => p.id === req.params.id);
   if (!post) return res.status(404).json({ error: 'Post not found' });
+  // If this post is being promoted to featured, un-feature every other post first
+  if (req.body.featured === true) {
+    db.blogPosts.forEach(p => { if (p.id !== post.id) p.featured = false; });
+  }
   Object.assign(post, req.body, { updatedAt: new Date().toISOString() });
   if (req.body.published && !post.publishedAt) post.publishedAt = new Date().toISOString();
   writeDB(db);

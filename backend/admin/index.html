@@ -625,7 +625,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <strong>Recommended size:</strong> 1600×900 (16:9) for crisp rendering on the post hero and social share cards. Minimum 1200×630. Smaller images still work but may look soft on the hero.
       </div>
     </div>
-    <div class="form-group"><label>Published</label><select id="bPublished"><option value="true">Yes — Live</option><option value="false">No — Draft</option></select></div>
+    <div class="form-row">
+      <div class="form-group"><label>Published</label><select id="bPublished"><option value="true">Yes — Live</option><option value="false">No — Draft</option></select></div>
+      <div class="form-group"><label>Featured Post <span style="color:var(--muted);font-weight:400">(pins to top of /blog)</span></label><select id="bFeatured"><option value="false">No</option><option value="true">Yes — feature this post</option></select></div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeBlogModal()">Cancel</button>
       <button class="btn btn-green" onclick="saveBlogPost()">Save Post</button>
@@ -1300,6 +1303,7 @@ function openBlogModal() {
   document.getElementById('blogModalId').value = '';
   ['bTitle','bSlug','bExcerpt','bContent','bTags','bFeaturedImage'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('bPublished').value = 'false';
+  document.getElementById('bFeatured').value = 'false';
   document.getElementById('blogModal').classList.add('open');
   updateBlogPreview();
 }
@@ -1314,6 +1318,7 @@ function editBlogPost(p) {
   document.getElementById('bTags').value = (p.tags||[]).join(',');
   document.getElementById('bFeaturedImage').value = p.featuredImage||'';
   document.getElementById('bPublished').value = p.published ? 'true' : 'false';
+  document.getElementById('bFeatured').value = p.featured ? 'true' : 'false';
   document.getElementById('blogModal').classList.add('open');
   updateBlogPreview();
 }
@@ -1470,6 +1475,7 @@ async function saveBlogPost() {
     tags: document.getElementById('bTags').value.split(',').map(s=>s.trim()).filter(Boolean),
     featuredImage: document.getElementById('bFeaturedImage').value.trim(),
     published: document.getElementById('bPublished').value === 'true',
+    featured: document.getElementById('bFeatured').value === 'true',
   };
   const url = id ? `${API}/blog/${id}` : `${API}/blog`;
   const method = id ? 'PUT' : 'POST';
