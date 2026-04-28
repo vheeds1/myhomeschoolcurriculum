@@ -193,6 +193,40 @@ nav a:hover,nav a.active{color:#fff;background:rgba(255,255,255,.12)}
 .pick-name{font-family:'Fraunces','Playfair Display',serif;font-size:.95rem;color:var(--navy);margin-bottom:6px}
 .pick-desc{font-size:.78rem;color:var(--text-muted);line-height:1.6;flex:1;margin-bottom:12px}
 .pick-link{font-size:.78rem;font-weight:600;color:var(--deep-sage);margin-top:auto}
+/* ── HOMEPAGE JOURNAL TEASER ────────────────────────────────────────── */
+.journal-teaser{background:var(--cream);padding:48px 24px 64px;border-bottom:1px solid var(--border)}
+.journal-inner{max-width:1100px;margin:0 auto}
+.journal-head{text-align:center;margin-bottom:28px}
+.journal-head .how-eyebrow{margin-bottom:6px}
+.journal-head h2{font-family:'Fraunces','Playfair Display',serif;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--navy);margin-bottom:8px}
+.journal-head p{color:var(--text-muted);font-size:.92rem;line-height:1.6;max-width:560px;margin:0 auto}
+.journal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;text-align:left}
+.journal-card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:all .2s}
+.journal-card:hover{border-color:var(--sage);box-shadow:0 8px 24px rgba(31,58,77,.08);transform:translateY(-2px)}
+.journal-card-thumb{aspect-ratio:16/10;overflow:hidden;background:#EAEDED}
+.journal-card-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.journal-card:hover .journal-card-thumb img{transform:scale(1.04)}
+.journal-card-body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1}
+.journal-card-cat{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--deep-sage);margin-bottom:8px}
+.journal-card-title{font-family:'Fraunces','Playfair Display',serif;font-size:1.05rem;color:var(--navy);line-height:1.3;margin-bottom:8px}
+.journal-card-excerpt{font-size:.84rem;color:var(--text-muted);line-height:1.55;flex:1;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px}
+.journal-card-meta{font-size:.75rem;font-weight:600;color:var(--deep-sage)}
+.journal-cta{text-align:center;margin-top:32px}
+.journal-cta a{display:inline-block;background:transparent;color:var(--navy);border:1.5px solid var(--navy);padding:11px 26px;border-radius:10px;font-size:.88rem;font-weight:600;text-decoration:none;transition:all .2s}
+.journal-cta a:hover{background:var(--navy);color:#fff}
+.journal-skeleton{aspect-ratio:16/10;background:linear-gradient(90deg,#EFE8DD 0%,#F5F0E5 50%,#EFE8DD 100%);background-size:200% 100%;animation:journalShimmer 1.4s infinite;border-radius:16px}
+@keyframes journalShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@media(max-width:900px) and (min-width:641px){.journal-grid{grid-template-columns:1fr 1fr}.journal-grid .journal-card:nth-child(3){display:none}}
+@media(max-width:640px){
+  .journal-grid{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 24px 18px;margin:0 -24px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .journal-grid::-webkit-scrollbar{display:none}
+  .journal-grid .journal-card{flex:0 0 82%;min-width:82%;scroll-snap-align:center}
+  .journal-dots{display:flex;justify-content:center;gap:7px;margin-top:14px}
+  .journal-dot{width:7px;height:7px;border-radius:50%;background:rgba(31,58,77,.18);border:none;padding:0;cursor:pointer;transition:background .2s,transform .2s}
+  .journal-dot.active{background:var(--deep-sage);transform:scale(1.25)}
+}
+.journal-dots{display:none}
+
 @media(max-width:900px){.picks-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){
   .picks-grid{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 24px 18px;margin:8px -24px 0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -963,6 +997,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="pullquote-dot" aria-label="Testimonial 2" aria-selected="false" onclick="showQuote(1)"></button>
       <button class="pullquote-dot" aria-label="Testimonial 3" aria-selected="false" onclick="showQuote(2)"></button>
     </div>
+  </div>
+</section>
+
+<section class="journal-teaser" aria-labelledby="journal-title">
+  <div class="journal-inner">
+    <div class="journal-head">
+      <div class="how-eyebrow">From the blog</div>
+      <h2 id="journal-title">Real talk on homeschooling</h2>
+    </div>
+    <div class="journal-grid" id="journalGrid">
+      <div class="journal-skeleton"></div>
+      <div class="journal-skeleton"></div>
+      <div class="journal-skeleton"></div>
+    </div>
+    <div class="journal-dots" id="journalDots" role="tablist" aria-label="Blog post navigation"></div>
+    <div class="journal-cta"><a href="/blog.html">Read all posts →</a></div>
   </div>
 </section>
 
@@ -1767,6 +1817,39 @@ window.addEventListener('scroll', () => {
   startTimer();
 })();
 
+// Hydrate filters from URL query string so footer/marketing links like
+// /?sort=rating, /?priceMax=0, /?badges=new actually filter the page.
+(function() {
+  const qs = new URLSearchParams(location.search);
+  const sort = qs.get('sort');
+  if (sort) {
+    const sel = document.getElementById('sortSelect');
+    if (sel && [...sel.options].some(o => o.value === sort)) sel.value = sort;
+  }
+  const priceMax = qs.get('priceMax');
+  if (priceMax !== null) {
+    const range = document.getElementById('priceRange');
+    if (range) { range.value = priceMax; updatePriceLabel(range); }
+  }
+  const search = qs.get('search');
+  if (search) {
+    const inp = document.getElementById('searchInput');
+    if (inp) inp.value = search;
+  }
+  // Multi-value chip filters: grade, style, worldview, format, budget,
+  // learningStyle, badges, etc. URL value can be comma-separated.
+  ['grade','style','worldview','format','budget','learningStyle','badges'].forEach(key => {
+    const v = qs.get(key);
+    if (!v) return;
+    const vals = v.split(',').map(s => s.trim()).filter(Boolean);
+    activeFilters[key] = vals;
+    vals.forEach(val => {
+      const chip = document.querySelector(`.chip[data-filter="${key}"][data-val="${CSS.escape(val)}"]`);
+      if (chip) chip.classList.add('active');
+    });
+  });
+})();
+
 fetchCurricula();
 loadUserFavorites();
 
@@ -1777,6 +1860,111 @@ loadUserFavorites();
 (function() {
   const slug = new URLSearchParams(location.search).get('curriculum');
   if (slug) setTimeout(() => openDetail(slug), 350);
+})();
+
+// ── HOMEPAGE JOURNAL TEASER — newest 3 published posts ──────────────────────
+(async function() {
+  const grid = document.getElementById('journalGrid');
+  if (!grid) return;
+  const FALLBACK_IMG = '/brand/png/icon-256.png';
+  function escapeHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  try {
+    const res = await fetch('/api/blog');
+    if (!res.ok) throw new Error('blog fetch failed');
+    const data = await res.json();
+    const all = Array.isArray(data) ? data : (data.posts || []);
+    const posts = all
+      .filter(p => p.published !== false)
+      .sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt))
+      .slice(0, 3);
+    if (!posts.length) { grid.parentElement.parentElement.style.display = 'none'; return; }
+    grid.innerHTML = posts.map(p => {
+      const img = p.featuredImage && /^https?:/.test(p.featuredImage) ? p.featuredImage : FALLBACK_IMG;
+      const cat = escapeHtml(p.category || 'General');
+      const title = escapeHtml(p.title || '');
+      const excerpt = escapeHtml(p.excerpt || '').slice(0, 140);
+      const slug = encodeURIComponent(p.slug || '');
+      return `<a class="journal-card" href="/blog.html?post=${slug}">
+        <div class="journal-card-thumb"><img src="${escapeHtml(img)}" alt="" loading="lazy"></div>
+        <div class="journal-card-body">
+          <div class="journal-card-cat">${cat}</div>
+          <div class="journal-card-title">${title}</div>
+          <p class="journal-card-excerpt">${excerpt}</p>
+          <div class="journal-card-meta">Read the post →</div>
+        </div>
+      </a>`;
+    }).join('');
+    initJournalCarousel();
+  } catch (e) {
+    // If the API fails, hide the section rather than show a broken state
+    grid.parentElement.parentElement.style.display = 'none';
+  }
+
+  // Mobile carousel — same pattern as the editor picks below 640px:
+  // horizontal snap-scroll with dot indicators and auto-advance every 6s.
+  function initJournalCarousel() {
+    const dotsWrap = document.getElementById('journalDots');
+    if (!dotsWrap) return;
+    dotsWrap.innerHTML = '';
+    const cards = Array.from(grid.querySelectorAll('.journal-card'));
+    if (cards.length < 2) return;
+    const mq = window.matchMedia('(max-width:640px)');
+    let timer = null, paused = false;
+
+    cards.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'journal-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Go to post ${i+1}`);
+      dot.addEventListener('click', () => {
+        paused = true;
+        // Scroll only the grid horizontally — scrollIntoView would also
+        // jump the page vertically to the carousel section.
+        grid.scrollTo({ left: cards[i].offsetLeft - (grid.clientWidth - cards[i].offsetWidth) / 2, behavior: 'smooth' });
+      });
+      dotsWrap.appendChild(dot);
+    });
+    const dots = Array.from(dotsWrap.children);
+
+    function syncDots() {
+      const center = grid.scrollLeft + grid.clientWidth / 2;
+      let nearest = 0, best = Infinity;
+      cards.forEach((card, i) => {
+        const cMid = card.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(cMid - center);
+        if (dist < best) { best = dist; nearest = i; }
+      });
+      dots.forEach((d, i) => d.classList.toggle('active', i === nearest));
+      return nearest;
+    }
+    grid.addEventListener('scroll', () => requestAnimationFrame(syncDots), { passive: true });
+    grid.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+    grid.addEventListener('mouseenter', () => { paused = true; });
+    grid.addEventListener('mouseleave', () => { paused = false; });
+
+    function tick() {
+      if (paused || !mq.matches || document.hidden) return;
+      const cur = syncDots();
+      const next = (cur + 1) % cards.length;
+      grid.scrollTo({ left: cards[next].offsetLeft - (grid.clientWidth - cards[next].offsetWidth) / 2, behavior: 'smooth' });
+    }
+
+    function start() { if (!timer && mq.matches) timer = setInterval(tick, 6000); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    mq.addEventListener('change', e => e.matches ? start() : stop());
+
+    // Only auto-advance while the carousel is on-screen — see editor
+    // picks carousel for full reasoning.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) start(); else stop();
+      }, { threshold: 0.25 }).observe(grid);
+    } else {
+      start();
+    }
+  }
 })();
 
 // ── EDITOR PICKS — mobile auto-scroll carousel ───────────────────────────────
@@ -1800,7 +1988,7 @@ loadUserFavorites();
     dot.setAttribute('aria-label', `Go to pick ${i+1}`);
     dot.addEventListener('click', () => {
       interacted = true;
-      cards[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      grid.scrollTo({ left: cards[i].offsetLeft - (grid.clientWidth - cards[i].offsetWidth) / 2, behavior: 'smooth' });
     });
     dotsWrap.appendChild(dot);
   });
@@ -1827,7 +2015,7 @@ loadUserFavorites();
     if (paused || !mq.matches || document.hidden) return;
     const cur = syncDots();
     const next = (cur + 1) % cards.length;
-    cards[next].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    grid.scrollTo({ left: cards[next].offsetLeft - (grid.clientWidth - cards[next].offsetWidth) / 2, behavior: 'smooth' });
   }
 
   function start() {
@@ -1839,7 +2027,20 @@ loadUserFavorites();
     if (timer) { clearInterval(timer); timer = null; }
   }
   mq.addEventListener('change', e => e.matches ? start() : stop());
-  start();
+
+  // Only run auto-advance while the carousel is on-screen. Prevents the
+  // page from snapping back to this section when the user has scrolled
+  // away (some mobile browsers re-scroll containers into view when
+  // their scroll position changes programmatically).
+  let onScreen = false;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      onScreen = entries[0].isIntersecting;
+      if (onScreen) start(); else stop();
+    }, { threshold: 0.25 }).observe(grid);
+  } else {
+    start();
+  }
 })();
 
 // ── CHECKLIST POPUP ──────────────────────────────────────────────────────────

@@ -246,7 +246,7 @@ app.get('/api/curricula', (req, res) => {
   const db = readDB();
   if (!db) return res.status(500).json({ error: 'Database error' });
   let results = db.curricula.filter(c => c.active);
-  const { grade, style, worldview, format, subject, special, search, priceMax, sort } = req.query;
+  const { grade, style, worldview, format, subject, special, search, priceMax, sort, badges } = req.query;
   if (search) {
     const q = search.toLowerCase();
     results = results.filter(c =>
@@ -263,7 +263,21 @@ app.get('/api/curricula', (req, res) => {
     results = results.filter(c => v.some(x => c.subject?.includes(x) || (coreSubjects.includes(x) && c.subject?.includes('Full Curriculum'))));
   }
   if (special)   { const v = special.split(',');   results = results.filter(c => v.some(x => c.special?.includes(x))); }
-  if (priceMax)  { results = results.filter(c => (c.priceMin || 0) <= parseInt(priceMax)); }
+  if (priceMax !== undefined && priceMax !== '') {
+    const pm = parseInt(priceMax);
+    if (pm === 0) {
+      // priceMax=0 from the "Free Options" link means truly free — both
+      // ends of the price range must be zero. Otherwise a freemium item
+      // (free tier + paid upgrade) would slip through.
+      results = results.filter(c => (c.priceMin || 0) === 0 && (c.priceMax || 0) === 0);
+    } else {
+      results = results.filter(c => (c.priceMin || 0) <= pm);
+    }
+  }
+  if (badges) {
+    const v = badges.split(',').map(s => s.trim()).filter(Boolean);
+    results = results.filter(c => v.some(b => (c.badges || []).includes(b)));
+  }
   const tierScore = { platinum: 3, gold: 2, silver: 1 };
   switch (sort) {
     case 'rating':     results.sort((a,b) => (b.rating||0) - (a.rating||0)); break;
