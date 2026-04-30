@@ -165,6 +165,33 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .meta-bar .share-btn:hover{border-color:var(--deep-sage);color:var(--deep-sage);background:var(--light-sage)}
 .meta-bar .share-btn svg{width:15px;height:15px}
 
+/* ── SHARE MODAL ────────────────────────────────────────────────────── */
+.share-modal{position:fixed;inset:0;background:rgba(31,58,77,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;animation:shareFade .2s ease-out}
+.share-modal.open{display:flex}
+@keyframes shareFade{from{opacity:0}to{opacity:1}}
+.share-modal-card{background:var(--warm-white);border-radius:18px;max-width:440px;width:100%;padding:28px 28px 24px;position:relative;box-shadow:0 30px 80px rgba(31,58,77,.3);animation:shareSlide .25s cubic-bezier(.22,1,.36,1)}
+@keyframes shareSlide{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.share-modal,.share-modal-card{animation:none}}
+.share-modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.6rem;line-height:1;color:var(--text-muted);cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.share-modal-close:hover{background:var(--paper);color:var(--navy)}
+.share-modal-card h3{font-family:'Fraunces','Playfair Display',serif;font-size:1.25rem;color:var(--navy);margin:0 0 18px;padding-right:30px}
+.share-options{display:flex;justify-content:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.share-opt{display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;text-decoration:none;color:#fff;background:var(--navy);border:none;cursor:pointer;transition:transform .15s, box-shadow .15s, filter .15s}
+.share-opt:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(31,58,77,.18);filter:brightness(1.06)}
+.share-opt:active{transform:scale(.94)}
+.share-opt svg{width:22px;height:22px}
+.share-opt-fb{background:#1877F2}
+.share-opt-tw{background:#000}
+.share-opt-pin{background:#E60023}
+.share-opt-ig{background:linear-gradient(135deg,#feda75 0%,#fa7e1e 25%,#d62976 50%,#962fbf 75%,#4f5bd5 100%)}
+.share-opt-mail{background:var(--deep-sage)}
+.share-link-row{display:flex;gap:8px;background:var(--paper);padding:6px;border-radius:12px}
+.share-link-input{flex:1;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--text-muted);padding:8px 10px;outline:none;min-width:0;text-overflow:ellipsis}
+.share-copy-btn{background:var(--navy);color:#fff;border:none;padding:9px 16px;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.84rem;cursor:pointer;white-space:nowrap;transition:background .15s}
+.share-copy-btn:hover{background:#162a37}
+.share-copy-btn.copied{background:var(--deep-sage)}
+@media(max-width:480px){.share-options{gap:10px}.share-opt{width:48px;height:48px}}
+
 /* Table of contents (top of article for mobile, sidebar for desktop) */
 .toc{background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:32px;font-size:.86rem}
 .toc-label{font-size:.7rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--deep-sage);margin-bottom:10px}
@@ -846,17 +873,105 @@ function buildSidebar(post) {
 }
 
 // ── SHARE ───────────────────────────────────────────────────────────────
-async function sharePost(title, slug) {
-  // Use the canonical /blog?post= path so share targets hit the SSR
-  // route directly (no 301 hop) and rich previews resolve faster.
+// Opens a custom share modal with Facebook/X/Pinterest/Email/Copy Link
+// buttons. We intentionally use this instead of navigator.share — the
+// native share sheet on desktop is bare (often just shows "Mail" or
+// "Messages") and on iOS hides Pinterest behind a long list. A custom
+// modal makes Pinterest a first-class option, which matters for a
+// homeschool audience.
+function sharePost(title, slug) {
   const url = `${window.location.origin}/blog?post=${slug}`;
-  if (navigator.share) {
-    try { await navigator.share({ title, url }); return; } catch (e) {}
+  const post = (allPosts || []).find(p => p.slug === slug);
+  const img = post && (post.featuredImage || post.ogImage) || '';
+  const desc = post && (post.excerpt || '') || '';
+  openShareModal({ url, title, img, desc });
+}
+
+function openShareModal({ url, title, img, desc }) {
+  const enc = encodeURIComponent;
+  const fb = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
+  const tw = `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(title)}`;
+  const pin = `https://www.pinterest.com/pin/create/button/?url=${enc(url)}&media=${enc(img)}&description=${enc(title + (desc ? ' — ' + desc : ''))}`;
+  const mail = `mailto:?subject=${enc(title)}&body=${enc(title + '\n\n' + url)}`;
+
+  // Build modal once, reuse on subsequent shares
+  let modal = document.getElementById('shareModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'shareModal';
+    modal.className = 'share-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'shareModalTitle');
+    modal.innerHTML = `
+      <div class="share-modal-card" role="document">
+        <button class="share-modal-close" aria-label="Close share dialog">&times;</button>
+        <h3 id="shareModalTitle">Share this post</h3>
+        <div class="share-options">
+          <a class="share-opt share-opt-fb" target="_blank" rel="noopener" data-platform="facebook" aria-label="Share on Facebook" title="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+          </a>
+          <a class="share-opt share-opt-ig" data-platform="instagram" aria-label="Copy link for Instagram" title="Instagram (copies link)">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a class="share-opt share-opt-tw" target="_blank" rel="noopener" data-platform="twitter" aria-label="Share on X (Twitter)" title="X (Twitter)">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a class="share-opt share-opt-pin" target="_blank" rel="noopener" data-platform="pinterest" aria-label="Share on Pinterest" title="Pinterest">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+          </a>
+          <a class="share-opt share-opt-mail" data-platform="email" aria-label="Share via email" title="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+        <div class="share-link-row">
+          <input type="text" class="share-link-input" id="shareLinkInput" readonly aria-label="Post URL">
+          <button class="share-copy-btn" id="shareCopyBtn">Copy link</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeShareModal(); });
+    modal.querySelector('.share-modal-close').addEventListener('click', closeShareModal);
+    modal.querySelector('#shareCopyBtn').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(modal.querySelector('#shareLinkInput').value);
+        const btn = modal.querySelector('#shareCopyBtn');
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1800);
+      } catch (e) {
+        showToast('Could not copy link', 'error');
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeShareModal();
+    });
   }
-  try {
-    await navigator.clipboard.writeText(url);
-    showToast('Link copied to clipboard!', 'success');
-  } catch (e) { showToast('Could not copy link', 'error'); }
+  // Fill in dynamic values
+  modal.querySelector('[data-platform="facebook"]').href = fb;
+  modal.querySelector('[data-platform="twitter"]').href = tw;
+  modal.querySelector('[data-platform="pinterest"]').href = pin;
+  modal.querySelector('[data-platform="email"]').href = mail;
+  // Instagram has no web share intent — clicking copies the link and
+  // tells the user to paste into a story or post.
+  const igBtn = modal.querySelector('[data-platform="instagram"]');
+  igBtn.onclick = async (e) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast('Link copied — paste into your Instagram story or bio', 'success');
+    } catch (err) {
+      showToast('Could not copy link', 'error');
+    }
+  };
+  modal.querySelector('#shareLinkInput').value = url;
+  modal.classList.add('open');
+}
+
+function closeShareModal() {
+  const modal = document.getElementById('shareModal');
+  if (modal) modal.classList.remove('open');
 }
 
 // ── NEWSLETTER ──────────────────────────────────────────────────────────
