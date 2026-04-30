@@ -515,7 +515,7 @@ function fmtDateLong(d) {
 }
 
 function escapeAttr(s) {
-  return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function authorInitials(name) {
@@ -840,7 +840,9 @@ function buildSidebar(post) {
 
 // ── SHARE ───────────────────────────────────────────────────────────────
 async function sharePost(title, slug) {
-  const url = `${window.location.origin}/blog.html?post=${slug}`;
+  // Use the canonical /blog?post= path so share targets hit the SSR
+  // route directly (no 301 hop) and rich previews resolve faster.
+  const url = `${window.location.origin}/blog?post=${slug}`;
   if (navigator.share) {
     try { await navigator.share({ title, url }); return; } catch (e) {}
   }

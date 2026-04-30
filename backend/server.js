@@ -67,6 +67,19 @@ app.use(cors({
 // Raw body for Stripe webhooks BEFORE express.json()
 app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
+
+// Intercept /blog.html?post=slug BEFORE static middleware so it never
+// gets served as the bare HTML shell. Without this redirect, rich-preview
+// crawlers (iMessage, Facebook, Twitter, Slack) would only see the
+// generic blog title with no og:image regardless of which post was
+// linked. We 301 to /blog?post=slug, which already runs SSR meta
+// injection further down in this file.
+app.get('/blog.html', (req, res, next) => {
+  if (!req.query.post) return next();
+  const qs = new URLSearchParams(req.query).toString();
+  res.redirect(301, `/blog?${qs}`);
+});
+
 app.use(express.static(path.join(__dirname, 'frontend')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
