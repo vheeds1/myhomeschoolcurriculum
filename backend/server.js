@@ -1758,7 +1758,10 @@ app.get('/blog', (req, res) => {
   const siteUrl = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
   const title = post.metaTitle || post.title;
   const desc = post.metaDescription || post.excerpt || '';
-  const img = post.ogImage || post.featuredImage || `${siteUrl}/brand/png/og-image-1200x630.png`;
+  // featuredImage is what the admin form edits, so it wins over any
+  // legacy ogImage field. Falls back to ogImage if featuredImage is
+  // empty, then to the brand default.
+  const img = post.featuredImage || post.ogImage || `${siteUrl}/brand/png/og-image-1200x630.png`;
   const url = `${siteUrl}/blog?post=${post.slug}`;
   const keywords = (post.keywords || post.tags || []).join(', ');
   const published = post.publishedAt || post.createdAt || '';

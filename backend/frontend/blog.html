@@ -517,6 +517,13 @@ function fmtDateLong(d) {
 function escapeAttr(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+// Escape a string for use inside a JS single-quoted literal that lives
+// inside an HTML attribute (e.g. onclick="fn('...')"). HTML-encoding
+// alone won't work because the browser decodes &#39; back to ' BEFORE
+// parsing the attribute as JS, breaking the string.
+function escapeJsInAttr(s) {
+  return String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}
 
 function authorInitials(name) {
   return (name || 'My Homeschool Curriculum Team')
@@ -731,7 +738,7 @@ function renderPost(post) {
         <div class="post-date">${dateStr} · ${readMin} min read</div>
       </div>
     </div>
-    <button class="share-btn" onclick="sharePost('${escapeAttr(post.title)}','${post.slug}')" aria-label="Share this post">
+    <button class="share-btn" onclick="sharePost('${escapeJsInAttr(post.title)}','${escapeJsInAttr(post.slug)}')" aria-label="Share this post">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
       Share
     </button>`;
