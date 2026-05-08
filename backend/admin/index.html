@@ -523,6 +523,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <label class="cb-tag"><input type="checkbox" value="Multiple Ages"> Multiple Ages</label>
     </div></div>
     <div class="form-row">
+      <div class="form-group"><label>Parent Prep Level</label>
+        <select id="cPrep">
+          <option value="">— Select —</option>
+          <option value="Open & Go">Open &amp; Go</option>
+          <option value="Light Prep">Light Prep</option>
+          <option value="Moderate Prep">Moderate Prep</option>
+          <option value="High Prep">High Prep</option>
+        </select>
+      </div>
       <div class="form-group"><label>Listing Type</label>
         <select id="cType"><option value="standard">Standard</option><option value="affiliate">Affiliate</option><option value="sponsored">Sponsored (Ad)</option></select>
       </div>
@@ -1194,6 +1203,7 @@ function openCurriculumModal() {
   document.getElementById('cTier').value = '';
   document.getElementById('cFeatured').value = 'false';
   document.getElementById('cActive').value = 'true';
+  document.getElementById('cPrep').value = '';
   document.querySelectorAll('#cBadges input[type=checkbox]').forEach(cb => cb.checked = false);
   document.getElementById('curriculumModal').classList.add('open');
 }
@@ -1221,6 +1231,7 @@ function editCurriculum(c) {
   setCheckboxGroup('cFormat', c.format||[]);
   setCheckboxGroup('cSubject', c.subject||[]);
   setCheckboxGroup('cSpecial', c.special||[]);
+  document.getElementById('cPrep').value = c.prep || '';
   document.getElementById('cAffiliate').value = c.affiliateLink||'';
   document.getElementById('cDiscountCode').value = c.discountCode||'';
   document.getElementById('cDiscountDesc').value = c.discountDesc||'';
@@ -1275,6 +1286,7 @@ async function saveCurriculum() {
     format: getCheckboxGroup('cFormat'),
     subject: getCheckboxGroup('cSubject'),
     special: getCheckboxGroup('cSpecial'),
+    prep: document.getElementById('cPrep').value || null,
     affiliateLink: document.getElementById('cAffiliate').value,
     discountCode: document.getElementById('cDiscountCode').value.trim(),
     discountDesc: document.getElementById('cDiscountDesc').value.trim(),

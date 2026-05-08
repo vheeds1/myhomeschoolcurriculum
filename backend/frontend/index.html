@@ -751,6 +751,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
     <div class="filter-section">
+      <div class="filter-label">⏱️ Parent Prep <button class="info-btn" onclick="toggleDefs('prep')" title="What do these mean?">ℹ️</button></div>
+      <div class="filter-chips">
+        <button class="chip" data-filter="prep" data-val="Open & Go">Open &amp; Go</button>
+        <button class="chip" data-filter="prep" data-val="Light Prep">Light Prep</button>
+        <button class="chip" data-filter="prep" data-val="Moderate Prep">Moderate Prep</button>
+        <button class="chip" data-filter="prep" data-val="High Prep">High Prep</button>
+      </div>
+      <div class="filter-defs" id="defs-prep" style="display:none">
+        <div class="def-item"><strong>Open &amp; Go</strong> — Scripted lessons or auto-graded online programs. Open the book or log in and teach. Almost no prep needed.</div>
+        <div class="def-item"><strong>Light Prep</strong> — A quick read-ahead or gathering of common supplies, roughly 15 minutes a week.</div>
+        <div class="def-item"><strong>Moderate Prep</strong> — Reading the teacher guide, gathering materials, and planning a few subjects each week.</div>
+        <div class="def-item"><strong>High Prep</strong> — Substantial parent planning — DIY frameworks, unit studies, or programs where you build the schedule yourself.</div>
+      </div>
+    </div>
+    <div class="filter-section">
       <div class="filter-label">💰 Annual Budget</div>
       <input type="range" class="range-input" id="priceRange" min="0" max="1500" step="50" value="1500" oninput="updatePriceLabel(this);debounceFilter()">
       <div class="range-labels"><span>Free</span><span id="priceLabel">Any price</span></div>
@@ -1297,6 +1312,7 @@ async function openDetail(slug, fromQuiz) {
         <div class="modal-item"><div class="modal-item-key">Worldview</div><div class="modal-item-val">${(c.worldview||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Format</div><div class="modal-item-val">${(c.format||[]).join(', ')}</div></div>
         <div class="modal-item"><div class="modal-item-key">Subject Coverage</div><div class="modal-item-val">${(c.subject||[]).join(', ')}</div></div>
+        ${c.prep ? `<div class="modal-item"><div class="modal-item-key">Parent Prep</div><div class="modal-item-val">${c.prep}</div></div>` : ''}
         ${(c.special||[]).length ? `<div class="modal-item"><div class="modal-item-key">Special Needs</div><div class="modal-item-val">${(c.special||[]).join(', ')}</div></div>` : ''}
       </div>
       ${c.pricingNote ? `<div style="background:#FEF9EF;border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:18px;font-size:.82rem;color:var(--charcoal);line-height:1.6">
@@ -1850,7 +1866,7 @@ window.addEventListener('scroll', () => {
   }
   // Multi-value chip filters: grade, style, worldview, format, budget,
   // learningStyle, badges, etc. URL value can be comma-separated.
-  ['grade','style','worldview','format','budget','learningStyle','badges'].forEach(key => {
+  ['grade','style','worldview','format','budget','learningStyle','badges','prep','subject','special'].forEach(key => {
     const v = qs.get(key);
     if (!v) return;
     const vals = v.split(',').map(s => s.trim()).filter(Boolean);

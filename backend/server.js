@@ -259,7 +259,7 @@ app.get('/api/curricula', (req, res) => {
   const db = readDB();
   if (!db) return res.status(500).json({ error: 'Database error' });
   let results = db.curricula.filter(c => c.active);
-  const { grade, style, worldview, format, subject, special, search, priceMax, sort, badges } = req.query;
+  const { grade, style, worldview, format, subject, special, search, priceMax, sort, badges, prep } = req.query;
   if (search) {
     const q = search.toLowerCase();
     results = results.filter(c =>
@@ -276,6 +276,7 @@ app.get('/api/curricula', (req, res) => {
     results = results.filter(c => v.some(x => c.subject?.includes(x) || (coreSubjects.includes(x) && c.subject?.includes('Full Curriculum'))));
   }
   if (special)   { const v = special.split(',');   results = results.filter(c => v.some(x => c.special?.includes(x))); }
+  if (prep)      { const v = prep.split(',');      results = results.filter(c => v.includes(c.prep)); }
   if (priceMax !== undefined && priceMax !== '') {
     const pm = parseInt(priceMax);
     if (pm === 0) {
