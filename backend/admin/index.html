@@ -659,6 +659,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<!-- REVIEW DETAILS MODAL -->
+<div class="modal-overlay" id="reviewModal" onclick="if(event.target===this)closeReviewModal()">
+  <div class="modal" style="max-width:640px">
+    <button class="modal-close" onclick="closeReviewModal()">✕</button>
+    <h3 style="margin-bottom:6px">⭐ Review</h3>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:18px">Read the full review before approving. Approve makes it public on the curriculum page; Delete removes it permanently.</p>
+    <div id="reviewDetailsBody"></div>
+    <div class="modal-actions" id="reviewModalActions"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -741,7 +752,7 @@ async function loadAnalytics() {
     // Pending reviews table
     const pr = data.pendingReviews || [];
     document.getElementById('pendingReviewsTable').innerHTML = pr.length
-      ? pr.map(r => `<tr><td>${r.curriculumSlug||r.curriculumId}</td><td>${r.name}</td><td>${'★'.repeat(r.rating)}</td><td>${r.title}</td><td><div class="action-btns"><button class="act-btn act-approve" onclick="approveReview(${r.id})">Approve</button><button class="act-btn act-delete" onclick="deleteReview(${r.id})">Delete</button></div></td></tr>`).join('')
+      ? pr.map(r => `<tr><td>${r.curriculumSlug||r.curriculumId}</td><td>${r.name}</td><td>${'★'.repeat(r.rating)}</td><td>${r.title}</td><td><div class="action-btns"><button class="act-btn act-view" onclick='viewReview(${JSON.stringify(r).replace(/'/g,"&#39;")})'>View</button><button class="act-btn act-approve" onclick="approveReview(${r.id})">Approve</button><button class="act-btn act-delete" onclick="deleteReview(${r.id})">Delete</button></div></td></tr>`).join('')
       : '<tr class="empty-row"><td colspan="5">No pending reviews 🎉</td></tr>';
     // Recent inquiries
     const ri = data.recentInquiries || [];
@@ -811,6 +822,7 @@ async function loadReviews() {
           <td><span class="badge ${r.approved?'badge-active':'badge-pending'}">${r.approved?'Approved':'Pending'}</span></td>
           <td>${fmt(r.createdAt)}</td>
           <td><div class="action-btns">
+            <button class="act-btn act-view" onclick='viewReview(${JSON.stringify(r).replace(/'/g,"&#39;")})'>View</button>
             ${!r.approved ? `<button class="act-btn act-approve" onclick="approveReview(${r.id})">Approve</button>` : ''}
             <button class="act-btn act-delete" onclick="deleteReview(${r.id})">Delete</button>
           </div></td>
@@ -818,6 +830,35 @@ async function loadReviews() {
       : '<tr class="empty-row"><td colspan="7">No reviews yet</td></tr>';
   } catch(e) {}
 }
+
+function viewReview(r) {
+  const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+  const dateStr = r.createdAt ? new Date(r.createdAt).toLocaleString() : '—';
+  document.getElementById('reviewDetailsBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Curriculum</div><div style="font-weight:600">${esc(r.curriculumName || r.curriculumSlug || r.curriculumId)}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Rating</div><div style="color:#D4A84B;font-size:1.1rem">${stars} <span style="color:var(--text);font-size:.85rem;margin-left:6px">${r.rating}/5</span></div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Reviewer</div><div>${esc(r.name)}${r.location ? ` <span style="color:var(--muted);font-size:.85rem">· ${esc(r.location)}</span>` : ''}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Email</div><div style="font-size:.85rem">${r.email ? `<a href="mailto:${esc(r.email)}" style="color:var(--accent)">${esc(r.email)}</a>` : '<span style="color:var(--muted)">—</span>'}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Grades Used</div><div>${esc(r.gradesUsed) || '<span style="color:var(--muted)">—</span>'}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">How Long</div><div>${esc(r.yearsUsed) || '<span style="color:var(--muted)">—</span>'}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Submitted</div><div style="font-size:.85rem">${dateStr}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Status</div><div><span class="badge ${r.approved?'badge-active':'badge-pending'}">${r.approved?'Approved':'Pending'}</span></div></div>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:14px">
+      <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Title</div>
+      <div style="font-family:'Fraunces','Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:14px">${esc(r.title)}</div>
+      <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Review</div>
+      <div style="background:#FFFBF5;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:.92rem;line-height:1.65;color:var(--text);white-space:pre-wrap">${esc(r.body)}</div>
+    </div>`;
+  document.getElementById('reviewModalActions').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeReviewModal()">Close</button>
+    ${!r.approved ? `<button class="btn btn-green" onclick="approveReview(${r.id});closeReviewModal()">✓ Approve</button>` : ''}
+    <button class="btn btn-ghost" style="color:#C8614A" onclick="deleteReview(${r.id});closeReviewModal()">Delete</button>`;
+  document.getElementById('reviewModal').classList.add('open');
+}
+function closeReviewModal() { document.getElementById('reviewModal').classList.remove('open'); }
 
 async function approveReview(id) {
   await fetch(`${API}/admin/reviews/${id}/approve`, { method: 'PUT', headers: authHeaders() });
