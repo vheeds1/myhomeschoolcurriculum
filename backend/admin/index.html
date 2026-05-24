@@ -850,7 +850,7 @@ function viewReview(r) {
       <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Title</div>
       <div style="font-family:'Fraunces','Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:14px">${esc(r.title)}</div>
       <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Review</div>
-      <div style="background:#FFFBF5;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:.92rem;line-height:1.65;color:var(--text);white-space:pre-wrap">${esc(r.body)}</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:.92rem;line-height:1.65;color:var(--text);white-space:pre-wrap">${esc(r.body)}</div>
     </div>`;
   document.getElementById('reviewModalActions').innerHTML = `
     <button class="btn btn-ghost" onclick="closeReviewModal()">Close</button>
