@@ -24,15 +24,27 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "name": "Homeschool Laws by State",
-  "description": "Complete guide to homeschool laws, requirements, and regulations in all 50 US states.",
-  "url": "https://myhomeschoolcurriculum.com/legal.html",
-  "publisher": {
-    "@type": "Organization",
-    "name": "My Homeschool Curriculum",
-    "url": "https://myhomeschoolcurriculum.com"
-  }
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "name": "Homeschool Laws by State",
+      "description": "Complete guide to homeschool laws, requirements, and regulations in all 50 US states.",
+      "url": "https://myhomeschoolcurriculum.com/legal.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "My Homeschool Curriculum",
+        "url": "https://myhomeschoolcurriculum.com"
+      },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://myhomeschoolcurriculum.com/" },
+        { "@type": "ListItem", "position": 2, "name": "State Homeschool Laws", "item": "https://myhomeschoolcurriculum.com/legal.html" }
+      ]
+    }
+  ]
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">

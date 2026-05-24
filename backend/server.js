@@ -1870,26 +1870,42 @@ app.get('/blog', (req, res) => {
   const modified = post.updatedAt || published;
   const wordCount = post.wordCount || (post.content || '').split(/\s+/).filter(Boolean).length;
 
+  // Combined JSON-LD graph: BlogPosting + BreadcrumbList. Breadcrumbs let
+  // Google render "myhomeschoolcurriculum.com › Blog › Getting Started"
+  // under the post's search result instead of the raw URL.
   const schema = JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": desc,
-    "image": img,
-    "author": { "@type": "Organization", "name": post.author || "My Homeschool Curriculum Team" },
-    "publisher": {
-      "@type": "Organization",
-      "name": "My Homeschool Curriculum",
-      "url": siteUrl,
-      "logo": { "@type": "ImageObject", "url": `${siteUrl}/brand/png/icon-512.png` }
-    },
-    "datePublished": published,
-    "dateModified": modified,
-    "mainEntityOfPage": { "@type": "WebPage", "@id": url },
-    "articleSection": post.category || 'General',
-    "keywords": keywords,
-    "wordCount": wordCount,
-    "inLanguage": "en-US"
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": desc,
+        "image": img,
+        "author": { "@type": "Organization", "name": post.author || "My Homeschool Curriculum Team" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "My Homeschool Curriculum",
+          "url": siteUrl,
+          "logo": { "@type": "ImageObject", "url": `${siteUrl}/brand/png/icon-512.png` }
+        },
+        "datePublished": published,
+        "dateModified": modified,
+        "mainEntityOfPage": { "@type": "WebPage", "@id": url },
+        "articleSection": post.category || 'General',
+        "keywords": keywords,
+        "wordCount": wordCount,
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${siteUrl}/blog` },
+          { "@type": "ListItem", "position": 3, "name": post.category || 'General', "item": `${siteUrl}/blog?category=${encodeURIComponent(post.category || 'General')}` },
+          { "@type": "ListItem", "position": 4, "name": post.title, "item": url }
+        ]
+      }
+    ]
   });
 
   let html = fs.readFileSync(file, 'utf8');
