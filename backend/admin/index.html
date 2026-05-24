@@ -69,6 +69,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .badge-pending{background:rgba(232,184,75,.2);color:var(--yellow)}
 .badge-active{background:rgba(74,154,84,.2);color:var(--accent)}
 .badge-canceled{background:rgba(224,90,71,.2);color:var(--red)}
+.badge-inactive{background:rgba(224,90,71,.15);color:var(--red)}
 .badge-handled{background:rgba(122,142,160,.2);color:var(--muted)}
 .badge-platinum{background:rgba(212,168,75,.25);color:var(--gold)}
 .badge-gold{background:rgba(212,168,75,.15);color:#c4963f}
@@ -408,6 +409,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="section-title">📬 Newsletter Subscribers</div>
           <input class="search-input" placeholder="Search…" oninput="filterTable('newsletterTable',this.value)">
         </div>
+        <div id="newsletterSummary" style="margin-bottom:12px;font-size:.88rem;color:var(--text)"></div>
         <div class="table-wrap"><table><thead><tr><th>Email</th><th>Name</th><th>Source</th><th>Status</th><th>Subscribed</th><th>Actions</th></tr></thead><tbody id="newsletterTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody></table></div>
       </div>
 
@@ -1088,17 +1090,28 @@ async function loadNewsletter() {
     const res = await fetch(`${API}/newsletter/subscribers`, { headers: authHeaders() });
     const data = await res.json();
     const subs = data.subscribers || [];
+    const activeCount = subs.filter(s => s.active !== false).length;
+    const unsubCount = subs.length - activeCount;
+    const summary = document.getElementById('newsletterSummary');
+    if (summary) summary.innerHTML = `<strong>${activeCount}</strong> active · <span style="color:var(--muted)">${unsubCount} unsubscribed · ${subs.length} total</span>`;
     document.getElementById('newsletterTable').innerHTML = subs.length
-      ? subs.map(s => `<tr>
+      ? subs.map(s => `<tr${s.active === false ? ' style="opacity:.55"' : ''}>
           <td>${s.email}</td>
           <td>${s.name||'—'}</td>
           <td><span class="badge badge-new">${s.source||'website'}</span></td>
-          <td><span class="badge ${s.active!==false ? 'badge-active' : 'badge-inactive'}">${s.active!==false ? 'Active' : 'Unsubscribed'}</span></td>
+          <td><span class="badge ${s.active!==false ? 'badge-active' : 'badge-inactive'}">${s.active!==false ? '● Active' : '✕ Unsubscribed'}</span></td>
           <td>${fmt(s.subscribedAt)}</td>
-          <td>${s.active!==false ? `<button class="act-btn act-delete" onclick="unsubscribeNewsletter('${s.email}')">Unsubscribe</button>` : '<span style="color:var(--muted);font-size:.75rem">—</span>'}</td>
+          <td>${s.active!==false
+            ? `<button class="act-btn act-delete" onclick="unsubscribeNewsletter('${s.email}')">Unsubscribe</button>`
+            : `<button class="act-btn act-approve" onclick="resubscribeNewsletter('${s.email}')">Resubscribe</button>`}</td>
         </tr>`).join('')
       : '<tr class="empty-row"><td colspan="6">No newsletter subscribers yet</td></tr>';
   } catch(e) {}
+}
+async function resubscribeNewsletter(email) {
+  if (!confirm('Mark ' + email + ' as active again?')) return;
+  await fetch(`${API}/admin/newsletter/resubscribe`, { method: 'POST', headers: authHeaders(), body: JSON.stringify({ email }) });
+  showToast('Resubscribed'); loadNewsletter();
 }
 async function unsubscribeNewsletter(email) {
   if (!confirm('Unsubscribe ' + email + '?')) return;

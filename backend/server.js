@@ -1312,6 +1312,20 @@ app.post('/api/newsletter/unsubscribe', (req, res) => {
   res.json({ success: true, message: "You've been unsubscribed." });
 });
 
+// Admin-only: mark a previously-unsubscribed subscriber as active again.
+// Useful when a parent accidentally unsubs and emails asking to be put
+// back on the list.
+app.post('/api/admin/newsletter/resubscribe', requireAdmin, (req, res) => {
+  const { email } = req.body;
+  const db = readDB();
+  const sub = (db.newsletterSubscribers||[]).find(s => s.email === email?.toLowerCase());
+  if (!sub) return res.status(404).json({ error: 'Subscriber not found' });
+  sub.active = true;
+  sub.resubscribedAt = new Date().toISOString();
+  writeDB(db);
+  res.json({ success: true, subscriber: sub });
+});
+
 app.get('/api/newsletter/subscribers', requireAdmin, (req, res) => {
   const db = readDB();
   const all = db.newsletterSubscribers || [];
