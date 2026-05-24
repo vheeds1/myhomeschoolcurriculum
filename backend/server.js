@@ -198,6 +198,93 @@ function ensureFileDB() {
 // ─── EMAIL ───────────────────────────────────────────────────────────────────
 const FROM_EMAIL = process.env.SMTP_USER || 'contact@myhomeschoolcurriculum.com';
 
+// Newsletter welcome email — footer/blog signups land here. Designed to feel
+// founder-signed and personal (matches the brand's "founder voice is always
+// visible" principle), set expectations on frequency, and point at the most
+// useful starting points on the site. Uses inline styles + a single table for
+// max compatibility across mail clients.
+function welcomeEmailHtml(name, email, siteUrl) {
+  const greeting = name ? `Hi ${name}!` : 'Hi there!';
+  const unsubUrl = `${siteUrl}/unsubscribe.html?email=${encodeURIComponent(email || '')}`;
+  // PNG logo (not inline SVG) — Gmail strips inline SVG, Outlook can't render it.
+  const logoUrl = `${siteUrl}/brand/png/icon-128.png`;
+  // Hero photo — child reading. Cropped to a wide 5:2 aspect via Unsplash
+  // params so it reads as a banner, not a hero-sized block. Email clients
+  // don't reliably support CSS object-fit, so we let the CDN do the crop.
+  const heroUrl = 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1120&h=450&fit=crop&crop=entropy&auto=format&q=80';
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Welcome to My Homeschool Curriculum</title></head>
+<body style="margin:0;padding:0;background:#FDF6EC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#2C3E3F;-webkit-font-smoothing:antialiased">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FDF6EC;padding:24px 16px">
+  <tr><td align="center">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;background:#FFFBF5;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(31,58,77,.06)">
+      <tr><td style="padding:26px 36px 20px;text-align:center;border-bottom:1px solid #EFE8DD">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+          <td style="vertical-align:middle;padding-right:10px"><img src="${logoUrl}" alt="" width="36" height="36" style="display:block;border:0;outline:0"></td>
+          <td style="vertical-align:middle;font-family:Georgia,'Times New Roman',serif;font-size:1.35rem;color:#1F3A4D;letter-spacing:-.3px;line-height:1">My Homeschool <em style="color:#D4A84C;font-style:italic;font-weight:400">Curriculum</em></td>
+        </tr></table>
+      </td></tr>
+      <tr><td style="padding:0;line-height:0">
+        <img src="${heroUrl}" alt="" width="560" style="display:block;width:100%;max-width:560px;height:auto;border:0;outline:0">
+      </td></tr>
+      <tr><td style="padding:32px 36px 8px;font-size:16px;line-height:1.7;color:#2C3E3F">
+        <p style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:1.5rem;color:#1F3A4D;letter-spacing:-.4px;line-height:1.25">${greeting}</p>
+        <p style="margin:0 0 16px">I'm Vanessa — the homeschool mom who built MyHomeschoolCurriculum.com because I got tired of digging through Facebook groups and catalog PDFs trying to figure out what would actually work for my kids. So glad you're here.</p>
+      </td></tr>
+      <tr><td style="padding:16px 36px 10px">
+        <p style="margin:0 0 14px;font-family:Georgia,'Times New Roman',serif;font-size:1.2rem;color:#1F3A4D;letter-spacing:-.2px">A few things worth bookmarking 🔖</p>
+      </td></tr>
+      <tr><td style="padding:0 36px 18px">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr><td style="padding:14px 16px;background:#F5F0E5;border-radius:10px">
+            <a href="${siteUrl}" style="text-decoration:none;color:#1F3A4D"><strong>📝 Take the 2-minute curriculum quiz</strong></a>
+            <div style="font-size:14px;color:#6B6B60;margin-top:2px">Personalized recommendations based on your family.</div>
+          </td></tr>
+          <tr><td style="height:10px;line-height:10px">&nbsp;</td></tr>
+          <tr><td style="padding:14px 16px;background:#F5F0E5;border-radius:10px">
+            <a href="${siteUrl}" style="text-decoration:none;color:#1F3A4D"><strong>🤖 Ask the Curriculum Advisor</strong></a>
+            <div style="font-size:14px;color:#6B6B60;margin-top:2px">A free AI advisor trained on our 60+ listings — open it from the green button in the bottom-right of any page.</div>
+          </td></tr>
+          <tr><td style="height:10px;line-height:10px">&nbsp;</td></tr>
+          <tr><td style="padding:14px 16px;background:#F5F0E5;border-radius:10px">
+            <a href="${siteUrl}" style="text-decoration:none;color:#1F3A4D"><strong>📚 Compare 60+ curricula side by side</strong></a>
+            <div style="font-size:14px;color:#6B6B60;margin-top:2px">Filter by grade, teaching style, worldview, budget, and prep level.</div>
+          </td></tr>
+          <tr><td style="height:10px;line-height:10px">&nbsp;</td></tr>
+          <tr><td style="padding:14px 16px;background:#F5F0E5;border-radius:10px">
+            <a href="${siteUrl}/blog.html" style="text-decoration:none;color:#1F3A4D"><strong>✍️ The blog</strong></a>
+            <div style="font-size:14px;color:#6B6B60;margin-top:2px">Real talk on getting started, choosing a style, and surviving year one.</div>
+          </td></tr>
+        </table>
+      </td></tr>
+      <tr><td style="padding:12px 36px 24px;font-size:16px;line-height:1.7;color:#2C3E3F">
+        <p style="margin:0 0 6px">Hit reply anytime — I read every email.</p>
+        <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:1.05rem;color:#1F3A4D">Vanessa</p>
+        <p style="margin:0;font-size:13px;color:#7A7A6E">Founder · My Homeschool Curriculum</p>
+      </td></tr>
+      <tr><td style="padding:18px 36px 28px;border-top:1px solid #EFE8DD;text-align:center">
+        <p style="margin:0;font-size:12px;color:#9E9E94;line-height:1.6">
+          Not what you signed up for? <a href="${unsubUrl}" style="color:#9E9E94;text-decoration:underline">Unsubscribe</a>. No hard feelings.
+        </p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
+}
+
+// Render the welcome email in the browser for visual review. Not auth-gated
+// because the URL is non-obvious and the rendered output is just marketing
+// copy + the brand. Remove or admin-gate if you ever want it private.
+function registerEmailPreviewRoutes(app) {
+  app.get('/api/preview/welcome-email', (req, res) => {
+    const name = req.query.name || 'Sarah';
+    const email = req.query.email || 'preview@example.com';
+    const siteUrl = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
+    res.type('html').send(welcomeEmailHtml(name, email, siteUrl));
+  });
+}
+
 async function sendEmail(to, subject, html) {
   console.log(`[Email] Sending to ${to}: "${subject}"`);
 
@@ -1088,8 +1175,8 @@ app.post('/api/newsletter/subscribe', submitLimiter, async (req, res) => {
   if (source === 'popup_checklist') {
     sendChecklistEmail(subscriber.email, siteUrl);
   } else {
-    sendEmail(subscriber.email, 'Welcome to MyHomeschoolCurriculum! 🧭',
-      `<h2>Welcome${subscriber.name ? ', '+subscriber.name : ''}!</h2><p>Thanks for subscribing! You'll receive new reviews, deals, and homeschool tips.</p><p><a href="${siteUrl}">Browse curricula →</a></p><p style="font-size:12px;color:#999;margin-top:24px">Don't want these emails? <a href="${siteUrl}/unsubscribe.html?email=${encodeURIComponent(subscriber.email)}" style="color:#999">Unsubscribe</a></p>`);
+    sendEmail(subscriber.email, 'Welcome — here\'s where to start 🧭',
+      welcomeEmailHtml(subscriber.name, subscriber.email, siteUrl));
   }
   sendEmail(process.env.ADMIN_EMAIL || process.env.SMTP_USER,
     `📬 New Newsletter Subscriber — ${subscriber.email}`,
@@ -1841,6 +1928,7 @@ app.use((req, res, next) => {
 
 // ─── START ───────────────────────────────────────────────────────────────────
 // Initialize database before starting server
+registerEmailPreviewRoutes(app);
 initDB().then(() => {
   app.listen(PORT, () => {
     console.log(`\n🧭 MyHomeschoolCurriculum API v2.0 → http://localhost:${PORT}`);
