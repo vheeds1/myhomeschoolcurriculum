@@ -146,7 +146,16 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 
 .results-bar{font-size:.85rem;color:var(--text-muted);margin-bottom:16px}
 .results-bar strong{color:var(--charcoal)}
-footer{background:var(--navy);color:rgba(255,255,255,.6);padding:28px 24px;text-align:center;font-size:.8rem;margin-top:60px}
+.newsletter-section{background:linear-gradient(135deg,var(--deep-sage),var(--sage));padding:48px 24px;margin-top:60px}
+.newsletter-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.newsletter-inner h2{font-family:'Fraunces','Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.4rem);color:#fff;margin-bottom:6px}
+.newsletter-inner p{font-size:.85rem;color:rgba(255,255,255,.78);margin:0}
+.newsletter-form{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap}
+.newsletter-email{padding:11px 16px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:.88rem;min-width:230px;outline:none;color:var(--charcoal)}
+.newsletter-submit{background:var(--gold);color:var(--navy);border:none;padding:11px 22px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
+.newsletter-submit:hover{background:#c4963f}
+@media(max-width:680px){.newsletter-inner{flex-direction:column;text-align:center}.newsletter-email{min-width:100%}.newsletter-submit{width:100%}}
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:28px 24px;text-align:center;font-size:.8rem;margin-top:0}
 footer a{color:var(--gold);text-decoration:none}
 @media(max-width:600px){.info-grid{grid-template-columns:1fr}.states-grid{grid-template-columns:1fr}}
 
@@ -251,6 +260,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 </main>
+
+<section class="newsletter-section" aria-labelledby="newsletter-title">
+  <div class="newsletter-inner">
+    <div>
+      <h2 id="newsletter-title">Get weekly curriculum tips in your inbox</h2>
+      <p>Join 10,000+ families getting honest reviews, teaching ideas, and new curriculum alerts. Free, always.</p>
+    </div>
+    <form class="newsletter-form" onsubmit="footerSubscribe(event)">
+      <input type="email" id="footerNlEmail" class="newsletter-email" placeholder="your@email.com" required aria-label="Email address">
+      <button type="submit" class="newsletter-submit">Subscribe Free →</button>
+    </form>
+  </div>
+</section>
 
 <footer>
     <div style="display:inline-flex;gap:10px;margin:0 0 8px;vertical-align:middle"><a href="https://www.pinterest.com/MyHomeschoolCurriculum" target="_blank" rel="noopener" aria-label="Follow on Pinterest" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);color:rgba(255,255,255,.75);text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></a><a href="https://www.facebook.com/profile.php?id=61589040482005" target="_blank" rel="noopener" aria-label="Follow on Facebook" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);color:rgba(255,255,255,.75);text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a></div><br>
@@ -466,6 +488,22 @@ async function openState(stateEncoded) {
 }
 
 function closeModal() { document.getElementById('stateOverlay').classList.remove('open'); }
+
+async function footerSubscribe(event) {
+  event.preventDefault();
+  const input = document.getElementById('footerNlEmail');
+  const email = input.value.trim();
+  if (!email) return;
+  try {
+    const res = await fetch(`${API}/newsletter/subscribe`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'legal' })
+    });
+    const data = await res.json();
+    alert(data.message || "You're subscribed!");
+    input.value = '';
+  } catch (e) { alert('Could not subscribe — please try again.'); }
+}
 
 // Pre-select state from URL
 function toggleMenu() {
