@@ -63,6 +63,7 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .diff-btn.active-strict{background:#FFE9E6;border-color:#C8614A;color:var(--terracotta)}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;align-items:center;color:var(--text-muted);margin-bottom:24px}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
+.dot-nonotice{background:#6B8FA6}
 .dot-easy{background:#4A7550}
 .dot-moderate{background:#D4A84B}
 .dot-strict{background:#C8614A}
@@ -80,6 +81,7 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .us-svg-map line,.us-svg-map path.separator1,.us-svg-map .dccircle{display:none}
 /* State paths — only these render, click, and show a hairline border between them */
 .us-svg-map path.state{fill:var(--border);stroke:var(--warm-white);stroke-width:1;cursor:pointer;pointer-events:auto;transition:fill .15s ease-out, filter .15s ease-out}
+.us-svg-map path.nonotice{fill:#8FAFC0}
 .us-svg-map path.easy{fill:#8BA990}
 .us-svg-map path.moderate{fill:#D2B158}
 .us-svg-map path.strict{fill:#CF7C63}
@@ -111,11 +113,13 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.12)}
 .state-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(31,58,77,.08);border-color:var(--sage)}
 .state-name{font-family:'Fraunces','Playfair Display',serif;font-size:1.05rem;color:var(--navy);font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
 .state-name .state-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.state-name .state-dot.nonotice{background:#6B8FA6}
 .state-name .state-dot.easy{background:#4A7550}
 .state-name .state-dot.moderate{background:#D4A84B}
 .state-name .state-dot.strict{background:#C8614A}
 .state-name .diff-badge{margin-left:auto}
 .diff-badge{padding:3px 10px;border-radius:10px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.badge-nonotice{background:#DDE7EE;color:#2A4F66}
 .badge-easy{background:#E6F4EA;color:#1E7E34}
 .badge-moderate{background:#FFF3CD;color:#856404}
 .badge-strict{background:#FFE9E6;color:var(--terracotta)}
@@ -212,15 +216,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="difficulty-filter">
       <button class="diff-btn" id="btn-all" onclick="setDiff('all',this)">All States</button>
-      <button class="diff-btn" id="btn-easy" onclick="setDiff('Easy',this)">🟢 Easy</button>
+      <button class="diff-btn" id="btn-nonotice" onclick="setDiff('No Notice',this)">🔵 No Notice</button>
+      <button class="diff-btn" id="btn-easy" onclick="setDiff('Low',this)">🟢 Low</button>
       <button class="diff-btn" id="btn-moderate" onclick="setDiff('Moderate',this)">🟡 Moderate</button>
       <button class="diff-btn" id="btn-strict" onclick="setDiff('High',this)">🔴 High</button>
     </div>
   </div>
   <div class="legend">
-    <span><span class="dot dot-easy"></span> Easy — Low oversight, minimal requirements</span>
+    <span><span class="dot dot-nonotice"></span> No Notice — No registration required</span>
+    <span><span class="dot dot-easy"></span> Low — One-time notice, minimal requirements</span>
     <span><span class="dot dot-moderate"></span> Moderate — Annual notice and/or assessment</span>
-    <span><span class="dot dot-strict"></span> High — Approval, detailed documentation, testing</span>
+    <span><span class="dot dot-strict"></span> High — Approval, portfolio, standardized testing</span>
   </div>
 
   <!-- ── U.S. GEOGRAPHIC MAP ──────────────────────────────────────────────── -->
@@ -264,15 +270,17 @@ const STATE_NAME_TO_ABBR = {
 };
 
 function difficultyClass(diff) {
+  if (diff === 'No Notice') return 'nonotice';
   if (diff === 'High' || diff === 'Strict') return 'strict';
   if (diff === 'Moderate') return 'moderate';
-  if (diff === 'Easy' || diff === 'Low') return 'easy';
+  if (diff === 'Low' || diff === 'Easy') return 'easy';
   return 'unknown';
 }
 function difficultyLabel(diff) {
-  if (diff === 'High' || diff === 'Strict') return 'High oversight';
-  if (diff === 'Moderate') return 'Moderate oversight';
-  if (diff === 'Easy' || diff === 'Low') return 'Low oversight';
+  if (diff === 'No Notice') return 'No notice required';
+  if (diff === 'High' || diff === 'Strict') return 'High regulation';
+  if (diff === 'Moderate') return 'Moderate regulation';
+  if (diff === 'Low' || diff === 'Easy') return 'Low regulation';
   return '';
 }
 
@@ -377,7 +385,7 @@ function renderStates(states) {
   if (!states.length) { grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">No states match your filter.</div>'; return; }
   grid.innerHTML = states.map(s => {
     const cls = difficultyClass(s.difficulty);
-    const badgeCls = cls === 'strict' ? 'badge-strict' : cls === 'moderate' ? 'badge-moderate' : 'badge-easy';
+    const badgeCls = cls === 'strict' ? 'badge-strict' : cls === 'moderate' ? 'badge-moderate' : cls === 'nonotice' ? 'badge-nonotice' : 'badge-easy';
     return `
       <div class="state-card" onclick="openState('${encodeURIComponent(s.state)}')" role="listitem" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
         <div class="state-name">
@@ -404,7 +412,7 @@ function filterStates() {
 function setDiff(diff, btn) {
   currentDiff = diff;
   document.querySelectorAll('.diff-btn').forEach(b => b.className = 'diff-btn');
-  if (diff === 'Easy') btn.className = 'diff-btn active-easy';
+  if (diff === 'No Notice' || diff === 'Low' || diff === 'Easy') btn.className = 'diff-btn active-easy';
   else if (diff === 'Moderate') btn.className = 'diff-btn active-moderate';
   else if (diff === 'High') btn.className = 'diff-btn active-strict';
   filterStates();
@@ -415,19 +423,34 @@ async function openState(stateEncoded) {
     const res = await fetch(`${API}/legal/states/${stateEncoded}`);
     const s = await res.json();
     const diffColor = (s.difficulty === 'Strict' || s.difficulty === 'High') ? 'red' : s.difficulty === 'Moderate' ? 'orange' : 'green';
-    const badgeCls = (s.difficulty === 'Strict' || s.difficulty === 'High') ? 'badge-strict' : s.difficulty === 'Moderate' ? 'badge-moderate' : 'badge-easy';
-    const diffLabel = s.difficulty === 'High' ? 'High Oversight' : s.difficulty + ' Oversight';
+    const cls = difficultyClass(s.difficulty);
+    const badgeCls = cls === 'strict' ? 'badge-strict' : cls === 'moderate' ? 'badge-moderate' : cls === 'nonotice' ? 'badge-nonotice' : 'badge-easy';
+    const diffLabel = s.difficulty === 'No Notice' ? 'No Notice Required' : s.difficulty + ' Regulation';
     document.getElementById('stateDetail').innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
         <h2>🗺️ ${s.state}</h2>
         <span class="diff-badge ${badgeCls}" style="padding:5px 14px;font-size:.78rem">${diffLabel}</span>
       </div>
       <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:16px">${s.description}</p>
+      <h3 style="font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--navy);margin:18px 0 8px;letter-spacing:-.2px">The basics</h3>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-key">Required School Ages</div><div class="info-val">${s.compulsoryAge || '—'}</div></div>
+        <div class="info-item"><div class="info-key">How Much School Time</div><div class="info-val">${s.instructionalDays || '—'}</div></div>
+        <div class="info-item"><div class="info-key">Parent Requirements</div><div class="info-val">${s.parentQualifications || '—'}</div></div>
+        <div class="info-item"><div class="info-key">Immunizations</div><div class="info-val">${s.immunizations || '—'}</div></div>
+      </div>
+      <h3 style="font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--navy);margin:20px 0 8px;letter-spacing:-.2px">Paperwork & curriculum</h3>
       <div class="info-grid">
         <div class="info-item"><div class="info-key">Withdrawal / Notice</div><div class="info-val">${s.withdrawalNotice}</div></div>
         <div class="info-item"><div class="info-key">Subject Requirements</div><div class="info-val">${s.subjectRequirements}</div></div>
-        <div class="info-item"><div class="info-key">Testing Requirements</div><div class="info-val">${s.testingRequirements}</div></div>
+        <div class="info-item"><div class="info-key">Annual Evaluation</div><div class="info-val">${s.evaluation || s.testingRequirements}</div></div>
         <div class="info-item"><div class="info-key">Portfolio / Records</div><div class="info-val">${s.portfolioRequirements}</div></div>
+      </div>
+      <h3 style="font-family:'Fraunces','Playfair Display',serif;font-size:1rem;color:var(--navy);margin:20px 0 8px;letter-spacing:-.2px">Activities, funding & graduation</h3>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-key">Public School Sports & Activities</div><div class="info-val">${s.sports || '—'}</div></div>
+        <div class="info-item"><div class="info-key">State Funding (ESA / Vouchers / Tax Credits)</div><div class="info-val">${s.funding || '—'}</div></div>
+        <div class="info-item" style="grid-column:1/-1"><div class="info-key">Homeschool Diploma</div><div class="info-val">${s.diploma || '—'}</div></div>
       </div>
       <div style="background:#FFF3CD;border-radius:10px;padding:12px 14px;font-size:.8rem;color:#856404;margin-bottom:16px">
         ⚠️ General information only. Verify current requirements with your state's official source before making legal decisions.
