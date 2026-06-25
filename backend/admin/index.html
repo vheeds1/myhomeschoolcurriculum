@@ -1152,11 +1152,24 @@ async function loadPublishers() {
         <td><div class="action-btns">
           ${!p.approved && p.status !== 'deactivated' ? `<button class="act-btn act-approve" onclick="approvePublisher('${p.id}')">Approve</button>` : ''}
           <button class="act-btn" onclick="editPublisher('${p.id}')">Edit</button>
+          <button class="act-btn act-view" onclick="sendPublisherReset('${p.id}','${p.email}')" title="Email this publisher a password reset link">Send Reset</button>
           ${p.status !== 'deactivated' ? `<button class="act-btn act-delete" onclick="deactivatePublisher('${p.id}')">Deactivate</button>` : `<button class="act-btn act-approve" onclick="reactivatePublisher('${p.id}')">Reactivate</button>`}
         </div></td>
       </tr>`;
     }).join('');
   } catch(e) { console.error('loadPublishers error', e); }
+}
+
+async function sendPublisherReset(id, email) {
+  if (!confirm(`Send a password reset link to ${email}?\n\nThe link is valid for 1 hour.`)) return;
+  try {
+    const res = await fetch(`${API}/admin/publishers/${id}/send-reset`, {
+      method: 'POST', headers: authHeaders()
+    });
+    const data = await res.json();
+    if (res.ok) showToast(`Reset link sent to ${email}`, 'success');
+    else showToast(data.error || 'Could not send reset', 'error');
+  } catch(e) { showToast('Could not send reset', 'error'); }
 }
 
 async function approvePublisher(id) {

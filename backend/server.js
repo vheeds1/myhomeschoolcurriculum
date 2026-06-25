@@ -2050,6 +2050,24 @@ app.post('/api/publisher/forgot-password', authLimiter, (req, res) => {
   res.json({ success: true, message: 'If a publisher account exists with that email, a reset link has been sent.' });
 });
 
+// Admin: trigger a password-reset email for an existing publisher. Same
+// token format as the public forgot-password flow, but addressable by
+// publisher id from the admin dashboard so the operator doesn't have to
+// log out and use the public form.
+app.post('/api/admin/publishers/:id/send-reset', requireAdmin, (req, res) => {
+  const db = readDB();
+  const publisher = (db.publishers || []).find(p => p.id === req.params.id);
+  if (!publisher) return res.status(404).json({ error: 'Publisher not found' });
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  publisher.resetToken = resetToken;
+  publisher.resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+  writeDB(db);
+  const resetUrl = `${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html?reset=${resetToken}`;
+  sendEmail(publisher.email, 'Reset your MyHomeschoolCurriculum publisher password',
+    `<p>Hi ${publisher.name},</p><p>An admin has issued a password reset for your publisher portal account. Click the button below to set a new password. This link expires in 1 hour.</p><p><a href="${resetUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Reset Password →</a></p><p style="font-size:12px;color:#999">If you weren't expecting this, contact us at contact@myhomeschoolcurriculum.com.</p>`);
+  res.json({ success: true, message: 'Reset link sent.' });
+});
+
 // Publisher reset password — accepts the one-hour token + a new password,
 // rehashes, clears the token. Invalidates existing publisher sessions so a
 // thief with an old session token can't keep using it.
