@@ -245,8 +245,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="btn-primary" onclick="doLogin()" id="loginBtn">Log In →</button>
       <div id="loginMsg" class="auth-msg" style="display:none"></div>
       <div class="auth-note">
+        <a href="#" onclick="showForgot();return false">Forgot password?</a><br>
         Don't have an account? <a href="#" onclick="switchTab('register');return false">Create one free →</a><br>
         <a href="/" style="color:var(--muted)">← Back to site</a>
+      </div>
+    </div>
+
+    <!-- Forgot Password Form -->
+    <div id="forgotForm" style="display:none">
+      <p style="font-size:.9rem;color:var(--text);margin-bottom:14px;line-height:1.55">Enter the email you used to register. We'll send a link to reset your password.</p>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="forgotEmail" aria-label="Email address" placeholder="you@company.com" onkeydown="if(event.key==='Enter')doForgot()">
+      </div>
+      <button class="btn-primary" onclick="doForgot()" id="forgotBtn">Send Reset Link →</button>
+      <div id="forgotMsg" class="auth-msg" style="display:none"></div>
+      <div class="auth-note">
+        <a href="#" onclick="switchTab('login');return false">← Back to log in</a>
+      </div>
+    </div>
+
+    <!-- Reset Password Form (shown when ?reset=<token> is in the URL) -->
+    <div id="resetForm" style="display:none">
+      <p style="font-size:.9rem;color:var(--text);margin-bottom:14px;line-height:1.55">Choose a new password. Must be at least 8 characters.</p>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" id="resetPassword" aria-label="New password" placeholder="At least 8 characters" onkeydown="if(event.key==='Enter')doReset()">
+      </div>
+      <div class="form-group">
+        <label>Confirm New Password</label>
+        <input type="password" id="resetPasswordConfirm" aria-label="Confirm new password" placeholder="Re-enter your new password" onkeydown="if(event.key==='Enter')doReset()">
+      </div>
+      <button class="btn-primary" onclick="doReset()" id="resetBtn">Reset Password →</button>
+      <div id="resetMsg" class="auth-msg" style="display:none"></div>
+      <div class="auth-note">
+        <a href="#" onclick="switchTab('login');return false">← Back to log in</a>
       </div>
     </div>
 
@@ -644,8 +677,86 @@ let publisherData = null;
 function switchTab(tab) {
   document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
   document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('forgotForm').style.display = 'none';
+  document.getElementById('resetForm').style.display = 'none';
   document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
   document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+}
+function showForgot() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('resetForm').style.display = 'none';
+  document.getElementById('forgotForm').style.display = 'block';
+  document.getElementById('tabLogin').classList.remove('active');
+  document.getElementById('tabRegister').classList.remove('active');
+}
+function showReset() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('forgotForm').style.display = 'none';
+  document.getElementById('resetForm').style.display = 'block';
+  document.getElementById('tabLogin').classList.remove('active');
+  document.getElementById('tabRegister').classList.remove('active');
+}
+// If the URL has ?reset=<token>, show the reset form on load.
+(function checkResetParam() {
+  const token = new URLSearchParams(location.search).get('reset');
+  if (!token) return;
+  window._resetToken = token;
+  // Wait until auth screen is mounted, then swap to reset panel
+  document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('resetForm')) showReset();
+  });
+  // Also run immediately in case DOM is already ready
+  if (document.readyState !== 'loading' && document.getElementById('resetForm')) showReset();
+})();
+
+async function doForgot() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  const btn = document.getElementById('forgotBtn');
+  if (!email) { showAuthMsg('forgotMsg', 'Please enter your email address.', 'error'); return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const res = await fetch(`${API}/publisher/forgot-password`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    showAuthMsg('forgotMsg', data.message || 'Check your email for a reset link.', res.ok ? 'success' : 'error');
+  } catch(e) {
+    showAuthMsg('forgotMsg', 'Could not connect to server. Please try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send Reset Link →';
+  }
+}
+
+async function doReset() {
+  const password = document.getElementById('resetPassword').value;
+  const confirm = document.getElementById('resetPasswordConfirm').value;
+  const btn = document.getElementById('resetBtn');
+  if (!password || password.length < 8) { showAuthMsg('resetMsg', 'Password must be at least 8 characters.', 'error'); return; }
+  if (password !== confirm) { showAuthMsg('resetMsg', "Passwords don't match.", 'error'); return; }
+  const token = window._resetToken;
+  if (!token) { showAuthMsg('resetMsg', 'Reset link is missing or invalid. Request a new one.', 'error'); return; }
+  btn.disabled = true; btn.textContent = 'Resetting…';
+  try {
+    const res = await fetch(`${API}/publisher/reset-password`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { showAuthMsg('resetMsg', data.error || 'Could not reset password.', 'error'); return; }
+    showAuthMsg('resetMsg', 'Password reset! Redirecting to login…', 'success');
+    // Strip the token from the URL and return to login
+    setTimeout(() => {
+      history.replaceState({}, '', '/publisher-portal.html');
+      switchTab('login');
+    }, 1400);
+  } catch(e) {
+    showAuthMsg('resetMsg', 'Could not connect to server. Please try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Reset Password →';
+  }
 }
 
 async function doLogin() {

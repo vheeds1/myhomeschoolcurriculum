@@ -2029,6 +2029,45 @@ app.post('/api/publisher/login', authLimiter, (req, res) => {
   }});
 });
 
+// Publisher forgot password — issues a one-hour reset token and emails a link
+// to /publisher-portal.html?reset=<token>. Mirrors the end-user reset flow
+// above. Response is always 200/success so attackers can't enumerate which
+// emails have publisher accounts.
+app.post('/api/publisher/forgot-password', authLimiter, (req, res) => {
+  const { email } = req.body || {};
+  if (!email) return res.status(400).json({ error: 'Email required.' });
+  const db = readDB();
+  const publisher = (db.publishers || []).find(p => p.email === email.toLowerCase());
+  if (publisher) {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    publisher.resetToken = resetToken;
+    publisher.resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+    writeDB(db);
+    const resetUrl = `${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html?reset=${resetToken}`;
+    sendEmail(publisher.email, 'Reset your MyHomeschoolCurriculum publisher password',
+      `<p>Hi ${publisher.name},</p><p>Click the button below to reset your publisher portal password. This link expires in 1 hour.</p><p><a href="${resetUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Reset Password →</a></p><p style="font-size:12px;color:#999">If you didn't request this, you can safely ignore this email.</p>`);
+  }
+  res.json({ success: true, message: 'If a publisher account exists with that email, a reset link has been sent.' });
+});
+
+// Publisher reset password — accepts the one-hour token + a new password,
+// rehashes, clears the token. Invalidates existing publisher sessions so a
+// thief with an old session token can't keep using it.
+app.post('/api/publisher/reset-password', authLimiter, (req, res) => {
+  const { token, password } = req.body || {};
+  if (!token || !password || password.length < 8)
+    return res.status(400).json({ error: 'Token and new password (8+ chars) required.' });
+  const db = readDB();
+  const publisher = (db.publishers || []).find(p => p.resetToken === token && new Date(p.resetTokenExpires) > new Date());
+  if (!publisher) return res.status(400).json({ error: 'Invalid or expired reset link.' });
+  const { hash, salt } = hashPassword(password);
+  publisher.passwordHash = hash; publisher.passwordSalt = salt;
+  publisher.resetToken = null; publisher.resetTokenExpires = null;
+  db.publisherSessions = (db.publisherSessions || []).filter(s => s.publisherId !== publisher.id);
+  writeDB(db);
+  res.json({ success: true, message: 'Password reset! You can now log in.' });
+});
+
 // Publisher auth middleware
 function requirePublisher(req, res, next) {
   const token = req.headers.authorization?.replace('Bearer ', '');
