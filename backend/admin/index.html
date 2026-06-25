@@ -1161,7 +1161,7 @@ async function loadPublishers() {
 }
 
 async function sendPublisherReset(id, email) {
-  if (!confirm(`Send a password reset link to ${email}?\n\nThe link is valid for 1 hour.`)) return;
+  if (!confirm(`Send a password reset link to ${email}?\n\nThe link is valid for 24 hours.`)) return;
   try {
     const res = await fetch(`${API}/admin/publishers/${id}/send-reset`, {
       method: 'POST', headers: authHeaders()

@@ -2041,11 +2041,11 @@ app.post('/api/publisher/forgot-password', authLimiter, (req, res) => {
   if (publisher) {
     const resetToken = crypto.randomBytes(32).toString('hex');
     publisher.resetToken = resetToken;
-    publisher.resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+    publisher.resetTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     writeDB(db);
     const resetUrl = `${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html?reset=${resetToken}`;
     sendEmail(publisher.email, 'Reset your MyHomeschoolCurriculum publisher password',
-      `<p>Hi ${publisher.name},</p><p>Click the button below to reset your publisher portal password. This link expires in 1 hour.</p><p><a href="${resetUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Reset Password →</a></p><p style="font-size:12px;color:#999">If you didn't request this, you can safely ignore this email.</p>`);
+      `<p>Hi ${publisher.name},</p><p>Click the button below to reset your publisher portal password. This link expires in 24 hours.</p><p><a href="${resetUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Reset Password →</a></p><p style="font-size:12px;color:#999">If you didn't request this, you can safely ignore this email.</p>`);
   }
   res.json({ success: true, message: 'If a publisher account exists with that email, a reset link has been sent.' });
 });
@@ -2060,11 +2060,11 @@ app.post('/api/admin/publishers/:id/send-reset', requireAdmin, (req, res) => {
   if (!publisher) return res.status(404).json({ error: 'Publisher not found' });
   const resetToken = crypto.randomBytes(32).toString('hex');
   publisher.resetToken = resetToken;
-  publisher.resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+  publisher.resetTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   writeDB(db);
   const resetUrl = `${process.env.SITE_URL||'http://localhost:3001'}/publisher-portal.html?reset=${resetToken}`;
   sendEmail(publisher.email, 'Reset your MyHomeschoolCurriculum publisher password',
-    `<p>Hi ${publisher.name},</p><p>An admin has issued a password reset for your publisher portal account. Click the button below to set a new password. This link expires in 1 hour.</p><p><a href="${resetUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Reset Password →</a></p><p style="font-size:12px;color:#999">If you weren't expecting this, contact us at contact@myhomeschoolcurriculum.com.</p>`);
+    `<p>Hi ${publisher.name},</p><p>An admin has issued a password reset for your publisher portal account. Click the button below to set a new password. This link expires in 24 hours.</p><p><a href="${resetUrl}" style="background:#4A7550;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">Reset Password →</a></p><p style="font-size:12px;color:#999">If you weren't expecting this, contact us at contact@myhomeschoolcurriculum.com.</p>`);
   res.json({ success: true, message: 'Reset link sent.' });
 });
 
